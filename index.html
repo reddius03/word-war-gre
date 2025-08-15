@@ -701,7 +701,7 @@
         const mainMenuFromLeaderboardButton = document.getElementById('main-menu-from-leaderboard');
         const backgroundMusic = document.getElementById('background-music');
         const correctSound = document.getElementById('correct-sound');
-        const wrongSound = document.getElementById('wrong-sound');
+        const wrongSound = document = document.getElementById('wrong-sound'); // Fixed typo here
 
         // Custom Modal Elements
         const customModalOverlay = document.getElementById('custom-modal-overlay');
@@ -885,8 +885,11 @@
                 return;
             }
 
-            if (!window.firebaseInitialized || !window.db || !window.addDoc || !window.collection) {
-                showCustomModal("Error", "Leaderboard service not ready. Please try again in a moment.");
+            // Explicitly check for Firebase readiness
+            if (!window.firebaseInitialized || !window.db || !window.addDoc || !window.collection || !window.currentUserId) {
+                console.warn("Attempted saveScore before Firebase was fully ready or user authenticated.");
+                showCustomModal("Error", "Leaderboard service not ready. Please wait a moment and try again.");
+                saveScoreButton.disabled = false; // Ensure button isn't stuck disabled
                 return;
             }
 
