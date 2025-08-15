@@ -485,9 +485,9 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 window.currentUserId = user.uid;
-                console.log("Firebase: User signed in:", user.uid);
+                console.log("Firebase Auth State Changed: User signed in:", user.uid);
             } else {
-                console.log("Firebase: No user signed in. Attempting anonymous sign-in...");
+                console.log("Firebase Auth State Changed: No user signed in. Attempting anonymous sign-in...");
                 try {
                     if (initialAuthToken) {
                         await signInWithCustomToken(auth, initialAuthToken);
@@ -499,11 +499,13 @@
                         console.log("Firebase: Signed in anonymously.");
                     }
                 } catch (error) {
-                    console.error("Firebase Auth Error:", error);
+                    console.error("Firebase Auth Error during sign-in:", error);
                     window.showCustomModal("Auth Error", "Could not sign in for leaderboard. Please try refreshing.");
                 }
             }
             window.firebaseInitialized = true; // Mark Firebase as ready
+            console.log("Firebase: Initialization complete. firebaseInitialized =", window.firebaseInitialized, "currentUserId =", window.currentUserId);
+
 
             // If leaderboard screen is currently active or main menu is active,
             // (meaning the user might want to see the leaderboard immediately),
@@ -701,7 +703,8 @@
         const mainMenuFromLeaderboardButton = document.getElementById('main-menu-from-leaderboard');
         const backgroundMusic = document.getElementById('background-music');
         const correctSound = document.getElementById('correct-sound');
-        const wrongSound = document = document.getElementById('wrong-sound'); // Fixed typo here
+        // Fixed typo here: should be `document.getElementById('wrong-sound')`
+        const wrongSound = document.getElementById('wrong-sound'); 
 
         // Custom Modal Elements
         const customModalOverlay = document.getElementById('custom-modal-overlay');
@@ -885,9 +888,16 @@
                 return;
             }
 
-            // Explicitly check for Firebase readiness
+            // Explicitly check for Firebase readiness AND user ID before attempting save
+            console.log("Save Score Attempt:");
+            console.log("  firebaseInitialized:", window.firebaseInitialized);
+            console.log("  db:", !!window.db); // Check if db object exists
+            console.log("  addDoc:", !!window.addDoc); // Check if addDoc function exists
+            console.log("  collection:", !!window.collection); // Check if collection function exists
+            console.log("  currentUserId:", window.currentUserId); // Crucial: check if user is authenticated
+
             if (!window.firebaseInitialized || !window.db || !window.addDoc || !window.collection || !window.currentUserId) {
-                console.warn("Attempted saveScore before Firebase was fully ready or user authenticated.");
+                console.warn("Save Score Aborted: Firebase or User not ready.");
                 showCustomModal("Error", "Leaderboard service not ready. Please wait a moment and try again.");
                 saveScoreButton.disabled = false; // Ensure button isn't stuck disabled
                 return;
@@ -901,7 +911,7 @@
                     name: playerName,
                     score: currentScore,
                     timestamp: window.serverTimestamp(), // Use server timestamp for consistent ordering
-                    userId: window.currentUserId || 'anonymous' // Store user ID (can be anonymous)
+                    userId: window.currentUserId // Store user ID (should now be guaranteed to exist)
                 }));
                 showCustomModal("Score Saved!", "Your score has been added to the global leaderboard!");
                 displayGlobalLeaderboard(); // Refresh leaderboard display
