@@ -6,124 +6,121 @@
     <title>Word War GRE</title>
     <!-- Tailwind CSS CDN for quick styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font for retro pixelated look -->
+    <!-- Google Font for minimalistic pixelated look -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
+        /* Primary bright color */
+        :root {
+            --primary-bright: #00E0FF; /* Electric Cyan */
+            --dark-background: #0A0A0A;
+        }
+
         /* Base styles */
         body {
             font-family: 'Press Start 2P', cursive;
-            background-color: #000; /* Deep black for arcade feel */
-            color: #E0E0E0; /* Light grey for text */
+            background-color: #000; /* Pure black for modern minimalism */
+            color: #E0E0E0; /* Light grey for subtle contrast */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 1rem; /* Responsive padding */
+            padding: 1rem;
             box-sizing: border-box;
             overflow: hidden; /* Prevent scrollbars */
-            background-image:
-                linear-gradient(rgba(0, 255, 0, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
-            background-size: 20px 20px; /* Subtle green grid */
+            /* Removed scanline and grid for cleaner look */
         }
-
-        /* Scanline effect for retro display */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.25) 50%), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 100% 2px, 2px 100%;
-            pointer-events: none; /* Allow clicks through */
-            z-index: 1000; /* Ensure it's on top */
-        }
-
 
         .game-container {
-            background-color: #0F0F0F; /* Dark grey for console */
-            border: 8px solid #00FF00; /* Neon green border */
-            border-radius: 15px;
-            padding: 1.5rem; /* Responsive padding */
+            background-color: var(--dark-background);
+            border: 4px solid var(--primary-bright); /* Thinner, bright border */
+            border-radius: 10px; /* Slightly less rounded for sharper feel */
+            padding: 2rem; /* Increased padding for more breathing room */
             box-shadow:
-                0 0 30px #00FF00, /* Stronger neon green glow */
-                0 0 60px #FF00FF, /* Vibrant magenta secondary glow */
-                inset 0 0 20px rgba(255, 255, 255, 0.3); /* Inner highlight */
-            max-width: 95%; /* Responsive max-width */
-            width: 100%; /* Take full width on smaller screens */
-            max-width: 900px; /* Limit max width on large screens */
+                0 0 25px var(--primary-bright); /* Single, strong bright glow */
+            max-width: 95%;
+            width: 100%;
+            max-width: 800px; /* Adjusted max width for slightly more compact feel */
             text-align: center;
             position: relative;
-            animation: pulse-border 1.5s infinite alternate; /* Faster pulse */
+            animation: pulse-border 1.8s infinite alternate ease-in-out; /* Slower, smoother pulse */
         }
 
         @keyframes pulse-border {
             from {
-                border-color: #00FF00;
-                box-shadow: 0 0 30px #00FF00, 0 0 60px #FF00FF, inset 0 0 20px rgba(255, 255, 255, 0.3);
+                border-color: var(--primary-bright);
+                box-shadow: 0 0 25px var(--primary-bright);
             }
             to {
-                border-color: #00FFFF; /* Aqua */
-                box-shadow: 0 0 40px #00FFFF, 0 0 80px #FFFF00, inset 0 0 25px rgba(255, 255, 255, 0.4); /* Yellow */
+                border-color: #00FFFF; /* Slightly different cyan/aqua for pulse effect */
+                box-shadow: 0 0 35px #00FFFF;
             }
         }
 
         h1 {
-            color: #FFFF00; /* Bright yellow */
-            text-shadow: 4px 4px #FF00FF; /* Magenta shadow */
-            font-size: 2.5rem; /* Base font size */
-            margin-bottom: 1.5rem; /* Responsive margin */
+            color: var(--primary-bright); /* Title in bright color */
+            text-shadow: none; /* Removed heavy shadow for minimalism */
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
             text-transform: uppercase;
         }
-        @media (min-width: 640px) { /* sm breakpoint */
-            h1 { font-size: 3rem; }
+        @media (min-width: 640px) {
+            h1 { font-size: 2.8rem; }
         }
-        @media (min-width: 768px) { /* md breakpoint */
-            h1 { font-size: 3.5rem; }
+        @media (min-width: 768px) {
+            h1 { font-size: 3.2rem; }
         }
 
         h2 {
-            color: #00FF00; /* Bright green */
-            text-shadow: 2px 2px #00FFFF; /* Aqua shadow */
-            font-size: 2rem; /* Base font size */
-            margin-bottom: 1.25rem; /* Responsive margin */
+            color: var(--primary-bright);
+            text-shadow: none; /* Removed heavy shadow for minimalism */
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
         }
-        @media (min-width: 640px) { /* sm breakpoint */
-            h2 { font-size: 2.25rem; }
+        @media (min-width: 640px) {
+            h2 { font-size: 2rem; }
         }
-        @media (min-width: 768px) { /* md breakpoint */
-            h2 { font-size: 2.5rem; }
+        @media (min-width: 768px) {
+            h2 { font-size: 2.2rem; }
         }
 
         button {
-            background-color: #FF00FF; /* Magenta */
-            color: #FFFFFF;
-            padding: 1rem 1.5rem; /* Responsive padding */
-            border: 5px solid #00FF00; /* Neon green border */
-            border-radius: 10px;
+            background-color: transparent; /* Transparent background */
+            color: var(--primary-bright); /* Text in bright color */
+            padding: 0.9rem 1.4rem;
+            border: 2px solid var(--primary-bright); /* Thinner bright border */
+            border-radius: 8px; /* Slightly less rounded */
             font-family: 'Press Start 2P', cursive;
-            font-size: 1rem; /* Base font size */
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.1s ease-in-out;
-            text-shadow: 2px 2px #000;
-            box-shadow: 0 8px #8B008B; /* Darker purple shadow for depth */
-            /* Removed fixed margins here to use flexbox gap */
+            transition: all 0.2s ease-in-out; /* Smoother transition */
+            text-shadow: none; /* Removed shadow */
+            box-shadow: 0 3px #0080A0; /* Subtle dark shadow for depth */
             outline: none;
             position: relative;
             top: 0;
             left: 0;
-            letter-spacing: 1px;
-        }
-        @media (min-width: 640px) { /* sm breakpoint */
-            button { padding: 1.125rem 2rem; font-size: 1.125rem; }
-        }
-        @media (min-width: 768px) { /* md breakpoint */
-            button { padding: 1.25rem 2.5rem; font-size: 1.25rem; }
+            letter-spacing: 0.5px; /* Slightly tighter spacing */
         }
 
+        button:active {
+            top: 3px;
+            box-shadow: none;
+        }
+
+        @media (min-width: 640px) {
+            button { padding: 1rem 1.8rem; font-size: 1.05rem; }
+        }
+        @media (min-width: 768px) {
+            button { padding: 1.1rem 2rem; font-size: 1.15rem; }
+        }
+
+        button:hover {
+            background-color: var(--primary-bright); /* Fill with bright color on hover */
+            color: #000; /* Black text on hover */
+            border-color: var(--primary-bright);
+            box-shadow: 0 5px #00B0D0; /* Slightly stronger shadow on hover */
+        }
 
         .screen {
             display: none;
@@ -135,41 +132,41 @@
 
         /* Game specific styles */
         #score-display, #wrong-attempts-display {
-            font-size: 1.5rem; /* Base font size */
-            margin: 0.75rem 0; /* Responsive margin */
-            color: #FFFF00; /* Yellow */
-            text-shadow: 2px 2px #000;
+            font-size: 1.4rem;
+            margin: 0.6rem 0;
+            color: #FFF; /* White for score */
+            text-shadow: none;
         }
         @media (min-width: 640px) {
-            #score-display, #wrong-attempts-display { font-size: 1.8rem; }
+            #score-display, #wrong-attempts-display { font-size: 1.6rem; }
         }
 
         #wrong-attempts-display {
-            color: #FF0000; /* Bright red */
+            color: #FF4500; /* Orange-red for wrong attempts */
         }
 
         #word-display {
-            font-size: 2rem; /* Default for smaller screens like tablets */
+            font-size: 2.2rem;
             font-weight: bold;
-            color: #FFFFFF; /* Changed to white for better visibility */
-            margin-bottom: 2rem; /* Responsive margin */
-            text-shadow: 0 0 10px #4B0082, 0 0 20px #4B0082; /* Dark purple glow */
+            color: #FFFFFF; /* White for the word */
+            margin-bottom: 2rem;
+            text-shadow: 0 0 12px #4B0082, 0 0 25px #4B0082; /* Dark purple glow */
             word-wrap: break-word;
             transition: color 0.1s ease-in-out, text-shadow 0.1s ease-in-out;
-            min-height: 4rem; /* Ensure space for feedback */
+            min-height: 4rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0.5rem; /* Add padding for long words */
+            padding: 0.5rem;
         }
-        @media (max-width: 480px) { /* Extra small phones */
-            #word-display { font-size: 1.75rem; min-height: 3.5rem; } /* Made smaller for tiny screens */
+        @media (max-width: 480px) {
+            #word-display { font-size: 1.8rem; min-height: 3.5rem; }
         }
-        @media (min-width: 640px) { /* sm breakpoint */
-            #word-display { font-size: 2.5rem; min-height: 5rem; }
-        }
-        @media (min-width: 768px) { /* md breakpoint */
+        @media (min-width: 640px) {
             #word-display { font-size: 2.8rem; min-height: 5rem; }
+        }
+        @media (min-width: 768px) {
+            #word-display { font-size: 3.2rem; min-height: 5rem; }
         }
 
 
@@ -186,102 +183,100 @@
         .choices-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1rem; /* Responsive gap */
-            margin-top: 1.5rem; /* Responsive margin */
+            gap: 0.8rem; /* Reduced gap for a tighter, cleaner look */
+            margin-top: 1.5rem;
         }
 
         @media (min-width: 640px) {
             .choices-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 1.25rem; /* Increased gap for larger screens */
+                gap: 1rem;
             }
         }
 
         .choice-button {
-            background-color: #0000FF; /* Electric blue */
-            border: 5px solid #FFFF00; /* Yellow border */
-            color: #FFFFFF;
-            padding: 1rem; /* Responsive padding */
-            border-radius: 10px;
-            font-size: 0.9rem; /* Base font size */
+            background-color: var(--dark-background); /* Dark background for choices */
+            border: 2px solid var(--primary-bright); /* Bright border */
+            color: #FFFFFF; /* White text for choices */
+            padding: 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
             text-align: left;
             word-wrap: break-word;
-            min-height: 5rem; /* Taller buttons */
+            min-height: 4.5rem; /* Slightly reduced height */
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px #0000A0; /* Darker blue shadow */
+            box-shadow: none; /* Removed choice button shadow */
         }
         @media (min-width: 640px) {
-            .choice-button { font-size: 1rem; padding: 1.25rem; min-height: 6rem; }
+            .choice-button { font-size: 0.95rem; padding: 1rem; min-height: 5rem; }
         }
         @media (min-width: 768px) {
-            .choice-button { font-size: 1.1rem; padding: 1.25rem; min-height: 6.25rem; }
+            .choice-button { font-size: 1rem; padding: 1.1rem; min-height: 5.5rem; }
         }
 
-
         .choice-button:hover {
-            background-color: #00FFFF; /* Aqua on hover */
-            border-color: #FF00FF; /* Magenta border on hover */
-            box-shadow: 0 8px #008B8B; /* Darker aqua shadow */
+            background-color: var(--primary-bright); /* Fill with bright color on hover */
+            border-color: var(--primary-bright);
+            color: #000; /* Black text on hover */
+            box-shadow: none;
         }
 
         #leaderboard-table {
             width: 100%;
-            margin-top: 2rem; /* Responsive margin */
+            margin-top: 1.5rem;
             border-collapse: collapse;
-            font-size: 1rem; /* Base font size */
+            font-size: 0.9rem;
         }
         @media (min-width: 640px) {
-            #leaderboard-table { font-size: 1.1rem; }
+            #leaderboard-table { font-size: 1rem; }
         }
         @media (min-width: 768px) {
-            #leaderboard-table { font-size: 1.2rem; }
+            #leaderboard-table { font-size: 1.1rem; }
         }
 
-
         #leaderboard-table th, #leaderboard-table td {
-            border: 3px solid #00FF00; /* Neon green border */
-            padding: 0.75rem; /* Responsive padding */
+            border: 1px solid #333; /* Subtle dark grey borders */
+            padding: 0.6rem;
             text-align: left;
             color: #E0E0E0;
         }
         @media (min-width: 640px) {
-            #leaderboard-table th, #leaderboard-table td { padding: 1rem; }
+            #leaderboard-table th, #leaderboard-table td { padding: 0.8rem; }
         }
 
-
         #leaderboard-table th {
-            background-color: #0000FF; /* Electric blue header */
-            color: #FFFF00;
-            text-shadow: 1px 1px #000;
+            background-color: var(--primary-bright); /* Header in bright color */
+            color: #000; /* Black text for header */
+            text-shadow: none;
         }
 
         #leaderboard-table tr:nth-child(even) {
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.05); /* Very subtle lighter row */
         }
 
         input[type="text"] {
-            background-color: #1A1A1A; /* Dark background */
-            border: 3px solid #00FF00; /* Neon green border */
-            color: #FFFF00;
+            background-color: #1A1A1A;
+            border: 1px solid #555; /* Softer border */
+            color: #FFF; /* White text */
             font-family: 'Press Start 2P', cursive;
-            padding: 0.75rem; /* Responsive padding */
-            font-size: 1rem; /* Base font size */
-            border-radius: 8px;
-            width: calc(100% - 1.5rem); /* Adjust for padding/border */
-            max-width: 350px;
-            margin-top: 1rem; /* Responsive margin */
+            padding: 0.6rem;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            width: calc(100% - 1.2rem);
+            max-width: 300px;
+            margin-top: 0.8rem;
             text-align: center;
         }
         @media (min-width: 640px) {
-            input[type="text"] { padding: 1rem; font-size: 1.1rem; }
+            input[type="text"] { padding: 0.8rem; font-size: 1rem; }
         }
 
         input[type="text"]:focus {
             outline: none;
-            border-color: #FF00FF;
-            box-shadow: 0 0 15px #FF00FF;
+            border-color: var(--primary-bright);
+            box-shadow: 0 0 8px var(--primary-bright);
         }
 
         /* Custom Modal Styles */
@@ -296,73 +291,75 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px); /* Softer blur */
+            -webkit-backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background-color: #0F0F0F;
-            border: 8px solid #FF00FF; /* Magenta border */
-            border-radius: 20px;
-            padding: 2.5rem; /* Responsive padding */
+            background-color: var(--dark-background);
+            border: 4px solid var(--primary-bright);
+            border-radius: 15px;
+            padding: 2rem;
             text-align: center;
-            box-shadow: 0 0 40px #FF00FF, inset 0 0 20px rgba(255, 255, 255, 0.4);
-            max-width: 90%; /* Responsive max-width */
-            width: 600px;
+            box-shadow: 0 0 30px var(--primary-bright);
+            max-width: 85%;
+            width: 500px;
             font-family: 'Press Start 2P', cursive;
-            font-size: 1.1rem; /* Base font size */
+            font-size: 1rem;
             color: #E0E0E0;
             position: relative;
             animation: modal-pop-in 0.3s ease-out;
         }
         @media (min-width: 640px) {
-            .modal-content { font-size: 1.2rem; padding: 3rem; }
+            .modal-content { font-size: 1.1rem; padding: 2.5rem; }
         }
 
         .modal-content h3 {
-            color: #FFFF00;
-            font-size: 1.8rem; /* Base font size */
-            margin-bottom: 1.5rem; /* Responsive margin */
-            text-shadow: 2px 2px #FF00FF;
+            color: var(--primary-bright);
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            text-shadow: none;
         }
         @media (min-width: 640px) {
-            .modal-content h3 { font-size: 2.2rem; }
+            .modal-content h3 { font-size: 1.8rem; }
         }
 
         .modal-content button {
-            background-color: #00FF00; /* Green */
-            border-color: #FFFF00; /* Yellow */
-            margin-top: 2rem; /* Responsive margin */
-            padding: 0.75rem 1.5rem; /* Responsive padding */
-            font-size: 1rem; /* Base font size */
-            box-shadow: 0 6px #008000; /* Darker green */
+            background-color: var(--primary-bright);
+            border: none;
+            color: #000; /* Black text on modal button */
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            box-shadow: 0 4px #0080A0;
         }
         @media (min-width: 640px) {
-            .modal-content button { padding: 1rem 2rem; font-size: 1.2rem; }
+            .modal-content button { padding: 0.8rem 1.5rem; font-size: 1.1rem; }
         }
 
         .modal-content button:hover {
-            background-color: #FFFF00; /* Yellow */
-            border-color: #00FF00; /* Green */
+            background-color: #00FFFF;
             color: #000;
         }
 
         /* Responsive adjustments for overall layout */
-        @media (max-width: 639px) { /* Extra small screens */
+        @media (max-width: 639px) {
             .game-container {
                 padding: 1rem;
-                border-width: 4px;
-                border-radius: 10px;
-                box-shadow: 0 0 15px #00FF00, 0 0 30px #FF00FF, inset 0 0 10px rgba(255, 255, 255, 0.2);
-            }
-            button {
-                padding: 0.8rem 1.2rem;
-                font-size: 0.9rem;
                 border-width: 3px;
                 border-radius: 8px;
-                box-shadow: 0 4px #8B008B;
-                /* No vertical margin here, flexbox will handle it */
-                margin: 0; /* Remove horizontal margin as well for full width */
+                box-shadow: 0 0 15px var(--primary-bright);
+            }
+            button {
+                padding: 0.7rem 1rem;
+                font-size: 0.85rem;
+                border-width: 2px;
+                border-radius: 6px;
+                box-shadow: 0 3px #0080A0;
+            }
+            .choice-button {
+                padding: 0.8rem;
+                min-height: 4rem;
             }
         }
     </style>
@@ -393,7 +390,7 @@
         <div id="main-menu" class="screen active">
             <h1 class="text-3xl sm:text-4xl md:text-5xl">Word War GRE</h1>
             <p class="text-sm sm:text-base md:text-lg mb-8">Test your GRE vocabulary skills!</p>
-            <div class="flex flex-col space-y-4 items-center w-full"> <!-- Added flexbox for buttons -->
+            <div class="flex flex-col space-y-4 items-center w-full">
                 <button id="play-solo-button" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Play Game</button>
                 <button id="show-leaderboard-main" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Leaderboard</button>
                 <button id="toggle-music-button" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Toggle Music</button>
@@ -705,7 +702,7 @@
         const mainMenuFromLeaderboardButton = document.getElementById('main-menu-from-leaderboard');
         const backgroundMusic = document.getElementById('background-music');
         const correctSound = document.getElementById('correct-sound');
-        const wrongSound = document.getElementById('wrong-sound'); 
+        const wrongSound = document.getElementById('wrong-sound');
 
         // Custom Modal Elements
         const customModalOverlay = document.getElementById('custom-modal-overlay');
