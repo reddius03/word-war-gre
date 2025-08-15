@@ -456,11 +456,19 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Global Variables (provided by Canvas environment)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        // Corrected typo: should use __initial_auth_token on the right side
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null; 
+        // Your web app's Firebase configuration - Copied from your message
+        const firebaseConfig = {
+            apiKey: "AIzaSyCodVJigrQK0craiXfsbaWi6oJpLZTMKso",
+            authDomain: "wordwargre.firebaseapp.com",
+            projectId: "wordwargre",
+            storageBucket: "wordwargre.firebasestorage.app",
+            messagingSenderId: "710867911424",
+            appId: "1:710867911424:web:f3703741b9455278e329e5",
+            measurementId: "G-TH2KBW28JP"
+        };
+
+        // We use the projectId for the artifacts collection path. This ensures it's unique to your project.
+        const appIdForCollectionPath = firebaseConfig.projectId;
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -468,12 +476,11 @@
         const auth = getAuth(app);
 
         // Expose Firebase objects and functions to the global window object
-        // This is done so the other script block can access them without 'import'
         window.firebaseInitialized = false;
         window.currentUserId = null;
         window.db = db;
         window.auth = auth;
-        window.appId = appId;
+        window.appId = appIdForCollectionPath; // Use the projectId for the collection path
         window.addDoc = addDoc;
         window.collection = collection;
         window.query = query;
@@ -489,27 +496,19 @@
             } else {
                 console.log("Firebase Auth State Changed: No user signed in. Attempting anonymous sign-in...");
                 try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        window.currentUserId = auth.currentUser.uid;
-                        console.log("Firebase: Signed in with custom token.");
-                    } else {
-                        await signInAnonymously(auth);
-                        window.currentUserId = auth.currentUser.uid;
-                        console.log("Firebase: Signed in anonymously.");
-                    }
+                    // Try to sign in anonymously if not already signed in
+                    await signInAnonymously(auth);
+                    window.currentUserId = auth.currentUser.uid;
+                    console.log("Firebase: Signed in anonymously. User ID:", window.currentUserId);
                 } catch (error) {
-                    console.error("Firebase Auth Error during sign-in:", error);
-                    window.showCustomModal("Auth Error", "Could not sign in for leaderboard. Please try refreshing.");
+                    console.error("Firebase Auth Error during anonymous sign-in:", error);
+                    window.showCustomModal("Auth Error", "Could not sign in for leaderboard. Please try refreshing. Check console for details.");
                 }
             }
             window.firebaseInitialized = true; // Mark Firebase as ready
             console.log("Firebase: Initialization complete. firebaseInitialized =", window.firebaseInitialized, "currentUserId =", window.currentUserId);
 
-
-            // If leaderboard screen is currently active or main menu is active,
-            // (meaning the user might want to see the leaderboard immediately),
-            // trigger loading of global leaderboard data.
+            // Trigger loading of global leaderboard data after Firebase is initialized and user is authenticated
             if (document.getElementById('leaderboard-screen').classList.contains('active') || document.getElementById('main-menu').classList.contains('active')) {
                 window.loadGlobalLeaderboard();
             }
