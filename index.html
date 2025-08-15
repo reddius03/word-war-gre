@@ -365,7 +365,7 @@
 </head>
 <body>
     <!-- Background Music Placeholder -->
-    <audio id="background-music" loop>
+    <audio id="background-music" loop autoplay>
         <!-- IMPORTANT: Ensure this path is correct relative to your index.html file on GitHub! -->
         <!-- If "Run As Fast As You Can.mp3" is in the same folder as index.html, this is correct. -->
         <source src="Run As Fast As You Can.mp3" type="audio/mpeg">
@@ -862,14 +862,21 @@
         // --- Event Listeners ---
         window.onload = function() {
             loadLeaderboard();
-            toggleMusicButton.textContent = "Play Music"; // Initial state
+            // Attempt to autoplay music
+            backgroundMusic.volume = 0.5;
+            backgroundMusic.play().then(() => {
+                musicPlaying = true;
+                toggleMusicButton.textContent = "Pause Music";
+            }).catch(e => {
+                musicPlaying = false;
+                toggleMusicButton.textContent = "Play Music";
+                console.error("Autoplay music failed:", e);
+                showCustomModal("Music Blocked", "Your browser blocked automatic music playback. Click 'Toggle Music' to enable it.");
+            });
         };
 
         // Main Menu Buttons
-        playSoloButton.addEventListener('click', () => {
-            gameMode = 'solo'; // Explicitly set mode (even if already default)
-            startGame();
-        });
+        playSoloButton.addEventListener('click', startGame);
         showLeaderboardMainMenuButton.addEventListener('click', displayLeaderboard);
         toggleMusicButton.addEventListener('click', toggleMusic);
 
@@ -884,18 +891,6 @@
 
         // Custom Modal Close Button
         modalCloseButton.addEventListener('click', hideCustomModal);
-
-        // Play music on first overall user interaction if autoplay failed initially
-        // This is crucial for browser autoplay policies
-        document.addEventListener('click', () => {
-            if (!musicPlaying && backgroundMusic.paused) {
-                backgroundMusic.volume = 0.5;
-                backgroundMusic.play().then(() => {
-                    toggleMusicButton.textContent = "Pause Music";
-                    musicPlaying = true;
-                }).catch(e => console.error("Music playback failed on user interaction:", e));
-            }
-        }, { once: true }); // Only trigger this check once for initial play
     </script>
 </body>
 </html>
