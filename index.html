@@ -362,6 +362,45 @@
                 min-height: 4rem;
             }
         }
+
+        /* Specific styles for 1920x1080 resolution (leaderboard only) */
+        @media (min-width: 1920px) {
+            body {
+                padding: 2rem; /* Give a bit more room on very large screens */
+            }
+
+            .game-container {
+                max-width: 1000px; /* Increase max-width for leaderboard for more horizontal space */
+                padding: 3rem; /* More padding for larger container */
+            }
+
+            #leaderboard-screen {
+                /* Ensure leaderboard screen adapts within the larger container */
+                min-height: 60vh; /* Allow it to take up more vertical space */
+                justify-content: space-between; /* Space out title, table, and buttons */
+                padding-bottom: 0; /* Remove extra padding if flex is handling spacing */
+            }
+
+            #leaderboard-screen h2 {
+                font-size: 3rem; /* Larger title for 1920px */
+            }
+
+            #leaderboard-table {
+                font-size: 1.2rem; /* Larger font size for readability */
+                margin-top: 2rem; /* More margin above table */
+            }
+
+            #leaderboard-table th, #leaderboard-table td {
+                padding: 1rem; /* More padding in table cells */
+            }
+
+            #download-leaderboard-button,
+            #main-menu-from-leaderboard {
+                font-size: 1.2rem; /* Larger buttons */
+                padding: 1.2rem 2.2rem;
+                margin-top: 2rem; /* More space between buttons and table */
+            }
+        }
     </style>
 </head>
 <body>
@@ -916,7 +955,7 @@
                 showScreen('leaderboard-screen');
             } catch (e) {
                 console.error("Error saving score to Firestore:", e);
-                showCustomModal("Save Error", `Could not save score: ${e.message}`);
+                showCustomModal("Save Error", `Could could not save score: ${e.message}`);
                 saveScoreButton.disabled = false; // Re-enable on error
             }
         }
