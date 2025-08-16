@@ -7,7 +7,7 @@
     <!-- Tailwind CSS CDN for quick styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font for minimalistic pixelated look -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start 2P&display=swap" rel="stylesheet">
     <style>
         /* Primary bright color */
         :root {
@@ -117,8 +117,8 @@
 
         button:hover {
             background-color: var(--primary-bright); /* Fill with bright color on hover */
-            color: #000; /* Black text on hover */
             border-color: var(--primary-bright);
+            color: #000; /* Black text on hover */
             box-shadow: 0 5px #00B0D0; /* Slightly stronger shadow on hover */
         }
 
@@ -394,12 +394,37 @@
                 padding: 1rem; /* More padding in table cells */
             }
 
-            #download-leaderboard-button,
-            #main-menu-from-leaderboard {
-                font-size: 1.2rem; /* Larger buttons */
-                padding: 1.2rem 2.2rem;
-                margin-top: 2rem; /* More space between buttons and table */
+            #leaderboard-pagination {
+                margin-top: 2rem;
             }
+        }
+
+        /* Max height for leaderboard screen with scrollbar styling */
+        #leaderboard-screen {
+            max-height: 500px; /* Set maximum height */
+            overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
+            scrollbar-width: thin; /* For Firefox */
+            scrollbar-color: var(--primary-bright) var(--dark-background); /* Thumb and track color for Firefox */
+        }
+
+        /* Webkit (Chrome, Safari) scrollbar styling */
+        #leaderboard-screen::-webkit-scrollbar {
+            width: 8px; /* Width of the scrollbar */
+        }
+
+        #leaderboard-screen::-webkit-scrollbar-track {
+            background: var(--dark-background); /* Track color */
+            border-radius: 10px;
+        }
+
+        #leaderboard-screen::-webkit-scrollbar-thumb {
+            background-color: var(--primary-bright); /* Thumb color */
+            border-radius: 10px;
+            border: 2px solid var(--dark-background); /* Border around the thumb */
+        }
+
+        #leaderboard-screen::-webkit-scrollbar-thumb:hover {
+            background-color: #00FFFF; /* Lighter blue on hover */
         }
     </style>
 </head>
@@ -475,7 +500,11 @@
                     <!-- Leaderboard entries will be injected here by JavaScript -->
                 </tbody>
             </table>
-            <button id="download-leaderboard-button" class="text-sm sm:text-base mt-8">Download Leaderboard</button>
+            <div id="leaderboard-pagination" class="flex justify-center space-x-4 mt-8">
+                <button id="prev-page-button" class="text-sm sm:text-base">&lt; Previous</button>
+                <span id="page-info" class="text-sm sm:text-base flex items-center"></span>
+                <button id="next-page-button" class="text-sm sm:text-base">Next &gt;</button>
+            </div>
             <button id="main-menu-from-leaderboard" class="text-sm sm:text-base mt-4">Main Menu</button>
         </div>
     </div>
@@ -548,6 +577,7 @@
             console.log("Firebase: Initialization complete. firebaseInitialized =", window.firebaseInitialized, "currentUserId =", window.currentUserId);
 
             // Trigger loading of global leaderboard data after Firebase is initialized and user is authenticated
+            // This ensures data is ready if leaderboard is opened immediately or after some time.
             if (document.getElementById('leaderboard-screen').classList.contains('active') || document.getElementById('main-menu').classList.contains('active')) {
                 window.loadGlobalLeaderboard();
             }
@@ -717,6 +747,11 @@
         let globalLeaderboardData = []; // This will hold scores from Firestore
         let musicPlaying = false; // Track music state
 
+        // Pagination state
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let totalPages = 1;
+
         // DOM Elements
         const mainMenuScreen = document.getElementById('main-menu');
         const gameScreen = document.getElementById('game-screen');
@@ -737,11 +772,17 @@
         const playAgainButton = document.getElementById('play-again-button');
         const mainMenuFromGameOverButton = document.getElementById('main-menu-from-gameover');
         const leaderboardBody = document.getElementById('leaderboard-body');
-        const downloadLeaderboardButton = document.getElementById('download-leaderboard-button');
+        // const downloadLeaderboardButton = document.getElementById('download-leaderboard-button'); // Removed
         const mainMenuFromLeaderboardButton = document.getElementById('main-menu-from-leaderboard');
         const backgroundMusic = document.getElementById('background-music');
         const correctSound = document.getElementById('correct-sound');
         const wrongSound = document.getElementById('wrong-sound');
+
+        // Pagination Elements
+        const prevPageButton = document.getElementById('prev-page-button');
+        const nextPageButton = document.getElementById('next-page-button');
+        const pageInfoSpan = document.getElementById('page-info');
+
 
         // Custom Modal Elements
         const customModalOverlay = document.getElementById('custom-modal-overlay');
@@ -763,14 +804,15 @@
 
         // Function to switch between game screens
         function showScreen(screenId) {
+            console.log(`Attempting to show screen: ${screenId}`); // Log screen transition
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
             document.getElementById(screenId).classList.add('active');
-            // If going to leaderboard, ensure it's loaded
+            // If going to leaderboard, ensure it's loaded and display the first page
             if (screenId === 'leaderboard-screen') {
                 if (window.firebaseInitialized) {
-                    loadGlobalLeaderboard();
+                    loadGlobalLeaderboard(); // This fetches all data
                 } else {
                     leaderboardBody.innerHTML = '<tr><td colspan="3">Initializing Firebase...</td></tr>';
                     leaderboardLoading.classList.remove('hidden');
@@ -783,11 +825,13 @@
             modalTitle.textContent = title;
             modalMessage.textContent = message;
             customModalOverlay.classList.remove('hidden');
+            console.log(`Modal Shown: Title - "${title}", Message - "${message}"`); // Log modal display
         }
 
         // Function to hide custom modal
         function hideCustomModal() {
             customModalOverlay.classList.add('hidden');
+            console.log("Modal Hidden."); // Log modal hide
         }
 
         // --- Game Logic ---
@@ -798,6 +842,7 @@
             wrongAttempts = 0;
             updateScoreDisplay();
             showScreen('game-screen');
+            console.log("Game started."); // Log game start
             pickAndDisplayWord();
         }
 
@@ -863,10 +908,12 @@
                 currentScore++;
                 isCorrect = true;
                 if (correctSound) correctSound.play().catch(e => console.error("Correct sound playback failed:", e));
+                console.log("Answer: CORRECT. Score:", currentScore); // Log correct answer
             } else {
                 wrongAttempts++;
                 isCorrect = false;
                 if (wrongSound) wrongSound.play().catch(e => console.error("Wrong sound playback failed:", e));
+                console.log("Answer: WRONG. Wrong attempts:", wrongAttempts); // Log wrong answer
             }
 
             // Apply visual feedback
@@ -894,6 +941,7 @@
             finalScoreDisplay.textContent = currentScore;
             playerNameInput.value = ''; // Clear input field
             saveScoreButton.disabled = false; // Enable save button
+            console.log("Game Over. Final Score:", currentScore); // Log game over
         }
 
         // --- Global Leaderboard Logic (Firestore) ---
@@ -941,6 +989,7 @@
             }
 
             saveScoreButton.disabled = true; // Disable to prevent multiple submissions
+            console.log("Attempting to save score..."); // Log save attempt
 
             try {
                 // Add score to Firestore
@@ -951,7 +1000,7 @@
                     userId: window.currentUserId // Store user ID (should now be guaranteed to exist)
                 }));
                 showCustomModal("Score Saved!", "Your score has been added to the global leaderboard!");
-                displayGlobalLeaderboard(); // Refresh leaderboard display
+                console.log(`Score saved for ${playerName}: ${currentScore}`); // Log successful save
                 showScreen('leaderboard-screen');
             } catch (e) {
                 console.error("Error saving score to Firestore:", e);
@@ -960,50 +1009,73 @@
             }
         }
 
-        // Displays the global leaderboard table
+        // Renders the leaderboard table for the current page
+        function renderLeaderboardPage() {
+            leaderboardBody.innerHTML = ''; // Clear previous entries
+            leaderboardLoading.classList.add('hidden'); // Hide loading indicator if data is available
+            console.log(`Rendering leaderboard page ${currentPage}. Total scores: ${globalLeaderboardData.length}`); // Log page rendering
+
+            if (globalLeaderboardData.length === 0) {
+                leaderboardBody.innerHTML = '<tr><td colspan="3">No scores yet! Be the first!</td></tr>';
+                pageInfoSpan.textContent = "Page 0/0";
+                prevPageButton.disabled = true;
+                nextPageButton.disabled = true;
+                return;
+            }
+
+            // Calculate pagination details
+            totalPages = Math.ceil(globalLeaderboardData.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const scoresToDisplay = globalLeaderboardData.slice(startIndex, endIndex);
+
+            pageInfoSpan.textContent = `Page ${currentPage}/${totalPages}`;
+            prevPageButton.disabled = currentPage === 1;
+            nextPageButton.disabled = currentPage === totalPages;
+
+            scoresToDisplay.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${startIndex + index + 1}</td>
+                    <td>${entry.name}</td>
+                    <td>${entry.score}</td>
+                `;
+                leaderboardBody.appendChild(row);
+            });
+        }
+
+        // Function to load all global leaderboard data from Firestore
         window.loadGlobalLeaderboard = function() { // Made global so Firebase script can call it
             leaderboardLoading.classList.remove('hidden'); // Show loading indicator
             leaderboardBody.innerHTML = ''; // Clear previous entries
+            console.log("Loading global leaderboard data..."); // Log data load initiation
 
             if (!window.firebaseInitialized || !window.db || !window.collection || !window.query || !window.orderBy || !window.onSnapshot) {
                 leaderboardBody.innerHTML = '<tr><td colspan="3">Leaderboard service not available.</td></tr>';
                 leaderboardLoading.classList.add('hidden');
+                console.warn("Firebase not fully initialized for leaderboard."); // Warn if Firebase is not ready
                 return;
             }
 
             const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`),
                 window.orderBy('score', 'desc')
-                // You can add .limit(10) here if you want only top 10 from Firestore,
-                // but for now we fetch all and slice in memory to allow flexible display.
             );
 
             // Listen for real-time updates to the leaderboard
             window.onSnapshot(q, (querySnapshot) => {
-                leaderboardLoading.classList.add('hidden'); // Hide loading indicator
+                console.log("Leaderboard data received from Firestore."); // Log data receipt
                 const scores = [];
                 querySnapshot.forEach((doc) => {
                     scores.push(doc.data());
                 });
 
-                // Sort and limit in memory (if not limited by query)
+                // Sort in memory and store all fetched scores
                 scores.sort((a, b) => b.score - a.score);
-                globalLeaderboardData = scores.slice(0, 10); // Keep top 10 for display
+                globalLeaderboardData = scores; // Store all fetched scores
 
-                leaderboardBody.innerHTML = ''; // Clear previous entries
-                if (globalLeaderboardData.length === 0) {
-                    leaderboardBody.innerHTML = '<tr><td colspan="3">No scores yet! Be the first!</td></tr>';
-                    return;
-                }
+                // After new data is fetched, re-render the current page
+                renderLeaderboardPage();
 
-                globalLeaderboardData.forEach((entry, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${entry.name}</td>
-                        <td>${entry.score}</td>
-                    `;
-                    leaderboardBody.appendChild(row);
-                });
             }, (error) => {
                 console.error("Error fetching global leaderboard:", error);
                 leaderboardLoading.classList.add('hidden');
@@ -1012,32 +1084,33 @@
             });
         }
 
+        // Navigates to the previous page
+        function goToPreviousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderLeaderboardPage();
+                console.log("Navigated to previous page:", currentPage); // Log page change
+            }
+        }
+
+        // Navigates to the next page
+        function goToNextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderLeaderboardPage();
+                console.log("Navigated to next page:", currentPage); // Log page change
+            }
+        }
 
         // Displays the leaderboard screen (this just switches screens, data is loaded by onSnapshot)
         function displayGlobalLeaderboard() {
+            currentPage = 1; // Reset to first page when opening leaderboard
             showScreen('leaderboard-screen');
+            console.log("Displaying global leaderboard screen."); // Log screen display
             // Data loading is handled by the onSnapshot listener triggered by loadGlobalLeaderboard()
             // which is called when Firebase is initialized or when leaderboard screen is activated.
         }
 
-
-        // --- Download Leaderboard Function (now downloads global data) ---
-        function downloadLeaderboard() {
-            if (globalLeaderboardData.length === 0) {
-                showCustomModal("No Data", "Leaderboard is empty to download.");
-                return;
-            }
-            const leaderboardDataString = JSON.stringify(globalLeaderboardData, null, 2); // Pretty print JSON
-            const blob = new Blob([leaderboardDataString], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'word_war_gre_global_leaderboard.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url); // Clean up
-        }
 
         // --- Music Control ---
         function toggleMusic() {
@@ -1045,11 +1118,13 @@
                 backgroundMusic.pause();
                 toggleMusicButton.textContent = "Play Music";
                 musicPlaying = false;
+                console.log("Music paused."); // Log music state change
             } else {
                 backgroundMusic.volume = 0.5; // Set volume
                 backgroundMusic.play().then(() => {
                     toggleMusicButton.textContent = "Pause Music";
                     musicPlaying = true;
+                    console.log("Music playing."); // Log music state change
                 }).catch(e => {
                     console.error("Music playback failed:", e);
                     showCustomModal("Music Error", "Autoplay blocked. Please interact with the page first or try again.");
@@ -1059,6 +1134,7 @@
 
         // --- Event Listeners ---
         window.onload = function() {
+            console.log("Window loaded. Initializing game."); // Log window load
             // Attempt to autoplay music (subject to browser policies)
             backgroundMusic.volume = 0.5;
             backgroundMusic.play().then(() => {
@@ -1084,12 +1160,26 @@
         playAgainButton.addEventListener('click', startGame);
         mainMenuFromGameOverButton.addEventListener('click', () => showScreen('main-menu'));
 
-        // Leaderboard Button
-        downloadLeaderboardButton.addEventListener('click', downloadLeaderboard);
-        mainMenuFromLeaderboardButton.addEventListener('click', () => showScreen('main-menu'));
+        // Leaderboard Pagination Buttons
+        prevPageButton.addEventListener('click', goToPreviousPage);
+        nextPageButton.addEventListener('click', goToNextPage);
 
         // Custom Modal Close Button
         modalCloseButton.addEventListener('click', hideCustomModal);
+        
+        // Ensure the initial screen is the main menu
+        showScreen('main-menu');
+
+        // Add logging for the specific button
+        if (mainMenuFromLeaderboardButton) {
+            console.log("Leaderboard Main Menu button element found:", mainMenuFromLeaderboardButton);
+            mainMenuFromLeaderboardButton.addEventListener('click', () => {
+                console.log("Leaderboard Main Menu button clicked!"); // This is the key log
+                showScreen('main-menu');
+            });
+        } else {
+            console.error("Leaderboard Main Menu button element NOT FOUND!");
+        }
     </script>
 </body>
 </html>
