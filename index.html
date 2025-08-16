@@ -983,6 +983,14 @@
                 clickedButton.classList.add('selected-feedback');
             }
 
+            // Apply visual feedback to the word display BEFORE the timeout
+            if (isCorrect) {
+                wordDisplay.classList.add('correct-feedback');
+            } else {
+                wordDisplay.classList.add('wrong-feedback');
+            }
+
+
             updateScoreDisplay();
 
             // Store a reference to the specific clicked button for later explicit removal
@@ -991,8 +999,8 @@
             setTimeout(() => {
                 wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
                 
-                // Explicitly remove the selected-feedback class from the *originally clicked button*
-                // before proceeding to the next word. This is crucial for mobile touch devices.
+                // Explicitly remove the feedback class from the *originally clicked button*
+                // This targets the one specific element that might be sticking.
                 if (selectedButtonForClear) {
                     selectedButtonForClear.classList.remove('selected-feedback');
                 }
@@ -1007,10 +1015,11 @@
                 if (wrongAttempts >= 3) {
                     endGame();
                 } else {
-                    // Wrap pickAndDisplayWord() in a setTimeout(0) to defer DOM manipulation
-                    // This allows the browser to fully process the previous state changes and repaints.
+                    // Call pickAndDisplayWord. Since displayChoices() (called by pickAndDisplayWord)
+                    // handles clearing choicesContainer.innerHTML, we don't need to do it here.
+                    // The setTimeout(0) around this helps ensure the browser's render queue processes the clear first.
                     setTimeout(() => {
-                        pickAndDisplayWord(); // Next word
+                        pickAndDisplayWord(); 
                     }, 0);
                 }
             }, 500); // 500ms delay for visual feedback for the user
