@@ -225,10 +225,10 @@
 
         /* NEW: Class for selected button feedback */
         .choice-button.selected-feedback {
-            background-color: var(--primary-bright); /* Blue background */
-            color: #000; /* Black text */
-            box-shadow: none; /* Override any active/hover shadows */
-            top: 0; /* Reset position */
+            background-color: var(--primary-bright) !important; /* Blue background */
+            color: #000 !important; /* Black text */
+            box-shadow: none !important; /* Override any active/hover shadows */
+            top: 0 !important; /* Reset position */
         }
 
 
@@ -974,39 +974,46 @@
                 console.log("Answer: WRONG. Wrong attempts:", wrongAttempts); // Log wrong answer
             }
 
-            // Apply visual feedback to the word display
-            if (isCorrect) {
-                wordDisplay.classList.add('correct-feedback');
-            } else {
-                wordDisplay.classList.add('wrong-feedback');
-            }
+            // Disable all choice buttons immediately after a selection
+            // This prevents further clicks and might help reset touch states
+            document.querySelectorAll('.choice-button').forEach(btn => btn.disabled = true);
 
-            // Apply feedback to the clicked button immediately
+            // Apply feedback to the clicked button immediately AFTER disabling others
             if (clickedButton) {
                 clickedButton.classList.add('selected-feedback');
             }
 
-            // NEW: Disable all choice buttons immediately after a selection
-            document.querySelectorAll('.choice-button').forEach(btn => btn.disabled = true);
-
             updateScoreDisplay();
+
+            // Store a reference to the specific clicked button for later explicit removal
+            const selectedButtonForClear = clickedButton;
 
             setTimeout(() => {
                 wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
                 
-                // Explicitly remove the feedback class from ALL choice buttons
+                // Explicitly remove the selected-feedback class from the *originally clicked button*
+                // before proceeding to the next word. This is crucial for mobile touch devices.
+                if (selectedButtonForClear) {
+                    selectedButtonForClear.classList.remove('selected-feedback');
+                }
+
+                // Re-enable all buttons. They will either be recreated or simply become clickable again.
+                // This part is crucial to ensure new buttons are clickable if they are reused.
+                // However, pickAndDisplayWord clears choicesContainer.innerHTML, making new buttons anyway.
                 document.querySelectorAll('.choice-button').forEach(btn => {
-                    btn.classList.remove('selected-feedback');
-                    // NEW: Re-enable buttons before proceeding to next word or end game
                     btn.disabled = false;
                 });
 
                 if (wrongAttempts >= 3) {
                     endGame();
                 } else {
-                    pickAndDisplayWord(); // Next word
+                    // Wrap pickAndDisplayWord() in a setTimeout(0) to defer DOM manipulation
+                    // This allows the browser to fully process the previous state changes and repaints.
+                    setTimeout(() => {
+                        pickAndDisplayWord(); // Next word
+                    }, 0);
                 }
-            }, 500); // 500ms delay for visual feedback
+            }, 500); // 500ms delay for visual feedback for the user
         }
 
         // Ends the game, shows final score, and prompts for name
