@@ -223,6 +223,15 @@
             box-shadow: none;
         }
 
+        /* NEW: Class for selected button feedback */
+        .choice-button.selected-feedback {
+            background-color: var(--primary-bright); /* Blue background */
+            color: #000; /* Black text */
+            box-shadow: none; /* Override any active/hover shadows */
+            top: 0; /* Reset position */
+        }
+
+
         #leaderboard-table {
             width: 100%;
             margin-top: 1.5rem;
@@ -372,6 +381,15 @@
             #score-display, #wrong-attempts-display {
                 font-size: 1.2rem;
             }
+             /* Game Over Screen adjustments for small screens */
+            #game-over-screen .flex-col > button { /* Target buttons directly */
+                margin-top: 0.8rem; /* Add more space between buttons */
+                width: 90%; /* Make buttons take up more width */
+                max-width: 250px; /* Limit max width for a stack */
+            }
+            #game-over-screen input[type="text"] {
+                margin-bottom: 1rem; /* More space below input */
+            }
         }
 
         /* Specific styles for phones (e.g., up to 480px width) */
@@ -516,9 +534,11 @@
             <p class="text-lg mt-4 mb-4">Your final score: <span id="final-score" class="font-bold text-yellow-400">0</span></p>
             <p class="text-md mb-2">Enter your name for the Leaderboard:</p>
             <input type="text" id="player-name-input" placeholder="Your Name" class="text-sm sm:text-base">
-            <button id="save-score-button" class="text-sm sm:text-base mt-4">Save Score</button>
-            <button id="play-again-button" class="text-sm sm:text-base">Play Again</button>
-            <button id="main-menu-from-gameover" class="text-sm sm:text-base">Main Menu</button>
+            <div class="flex flex-col space-y-3 items-center w-full mt-4"> <!-- Added flex column for buttons -->
+                <button id="save-score-button" class="text-sm sm:text-base w-full max-w-xs">Save Score</button>
+                <button id="play-again-button" class="text-sm sm:text-base w-full max-w-xs">Play Again</button>
+                <button id="main-menu-from-gameover" class="text-sm sm:text-base w-full max-w-xs">Main Menu</button>
+            </div>
         </div>
 
         <!-- Leaderboard Screen -->
@@ -933,13 +953,14 @@
                 button.classList.add('choice-button', 'rounded-lg', 'text-sm', 'md:text-base');
                 button.textContent = option;
                 button.dataset.index = index; // Store index to identify choice
-                button.addEventListener('click', () => checkAnswer(option));
+                // Pass the button element itself to checkAnswer
+                button.addEventListener('click', (event) => checkAnswer(option, event.currentTarget));
                 choicesContainer.appendChild(button);
             });
         }
 
         // Checks the player's answer
-        function checkAnswer(selectedDefinition) {
+        function checkAnswer(selectedDefinition, clickedButton) {
             let isCorrect = false;
             if (selectedDefinition === currentWord.definition) {
                 currentScore++;
@@ -953,21 +974,33 @@
                 console.log("Answer: WRONG. Wrong attempts:", wrongAttempts); // Log wrong answer
             }
 
-            // Apply visual feedback
+            // Apply visual feedback to the word display
             if (isCorrect) {
                 wordDisplay.classList.add('correct-feedback');
             } else {
                 wordDisplay.classList.add('wrong-feedback');
             }
 
+            // NEW: Apply feedback to the clicked button immediately
+            if (clickedButton) {
+                clickedButton.classList.add('selected-feedback');
+            }
+
             updateScoreDisplay();
 
             setTimeout(() => {
                 wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
+                
+                // NEW: Explicitly remove the feedback class from ALL choice buttons
+                document.querySelectorAll('.choice-button').forEach(btn => {
+                    btn.classList.remove('selected-feedback');
+                });
+
                 if (wrongAttempts >= 3) {
                     endGame();
                 } else {
-                    pickAndDisplayWord(); // Next word
+                    // Next word will be picked, which clears choicesContainer anyway
+                    pickAndDisplayWord(); 
                 }
             }, 500); // 500ms delay for visual feedback
         }
