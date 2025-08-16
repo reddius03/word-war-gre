@@ -343,38 +343,42 @@
         }
 
         /* Responsive adjustments for overall layout */
+        /* Adjusted max-height and padding for game-container on small screens */
         @media (max-width: 639px) {
             .game-container {
-                padding: 0.8rem; /* Slightly reduced padding */
+                padding: 0.8rem;
                 border-width: 3px;
                 border-radius: 8px;
                 box-shadow: 0 0 15px var(--primary-bright);
+                max-height: 95vh; /* Limit height to 95% of viewport height */
+                overflow-y: auto; /* Add scrolling if content overflows */
             }
             button {
-                padding: 0.6rem 0.8rem; /* Smaller button padding */
-                font-size: 0.75rem; /* Smaller button font size */
+                padding: 0.6rem 0.8rem;
+                font-size: 0.75rem;
                 border-width: 2px;
                 border-radius: 6px;
                 box-shadow: 0 3px #0080A0;
             }
             .choice-button {
-                padding: 0.6rem; /* Smaller choice button padding */
-                min-height: 3.5rem; /* Slightly reduced min-height for choices */
-                font-size: 0.8rem; /* Smaller font for choice buttons on tiny screens */
+                padding: 0.6rem;
+                min-height: 3.5rem;
+                font-size: 0.8rem;
             }
             #word-display {
-                font-size: 1.6rem; /* Ensure word display is smaller on very small screens */
-                min-height: 3rem; /* Adjust minimum height */
+                font-size: 1.6rem;
+                min-height: 3rem;
             }
             #score-display, #wrong-attempts-display {
-                font-size: 1.2rem; /* Make score/wrong attempts smaller */
+                font-size: 1.2rem;
             }
         }
 
         /* Specific styles for phones (e.g., up to 480px width) */
         @media (max-width: 480px) {
              .game-container {
-                padding: 0.6rem; /* Even less padding for tiny screens */
+                padding: 0.6rem;
+                max-height: 98vh; /* Slightly larger max-height for tiny screens to prevent excessive scrolling */
             }
             h1 { font-size: 1.8rem; }
             h2 { font-size: 1.5rem; }
