@@ -981,26 +981,30 @@
                 wordDisplay.classList.add('wrong-feedback');
             }
 
-            // NEW: Apply feedback to the clicked button immediately
+            // Apply feedback to the clicked button immediately
             if (clickedButton) {
                 clickedButton.classList.add('selected-feedback');
             }
+
+            // NEW: Disable all choice buttons immediately after a selection
+            document.querySelectorAll('.choice-button').forEach(btn => btn.disabled = true);
 
             updateScoreDisplay();
 
             setTimeout(() => {
                 wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
                 
-                // NEW: Explicitly remove the feedback class from ALL choice buttons
+                // Explicitly remove the feedback class from ALL choice buttons
                 document.querySelectorAll('.choice-button').forEach(btn => {
                     btn.classList.remove('selected-feedback');
+                    // NEW: Re-enable buttons before proceeding to next word or end game
+                    btn.disabled = false;
                 });
 
                 if (wrongAttempts >= 3) {
                     endGame();
                 } else {
-                    // Next word will be picked, which clears choicesContainer anyway
-                    pickAndDisplayWord(); 
+                    pickAndDisplayWord(); // Next word
                 }
             }, 500); // 500ms delay for visual feedback
         }
