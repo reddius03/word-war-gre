@@ -345,21 +345,54 @@
         /* Responsive adjustments for overall layout */
         @media (max-width: 639px) {
             .game-container {
-                padding: 1rem;
+                padding: 0.8rem; /* Slightly reduced padding */
                 border-width: 3px;
                 border-radius: 8px;
                 box-shadow: 0 0 15px var(--primary-bright);
             }
             button {
-                padding: 0.7rem 1rem;
-                font-size: 0.85rem;
+                padding: 0.6rem 0.8rem; /* Smaller button padding */
+                font-size: 0.75rem; /* Smaller button font size */
                 border-width: 2px;
                 border-radius: 6px;
                 box-shadow: 0 3px #0080A0;
             }
             .choice-button {
-                padding: 0.8rem;
-                min-height: 4rem;
+                padding: 0.6rem; /* Smaller choice button padding */
+                min-height: 3.5rem; /* Slightly reduced min-height for choices */
+                font-size: 0.8rem; /* Smaller font for choice buttons on tiny screens */
+            }
+            #word-display {
+                font-size: 1.6rem; /* Ensure word display is smaller on very small screens */
+                min-height: 3rem; /* Adjust minimum height */
+            }
+            #score-display, #wrong-attempts-display {
+                font-size: 1.2rem; /* Make score/wrong attempts smaller */
+            }
+        }
+
+        /* Specific styles for phones (e.g., up to 480px width) */
+        @media (max-width: 480px) {
+             .game-container {
+                padding: 0.6rem; /* Even less padding for tiny screens */
+            }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.5rem; }
+            button {
+                padding: 0.5rem 0.7rem;
+                font-size: 0.7rem;
+            }
+            .choice-button {
+                padding: 0.5rem;
+                min-height: 3rem;
+                font-size: 0.75rem;
+            }
+            #word-display {
+                font-size: 1.4rem;
+                min-height: 2.5rem;
+            }
+            #score-display, #wrong-attempts-display {
+                font-size: 1.1rem;
             }
         }
 
