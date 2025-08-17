@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -979,7 +979,6 @@
             }
 
             // Disable all choice buttons immediately after a selection
-            // This prevents further clicks and might help reset touch states
             document.querySelectorAll('.choice-button').forEach(btn => btn.disabled = true);
 
             // Apply feedback to the clicked button immediately AFTER disabling others
@@ -996,16 +995,25 @@
 
             updateScoreDisplay();
 
+            // Store a reference to the specific clicked button for later explicit removal and reflow.
+            const clickedButtonRef = clickedButton;
+
             setTimeout(() => {
                 // Clear word feedback classes
                 wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
                 
-                // No need to remove 'selected-feedback' from the old button here,
-                // as pickAndDisplayWord() will clear choicesContainer.innerHTML,
-                // effectively removing the old button from the DOM entirely.
+                // Explicitly remove the 'selected-feedback' class from the clicked button.
+                // This is crucial to break any lingering browser visual states on mobile.
+                if (clickedButtonRef) {
+                    clickedButtonRef.classList.remove('selected-feedback');
+                }
 
-                // Re-enable all buttons. These are either the ones about to be removed,
-                // or if no new word, for the game over screen. This is a safeguard.
+                // Force a reflow/repaint on the container. This often helps mobile browsers
+                // acknowledge the style changes and clear visual caches.
+                // Reading any offset property of an element can trigger a reflow.
+                void choicesContainer.offsetWidth; // forces reflow
+
+                // Re-enable all buttons. (Though they will be replaced by pickAndDisplayWord anyway).
                 document.querySelectorAll('.choice-button').forEach(btn => {
                     btn.disabled = false;
                 });
@@ -1013,12 +1021,9 @@
                 if (wrongAttempts >= 3) {
                     endGame();
                 } else {
-                    // This setTimeout(0) ensures the browser has a chance to fully render
-                    // the current state (feedback cleared, old buttons logically removed)
-                    // before the new word and its new buttons are picked and displayed.
-                    setTimeout(() => {
-                        pickAndDisplayWord(); 
-                    }, 0);
+                    // Call pickAndDisplayWord directly now that cleanup is done.
+                    // It will handle clearing choicesContainer.innerHTML and rebuilding.
+                    pickAndDisplayWord(); 
                 }
             }, 500); // 500ms delay for visual feedback for the user
         }
