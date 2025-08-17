@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -872,7 +872,7 @@
                     loadGlobalLeaderboard(); // This fetches all data
                 } else {
                     leaderboardBody.innerHTML = '<tr><td colspan="3">Initializing Firebase...</td></tr>';
-                    leaderboardLoading.classList.remove('hidden');
+                    leaderboardLoading.classList.add('hidden'); // Hide loading indicator if Firebase not ready
                 }
             }
         }
@@ -941,13 +941,17 @@
 
             wordDisplay.textContent = currentWord.word;
             wordDisplay.classList.remove('correct-feedback', 'wrong-feedback'); // Clear previous feedback
-            displayChoices();
+            
+            // Crucial: Clear choicesContainer *before* adding new buttons to prevent sticky state
+            choicesContainer.innerHTML = ''; 
+            displayChoices(); // This will now always build into a clean container.
         }
 
 
         // Renders the choice buttons
         function displayChoices() {
-            choicesContainer.innerHTML = ''; // Clear previous choices
+            // This function is now solely responsible for creating and appending buttons.
+            // choicesContainer.innerHTML is now cleared in pickAndDisplayWord()
             currentWord.shuffledOptions.forEach((option, index) => {
                 const button = document.createElement('button');
                 button.classList.add('choice-button', 'rounded-lg', 'text-sm', 'md:text-base');
@@ -990,24 +994,18 @@
                 wordDisplay.classList.add('wrong-feedback');
             }
 
-
             updateScoreDisplay();
 
-            // Store a reference to the specific clicked button for later explicit removal
-            const selectedButtonForClear = clickedButton;
-
             setTimeout(() => {
+                // Clear word feedback classes
                 wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
                 
-                // Explicitly remove the feedback class from the *originally clicked button*
-                // This targets the one specific element that might be sticking.
-                if (selectedButtonForClear) {
-                    selectedButtonForClear.classList.remove('selected-feedback');
-                }
+                // No need to remove 'selected-feedback' from the old button here,
+                // as pickAndDisplayWord() will clear choicesContainer.innerHTML,
+                // effectively removing the old button from the DOM entirely.
 
-                // Re-enable all buttons. They will either be recreated or simply become clickable again.
-                // This part is crucial to ensure new buttons are clickable if they are reused.
-                // However, pickAndDisplayWord clears choicesContainer.innerHTML, making new buttons anyway.
+                // Re-enable all buttons. These are either the ones about to be removed,
+                // or if no new word, for the game over screen. This is a safeguard.
                 document.querySelectorAll('.choice-button').forEach(btn => {
                     btn.disabled = false;
                 });
@@ -1015,9 +1013,9 @@
                 if (wrongAttempts >= 3) {
                     endGame();
                 } else {
-                    // Call pickAndDisplayWord. Since displayChoices() (called by pickAndDisplayWord)
-                    // handles clearing choicesContainer.innerHTML, we don't need to do it here.
-                    // The setTimeout(0) around this helps ensure the browser's render queue processes the clear first.
+                    // This setTimeout(0) ensures the browser has a chance to fully render
+                    // the current state (feedback cleared, old buttons logically removed)
+                    // before the new word and its new buttons are picked and displayed.
                     setTimeout(() => {
                         pickAndDisplayWord(); 
                     }, 0);
