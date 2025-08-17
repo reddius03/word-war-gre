@@ -804,6 +804,7 @@
         let currentWord = {};
         let globalLeaderboardData = []; // This will hold scores from Firestore
         let musicPlaying = false; // Track music state
+        let highlightedDocId = null; // Global variable to store the ID of the document to highlight
 
         // Pagination state
         let currentPage = 1;
@@ -1086,24 +1087,23 @@
             console.log("Attempting to save score..."); // Log save attempt
 
             try {
-                await retryFirebaseCall(() => window.addDoc(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), { // This line is already correct
+                const docRef = await retryFirebaseCall(() => window.addDoc(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), {
                     name: playerName,
                     score: currentScore,
                     timestamp: window.serverTimestamp(),
                     userId: window.currentUserId
                 }));
+                console.log(`Score saved for ${playerName}: ${currentScore}, Doc ID: ${docRef.id}`);
+                highlightedDocId = docRef.id; // Store the ID of the newly saved document for highlighting
+
                 showCustomModal("Score Saved!", "Your score has been added to the global leaderboard!");
-                console.log(`Score saved for ${playerName}: ${currentScore}`);
                 
                 // When modal is closed, show leaderboard and go to user's page
-                // Re-attach the event listener to ensure it's fresh and only fires once for this modal
                 const currentModalCloseButton = document.getElementById('modal-close-button');
                 currentModalCloseButton.onclick = null; // Clear existing listener
                 currentModalCloseButton.addEventListener('click', function handler() {
                     hideCustomModal();
-                    // Remove this specific handler after it's used
                     currentModalCloseButton.removeEventListener('click', handler); 
-                    // Small delay to allow modal to visually close before navigating
                     setTimeout(() => {
                         displayGlobalLeaderboard(true); // Now calls with flag to navigate to user's score page
                     }, 300); 
@@ -1142,9 +1142,9 @@
 
             scoresToDisplay.forEach((entry, index) => {
                 const row = document.createElement('tr');
-                // Highlight the user's row if it matches the current user ID
-                if (window.currentUserId && entry.userId === window.currentUserId) {
-                    row.classList.add('bg-blue-800', 'text-yellow-300'); // Tailwind classes for highlighting
+                // Highlight the user's row if it matches the specific highlightedDocId
+                if (highlightedDocId && entry.id === highlightedDocId) {
+                    row.classList.add('bg-blue-800', 'text-yellow-300', 'font-bold', 'border-2', 'border-yellow-300'); // Added more highlight styles
                 }
                 row.innerHTML = `
                     <td>${startIndex + index + 1}</td>
@@ -1153,6 +1153,9 @@
                 `;
                 leaderboardBody.appendChild(row);
             });
+
+            // After rendering, clear the highlighted ID so it doesn't persist beyond this load
+            highlightedDocId = null;
         }
 
         // Function to load all global leaderboard data from Firestore
@@ -1170,7 +1173,7 @@
             }
 
             // Order by score descending, then by timestamp ascending for consistent tie-breaking
-            const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), // This line is already correct
+            const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`),
                 window.orderBy('score', 'desc'),
                 window.orderBy('timestamp', 'asc') 
             );
@@ -1189,26 +1192,41 @@
                         return b.score - a.score; // Primary sort by score descending
                     }
                     // Secondary sort by timestamp ascending for ties (older entries first)
-                    return (a.timestamp?.toMillis() || 0) - (b.timestamp?.toMillis() || 0); // Handle potential null timestamps
+                    // Ensure timestamp exists and convert to milliseconds for comparison
+                    const aTimestamp = a.timestamp && typeof a.timestamp.toMillis === 'function' ? a.timestamp.toMillis() : 0;
+                    const bTimestamp = b.timestamp && typeof b.timestamp.toMillis === 'function' ? b.timestamp.toMillis() : 0;
+                    return aTimestamp - bTimestamp;
                 });
                 globalLeaderboardData = scores; // Store all fetched scores
 
                 if (goToUserScorePage && userIdToFind) {
                     let userRank = -1;
-                    // Find the highest rank for the current user
-                    for (let i = 0; i < globalLeaderboardData.length; i++) {
-                        if (globalLeaderboardData[i].userId === userIdToFind) {
-                            userRank = i + 1; // Ranks are 1-based
-                            break; // Found the first (highest score) entry for this user
+                    let targetDocIndex = -1;
+
+                    // Find the rank of the specific highlighted document first
+                    if (highlightedDocId) {
+                        targetDocIndex = globalLeaderboardData.findIndex(entry => entry.id === highlightedDocId);
+                    }
+                    
+                    // If a specific doc is highlighted, prioritize its page.
+                    // Otherwise, find the highest score for the user.
+                    if (targetDocIndex !== -1) {
+                        userRank = targetDocIndex + 1;
+                    } else if (userIdToFind) {
+                        for (let i = 0; i < globalLeaderboardData.length; i++) {
+                            if (globalLeaderboardData[i].userId === userIdToFind) {
+                                userRank = i + 1; // Ranks are 1-based
+                                break; // Found the highest score entry for this user
+                            }
                         }
                     }
 
                     if (userRank !== -1) {
                         currentPage = Math.ceil(userRank / itemsPerPage);
-                        console.log(`User (ID: ${userIdToFind}) found at rank ${userRank}, navigating to page ${currentPage}`);
+                        console.log(`Navigating to page ${currentPage} for highlighted doc ID ${highlightedDocId || userIdToFind}`);
                     } else {
-                        currentPage = 1; // User score not found (e.g., deleted or not yet in data), default to first page
-                        console.log(`User (ID: ${userIdToFind}) score not found in current leaderboard data, defaulting to page 1.`);
+                        currentPage = 1; // User score not found, default to first page
+                        console.log(`Highlighted doc or user ID not found, defaulting to page 1.`);
                     }
                 }
 
@@ -1255,6 +1273,7 @@
             // Only reset to page 1 if not trying to go to user's specific page
             if (!goToUserScore) {
                 currentPage = 1; 
+                highlightedDocId = null; // Clear highlight if not coming from a save
             }
             showScreen('leaderboard-screen');
             console.log("Displaying global leaderboard screen.");
