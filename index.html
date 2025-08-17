@@ -208,6 +208,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: none; /* Removed choice button shadow */
+            touch-action: manipulation; /* Added to improve touch handling on mobile */
         }
         @media (min-width: 640px) {
             .choice-button { font-size: 0.95rem; padding: 1rem; min-height: 5rem; }
@@ -223,7 +224,7 @@
             box-shadow: none;
         }
 
-        /* NEW: Class for selected button feedback */
+        /* Class for selected button feedback */
         .choice-button.selected-feedback {
             background-color: var(--primary-bright) !important; /* Blue background */
             color: #000 !important; /* Black text */
@@ -1085,16 +1086,29 @@
             console.log("Attempting to save score..."); // Log save attempt
 
             try {
-                // Add score to Firestore
-                await retryFirebaseCall(() => window.addDoc(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), {
+                await retryFirebaseCall(() => window.addDoc(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), { // This line is already correct
                     name: playerName,
                     score: currentScore,
-                    timestamp: window.serverTimestamp(), // Use server timestamp for consistent ordering
-                    userId: window.currentUserId // Store user ID (should now be guaranteed to exist)
+                    timestamp: window.serverTimestamp(),
+                    userId: window.currentUserId
                 }));
                 showCustomModal("Score Saved!", "Your score has been added to the global leaderboard!");
-                console.log(`Score saved for ${playerName}: ${currentScore}`); // Log successful save
-                showScreen('leaderboard-screen');
+                console.log(`Score saved for ${playerName}: ${currentScore}`);
+                
+                // When modal is closed, show leaderboard and go to user's page
+                // Re-attach the event listener to ensure it's fresh and only fires once for this modal
+                const currentModalCloseButton = document.getElementById('modal-close-button');
+                currentModalCloseButton.onclick = null; // Clear existing listener
+                currentModalCloseButton.addEventListener('click', function handler() {
+                    hideCustomModal();
+                    // Remove this specific handler after it's used
+                    currentModalCloseButton.removeEventListener('click', handler); 
+                    // Small delay to allow modal to visually close before navigating
+                    setTimeout(() => {
+                        displayGlobalLeaderboard(true); // Now calls with flag to navigate to user's score page
+                    }, 300); 
+                });
+                
             } catch (e) {
                 console.error("Error saving score to Firestore:", e);
                 showCustomModal("Save Error", `Could could not save score: ${e.message}`);
@@ -1128,6 +1142,10 @@
 
             scoresToDisplay.forEach((entry, index) => {
                 const row = document.createElement('tr');
+                // Highlight the user's row if it matches the current user ID
+                if (window.currentUserId && entry.userId === window.currentUserId) {
+                    row.classList.add('bg-blue-800', 'text-yellow-300'); // Tailwind classes for highlighting
+                }
                 row.innerHTML = `
                     <td>${startIndex + index + 1}</td>
                     <td>${entry.name}</td>
@@ -1138,20 +1156,23 @@
         }
 
         // Function to load all global leaderboard data from Firestore
-        window.loadGlobalLeaderboard = function() { // Made global so Firebase script can call it
+        window.loadGlobalLeaderboard = function(options = {}) { // Accept options object
+            const { goToUserScorePage = false, userIdToFind = null } = options;
             leaderboardLoading.classList.remove('hidden'); // Show loading indicator
             leaderboardBody.innerHTML = ''; // Clear previous entries
             console.log("Loading global leaderboard data..."); // Log data load initiation
 
             if (!window.firebaseInitialized || !window.db || !window.collection || !window.query || !window.orderBy || !window.onSnapshot) {
-                leaderboardBody.innerHTML = '<tr><td colspan="3">Leaderboard service not available.</td></tr>';
+                leaderboardBody.innerHTML = '<tr><td colspan="3">Leaderboard service not available or Firebase not fully initialized.</td></tr>';
                 leaderboardLoading.classList.add('hidden');
-                console.warn("Firebase not fully initialized for leaderboard."); // Warn if Firebase is not ready
+                console.warn("Firebase not fully initialized for leaderboard. Current state: firebaseInitialized=", window.firebaseInitialized, "db=", !!window.db, "collection=", !!window.collection);
                 return;
             }
 
-            const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`),
-                window.orderBy('score', 'desc')
+            // Order by score descending, then by timestamp ascending for consistent tie-breaking
+            const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), // This line is already correct
+                window.orderBy('score', 'desc'),
+                window.orderBy('timestamp', 'asc') 
             );
 
             // Listen for real-time updates to the leaderboard
@@ -1159,21 +1180,55 @@
                 console.log("Leaderboard data received from Firestore."); // Log data receipt
                 const scores = [];
                 querySnapshot.forEach((doc) => {
-                    scores.push(doc.data());
+                    scores.push({ id: doc.id, ...doc.data() }); // Include doc.id for potential identification
                 });
 
-                // Sort in memory and store all fetched scores
-                scores.sort((a, b) => b.score - a.score);
+                // Sort in memory (Firestore's orderBy is primary source, but double-check consistency)
+                scores.sort((a, b) => {
+                    if (b.score !== a.score) {
+                        return b.score - a.score; // Primary sort by score descending
+                    }
+                    // Secondary sort by timestamp ascending for ties (older entries first)
+                    return (a.timestamp?.toMillis() || 0) - (b.timestamp?.toMillis() || 0); // Handle potential null timestamps
+                });
                 globalLeaderboardData = scores; // Store all fetched scores
 
-                // After new data is fetched, re-render the current page
+                if (goToUserScorePage && userIdToFind) {
+                    let userRank = -1;
+                    // Find the highest rank for the current user
+                    for (let i = 0; i < globalLeaderboardData.length; i++) {
+                        if (globalLeaderboardData[i].userId === userIdToFind) {
+                            userRank = i + 1; // Ranks are 1-based
+                            break; // Found the first (highest score) entry for this user
+                        }
+                    }
+
+                    if (userRank !== -1) {
+                        currentPage = Math.ceil(userRank / itemsPerPage);
+                        console.log(`User (ID: ${userIdToFind}) found at rank ${userRank}, navigating to page ${currentPage}`);
+                    } else {
+                        currentPage = 1; // User score not found (e.g., deleted or not yet in data), default to first page
+                        console.log(`User (ID: ${userIdToFind}) score not found in current leaderboard data, defaulting to page 1.`);
+                    }
+                }
+
+                // After new data is fetched (and currentPage potentially adjusted), re-render the current page
                 renderLeaderboardPage();
 
             }, (error) => {
                 console.error("Error fetching global leaderboard:", error);
                 leaderboardLoading.classList.add('hidden');
-                leaderboardBody.innerHTML = '<tr><td colspan="3">Error loading leaderboard.</td></tr>';
-                showCustomModal("Leaderboard Error", "Could not load global leaderboard. Check your internet connection.");
+                let errorMessage = "Could not load global leaderboard. Check console for details.";
+
+                // More specific error message for missing indexes
+                if (error.code === 'failed-precondition' && error.message.includes('The query requires an index')) {
+                    errorMessage = "Leaderboard requires a Firestore index. Please create a composite index on 'globalLeaderboard' collection with 'score' (descending) and 'timestamp' (ascending) fields in your Firebase console (under Firestore -> Indexes tab).";
+                } else if (error.code === 'permission-denied') {
+                    errorMessage = "Leaderboard access denied. Please check your Firebase Firestore Security Rules to ensure 'read' permissions for authenticated users on 'artifacts/{appId}/public/data/globalLeaderboard'.";
+                }
+
+                leaderboardBody.innerHTML = `<tr><td colspan="3">${errorMessage}</td></tr>`;
+                showCustomModal("Leaderboard Error", errorMessage);
             });
         }
 
@@ -1196,12 +1251,19 @@
         }
 
         // Displays the leaderboard screen (this just switches screens, data is loaded by onSnapshot)
-        function displayGlobalLeaderboard() {
-            currentPage = 1; // Reset to first page when opening leaderboard
+        function displayGlobalLeaderboard(goToUserScore = false) {
+            // Only reset to page 1 if not trying to go to user's specific page
+            if (!goToUserScore) {
+                currentPage = 1; 
+            }
             showScreen('leaderboard-screen');
-            console.log("Displaying global leaderboard screen."); // Log screen display
-            // Data loading is handled by the onSnapshot listener triggered by loadGlobalLeaderboard()
-            // which is called when Firebase is initialized or when leaderboard screen is activated.
+            console.log("Displaying global leaderboard screen.");
+
+            // Pass options to loadGlobalLeaderboard. If goToUserScore is true, also pass currentUserId
+            window.loadGlobalLeaderboard({
+                goToUserScorePage: goToUserScore,
+                userIdToFind: goToUserScore ? window.currentUserId : null
+            });
         }
 
 
@@ -1258,7 +1320,12 @@
         nextPageButton.addEventListener('click', goToNextPage);
 
         // Custom Modal Close Button
-        modalCloseButton.addEventListener('click', hideCustomModal);
+        // Make sure to remove any existing listeners before re-adding to prevent duplicates
+        // We're handling this within saveScore for the specific use case, so remove the general one here.
+        // If there are other modals using this button, a more generic approach would be needed.
+        // For this app, only saveScore sets a custom handler.
+        modalCloseButton.onclick = null; // Clear any existing generic listener
+        modalCloseButton.addEventListener('click', hideCustomModal); // Add default listener for non-score modals
         
         // Ensure the initial screen is the main menu
         showScreen('main-menu');
