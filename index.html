@@ -21,6 +21,7 @@
             background-color: #000; /* Pure black for modern minimalism */
             color: #E0E0E0; /* Light grey for subtle contrast */
             display: flex;
+            flex-direction: column; /* Allow vertical stacking for highest scorer */
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -131,14 +132,14 @@
         }
 
         /* Game specific styles */
-        #score-display, #wrong-attempts-display {
+        #score-display, #wrong-attempts-display, #timer-display {
             font-size: 1.4rem;
             margin: 0.6rem 0;
-            color: #FFF; /* White for score */
+            color: #FFF; /* White for score and timer */
             text-shadow: none;
         }
         @media (min-width: 640px) {
-            #score-display, #wrong-attempts-display { font-size: 1.6rem; }
+            #score-display, #wrong-attempts-display, #timer-display { font-size: 1.6rem; }
         }
 
         #wrong-attempts-display {
@@ -204,17 +205,26 @@
             text-align: left;
             word-wrap: break-word;
             min-height: 4.5rem; /* Slightly reduced height */
-            display: flex;
+            
+            /* New styles for line clamping */
+            overflow: hidden; /* Hide overflowing text */
+            text-overflow: ellipsis; /* Add ellipsis for overflow */
+            display: -webkit-box; /* Required for -webkit-line-clamp */
+            -webkit-line-clamp: 4; /* Limit to 4 lines */
+            -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
+            max-height: 6.5rem; /* Calculated to roughly fit 4 lines with padding (approx 104px) */
+            
+            display: flex; /* Kept display flex for vertical centering */
             align-items: center;
             justify-content: center;
             box-shadow: none; /* Removed choice button shadow */
             touch-action: manipulation; /* Added to improve touch handling on mobile */
         }
         @media (min-width: 640px) {
-            .choice-button { font-size: 0.95rem; padding: 1rem; min-height: 5rem; }
+            .choice-button { font-size: 0.95rem; padding: 1rem; min-height: 5rem; max-height: 7rem; /* Adjusted for larger font and padding */ }
         }
         @media (min-width: 768px) {
-            .choice-button { font-size: 1rem; padding: 1.1rem; min-height: 5.5rem; }
+            .choice-button { font-size: 1rem; padding: 1.1rem; min-height: 5.5rem; max-height: 7.5rem; /* Adjusted for larger font and padding */ }
         }
 
         .choice-button:hover {
@@ -524,6 +534,37 @@
         #leaderboard-screen::-webkit-scrollbar-thumb:hover {
             background-color: #00FFFF; /* Lighter blue on hover */
         }
+
+        /* Styles for Stats Page */
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            background-color: #1A1A1A; /* Slightly lighter dark background */
+            border: 1px solid var(--primary-bright);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .stats-item span:first-child {
+            color: var(--primary-bright); /* Icon/label color */
+        }
+        .stats-item span:last-child {
+            color: #FFF; /* Value color */
+            font-weight: bold;
+        }
+        .stats-icon {
+            margin-right: 0.8rem;
+        }
+
+        /* For the chess icon */
+        .chess-icon::before {
+            content: "\2655"; /* Unicode chess pawn or other piece */
+            font-size: 1.2em;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -547,15 +588,21 @@
         Your browser does not conduct the audio element.
     </audio>
 
+    <!-- Highest Scorer Display - Now controlled by JavaScript's showScreen function -->
+    <div id="highest-scorer-overall-display" class="text-sm text-white mb-4 text-center relative top-[-10px] hidden">
+        Loading top scorer...
+    </div>
+
     <div class="game-container">
         <!-- Main Menu Screen -->
         <div id="main-menu" class="screen active">
             <h1 class="text-3xl sm:text-4xl md:text-5xl">Word War GRE</h1>
             <p class="text-sm sm:text-base md:text-lg mb-8">Test your GRE vocabulary skills!</p>
-            <div class="flex flex-col space-y-4 items-center w-full">
-                <button id="play-solo-button" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Play Game</button>
-                <button id="show-leaderboard-main" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Leaderboard</button>
-                <button id="toggle-music-button" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Toggle Music</button>
+            <div class="flex flex-col space-y-4 items-center w-full md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
+                <button id="play-solo-button" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Play Game</button>
+                <button id="show-leaderboard-main" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Leaderboard</button>
+                <button id="show-stats-button" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Stats</button>
+                <button id="toggle-music-button" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Toggle Music</button>
             </div>
         </div>
 
@@ -564,6 +611,7 @@
             <div class="flex justify-between items-center mb-6">
                 <div id="score-display" class="text-lg sm:text-xl">Score: 0</div>
                 <div id="wrong-attempts-display" class="text-lg sm:text-xl">Wrong: 0/3</div>
+                <div id="timer-display" class="text-lg sm:text-xl">Time: 60</div>
             </div>
             <div id="word-display" class="text-2xl sm:text-3xl md:text-4xl mb-8"></div>
             <div id="choices-container" class="choices-grid">
@@ -607,6 +655,27 @@
             </div>
             <button id="main-menu-from-leaderboard" class="text-sm sm:text-base mt-4">Main Menu</button>
         </div>
+
+        <!-- Stats Screen -->
+        <div id="stats-screen" class="screen">
+            <h2 class="text-xl sm:text-2xl md:text-3xl">Your Stats</h2>
+            <div class="flex flex-col space-y-3 mt-8">
+                <div class="stats-item">
+                    <span class="stats-icon">&#x2655; Games Played:</span>
+                    <span id="games-played-stat">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-icon">🏆 Highest Rank:</span>
+                    <span id="highest-rank-stat">N/A</span>
+                </div>
+            </div>
+            <button id="main-menu-from-stats" class="text-sm sm:text-base mt-8">Main Menu</button>
+        </div>
+    </div>
+
+    <!-- NEW: Developer Note Display -->
+    <div id="developer-note-display" class="text-base text-white mt-5 text-center">
+        Developer Note: <a href="https://wordwargre.blogspot.com/2025/08/update-aug-19th-2025.html" target="_blank" class="text-yellow-400 underline">Aug 19th Updates</a>
     </div>
 
     <!-- Custom Modal for Alerts -->
@@ -622,7 +691,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Your web app's Firebase configuration - Copied from your message
         const firebaseConfig = {
@@ -655,6 +724,9 @@
         window.orderBy = orderBy;
         window.onSnapshot = onSnapshot;
         window.serverTimestamp = serverTimestamp;
+        window.doc = doc; // Expose doc for Firestore
+        window.getDoc = getDoc; // Expose getDoc for Firestore
+        window.setDoc = setDoc; // Expose setDoc for Firestore
 
         // Authenticate user when Firebase is ready
         onAuthStateChanged(auth, async (user) => {
@@ -678,12 +750,12 @@
 
             // Trigger loading of global leaderboard data after Firebase is initialized and user is authenticated
             // This ensures data is ready if leaderboard is opened immediately or after some time.
-            if (document.getElementById('leaderboard-screen').classList.contains('active') || document.getElementById('main-menu').classList.contains('active')) {
+            if (document.getElementById('leaderboard-screen').classList.contains('active') || document.getElementById('main-menu').classList.contains('active') || document.getElementById('stats-screen').classList.contains('active')) {
                 window.loadGlobalLeaderboard();
+                window.loadUserStats(); // Load user stats when Firebase is ready
             }
         });
     </script>
-
 
     <script>
         // Game Data: GRE Words and Definitions
@@ -2899,6 +2971,15 @@
         let musicPlaying = false; // Track music state
         let modalOnCloseCallback = null; // New: Stores a callback for when the modal closes
 
+        // Timer State
+        let gameTimer = null; // Holds the setInterval ID
+        let timeLeft = 60; // Initial time in seconds
+        let isTimerPausedForModal = false; // Track if timer is paused specifically for a modal
+
+        // Stats State
+        let gamesPlayed = 0; // This will now be loaded from Firestore
+        let highestRank = "N/A"; // This will be derived from global leaderboard data
+
         // Pagination state
         let currentPage = 1;
         const itemsPerPage = 10;
@@ -2910,21 +2991,23 @@
         const gameOverScreen = document.getElementById('game-over-screen');
         const leaderboardScreen = document.getElementById('leaderboard-screen');
         const leaderboardLoading = document.getElementById('leaderboard-loading'); // New loading indicator
+        const statsScreen = document.getElementById('stats-screen'); // New Stats screen
 
         const playSoloButton = document.getElementById('play-solo-button');
         const showLeaderboardMainMenuButton = document.getElementById('show-leaderboard-main');
+        const showStatsButton = document.getElementById('show-stats-button'); // New Stats button
         const toggleMusicButton = document.getElementById('toggle-music-button');
         const wordDisplay = document.getElementById('word-display');
         const choicesContainer = document.getElementById('choices-container');
-        const scoreDisplay = document.getElementById('score-display');
+        const scoreDisplay = document = document.getElementById('score-display');
         const wrongAttemptsDisplay = document.getElementById('wrong-attempts-display');
+        const timerDisplay = document.getElementById('timer-display'); // New timer display element
         const finalScoreDisplay = document.getElementById('final-score');
-        const playerNameInput = document.getElementById('player-name-input'); // Fixed typo here
+        const playerNameInput = document.getElementById('player-name-input');
         const saveScoreButton = document.getElementById('save-score-button');
         const playAgainButton = document.getElementById('play-again-button');
         const mainMenuFromGameOverButton = document.getElementById('main-menu-from-gameover');
         const leaderboardBody = document.getElementById('leaderboard-body');
-        // const downloadLeaderboardButton = document.getElementById('download-leaderboard-button'); // Removed
         const mainMenuFromLeaderboardButton = document.getElementById('main-menu-from-leaderboard');
         const backgroundMusic = document.getElementById('background-music');
         const correctSound = document.getElementById('correct-sound');
@@ -2934,6 +3017,16 @@
         const prevPageButton = document.getElementById('prev-page-button');
         const nextPageButton = document.getElementById('next-page-button');
         const pageInfoSpan = document.getElementById('page-info');
+
+        // Stats Elements
+        const gamesPlayedStat = document.getElementById('games-played-stat');
+        const highestRankStat = document.getElementById('highest-rank-stat');
+        const mainMenuFromStatsButton = document.getElementById('main-menu-from-stats'); // New button for stats page
+
+        // NEW: Highest Scorer DOM Element
+        const highestScorerOverallDisplay = document.getElementById('highest-scorer-overall-display');
+        // NEW: Developer Note DOM Element
+        const developerNoteDisplay = document.getElementById('developer-note-display');
 
 
         // Custom Modal Elements
@@ -2961,6 +3054,17 @@
                 screen.classList.remove('active');
             });
             document.getElementById(screenId).classList.add('active');
+
+            // Control visibility of highest scorer display based on current screen
+            if (screenId === 'main-menu') {
+                highestScorerOverallDisplay.classList.remove('hidden');
+                developerNoteDisplay.classList.remove('hidden'); // Show developer note on main menu
+                updateHighestScorerDisplay(); // Ensure it's updated when shown
+            } else {
+                highestScorerOverallDisplay.classList.add('hidden');
+                developerNoteDisplay.classList.add('hidden'); // Hide developer note on other screens
+            }
+
             // If going to leaderboard, ensure it's loaded and display the first page
             if (screenId === 'leaderboard-screen') {
                 if (window.firebaseInitialized) {
@@ -2969,13 +3073,16 @@
                     leaderboardBody.innerHTML = '<tr><td colspan="3">Initializing Firebase...</td></tr>';
                     leaderboardLoading.classList.add('hidden'); // Hide loading indicator if Firebase not ready
                 }
+            } else if (screenId === 'stats-screen') {
+                updateStatsDisplay(); // Update stats when navigating to the stats screen
             }
         }
 
         // Function to show custom modal - now accepts an optional callback
         window.showCustomModal = function(title, message, onCloseCallback = null) {
             modalTitle.textContent = title;
-            modalMessage.textContent = message;
+            // Use innerHTML for modal message to allow for HTML formatting (like colored spans)
+            modalMessage.innerHTML = message;
             customModalOverlay.classList.remove('hidden');
             modalOnCloseCallback = onCloseCallback; // Store the callback
             console.log(`Modal Shown: Title - "${title}", Message - "${message}"`);
@@ -2996,11 +3103,42 @@
 
         // --- Game Logic ---
 
+        // Updates the timer display
+        function updateTimerDisplay() {
+            timerDisplay.textContent = `Time: ${timeLeft}`;
+        }
+
+        // The countdown function for the timer
+        function countdown() {
+            if (isTimerPausedForModal) {
+                return; // Do nothing if timer is explicitly paused for a modal
+            }
+            timeLeft--;
+            updateTimerDisplay();
+            if (timeLeft <= 0) {
+                clearInterval(gameTimer);
+                gameTimer = null; // Clear the timer ID
+                endGame(); // End the game when time runs out
+            }
+        }
+
         // Initializes the game state and displays a new word
         function startGame() {
             currentScore = 0;
             wrongAttempts = 0;
+            timeLeft = 60; // Reset timer
+            isTimerPausedForModal = false; // Ensure timer is not paused initially
+
+            updateGamesPlayedFirestore(); // Call async function to update persisted count
             updateScoreDisplay();
+            updateTimerDisplay(); // Initial timer display
+
+            // Clear any existing timer before starting a new one
+            if (gameTimer) {
+                clearInterval(gameTimer);
+            }
+            gameTimer = setInterval(countdown, 1000); // Start the countdown
+
             showScreen('game-screen');
             console.log("Game started."); // Log game start
             pickAndDisplayWord();
@@ -3099,19 +3237,17 @@
             // Store a reference to the specific clicked button for later explicit removal and reflow.
             const clickedButtonRef = clickedButton;
 
+            // This timeout handles the visual feedback duration and then proceeds
             setTimeout(() => {
                 // Clear word feedback classes
                 wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
                 
                 // Explicitly remove the 'selected-feedback' class from the clicked button.
-                // This is crucial to break any lingering browser visual states on mobile.
                 if (clickedButtonRef) {
                     clickedButtonRef.classList.remove('selected-feedback');
                 }
 
-                // Force a reflow/repaint on the container. This often helps mobile browsers
-                // acknowledge the style changes and clear visual caches.
-                // Reading any offset property of an element can trigger a reflow.
+                // Force a reflow/repaint on the container.
                 void choicesContainer.offsetWidth; // forces reflow
 
                 // Re-enable all buttons. (Though they will be replaced by pickAndDisplayWord anyway).
@@ -3119,18 +3255,44 @@
                     btn.disabled = false;
                 });
 
-                if (wrongAttempts >= 3) {
-                    endGame();
+                // Decide next step: show correct answer modal (if wrong), then check for game over or next word.
+                if (!isCorrect) {
+                    isTimerPausedForModal = true; // Pause timer before showing modal
+                    clearInterval(gameTimer); // Stop timer interval temporarily
+                    gameTimer = null; // Clear ID so it's not mistakenly resumed by countdown()
+
+                    const message = `The correct answer for "${currentWord.word}" was: <br><br><span class="text-green-400">"${currentWord.definition}"</span>`;
+                    
+                    // Show modal. After modal closes, THEN check for game over or next word.
+                    window.showCustomModal("Incorrect Answer", message, () => {
+                        isTimerPausedForModal = false; // Unpause timer state
+                        if (wrongAttempts >= 3 || timeLeft <= 0) { // Check for game over condition
+                            endGame();
+                        } else {
+                            // Only resume timer if game is not over and we're not already at 0 seconds
+                            if (!gameTimer) { // Only start a new interval if one isn't already running
+                                gameTimer = setInterval(countdown, 1000); // Resume timer
+                            }
+                            pickAndDisplayWord();
+                        }
+                    });
                 } else {
-                    // Call pickAndDisplayWord directly now that cleanup is done.
-                    // It will handle clearing choicesContainer.innerHTML and rebuilding.
-                    pickAndDisplayWord(); 
+                    // If correct, no modal, just proceed.
+                    if (wrongAttempts >= 3 || timeLeft <= 0) { // Check for game over condition (should be rare if correct)
+                        endGame(); 
+                    } else {
+                        pickAndDisplayWord();
+                    }
                 }
             }, 500); // 500ms delay for visual feedback for the user
         }
 
         // Ends the game, shows final score, and prompts for name
         function endGame() {
+            if (gameTimer) { // Ensure timer is stopped if game ends
+                clearInterval(gameTimer);
+                gameTimer = null;
+            }
             showScreen('game-over-screen');
             finalScoreDisplay.textContent = currentScore;
             playerNameInput.value = ''; // Clear input field
@@ -3235,11 +3397,8 @@
                 const row = document.createElement('tr');
                 const rank = startIndex + index + 1; // Calculate actual rank
 
-                // Removed specific class assignments for leaderboard-rank-1, -2, -3
-                // The general styling for table rows will now apply to these as well.
-
                 // If this is the *latest submitted score*, apply its specific highlight
-                // This will override any default row styling.
+                // This will override any default row styling or previously applied rank styles.
                 if (latestSubmittedDocId && entry.id === latestSubmittedDocId) {
                     row.classList.add('recent-score-highlight');
                 }
@@ -3272,7 +3431,7 @@
             }
 
             // Order by score descending, then by timestamp ascending for consistent tie-breaking
-            const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), // This line is already correct
+            const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`),
                 window.orderBy('score', 'desc'),
                 window.orderBy('timestamp', 'asc') 
             );
@@ -3282,7 +3441,8 @@
                 console.log("Leaderboard data received from Firestore."); // Log data receipt
                 const scores = [];
                 querySnapshot.forEach((doc) => {
-                    scores.push({ id: doc.id, ...doc.data() }); // Include doc.id for potential identification
+                    const data = { id: doc.id, ...doc.data() };
+                    scores.push(data); 
                 });
 
                 // Sort in memory (Firestore's orderBy is primary source, but double-check consistency)
@@ -3295,9 +3455,23 @@
                 });
                 globalLeaderboardData = scores; // Store all fetched scores
 
+                // --- Start of Highest Rank Calculation Correction ---
+                let foundHighestRank = "N/A";
+                if (window.currentUserId) {
+                    // Iterate through the already sorted globalLeaderboardData to find the user's highest rank
+                    for (let i = 0; i < globalLeaderboardData.length; i++) {
+                        if (globalLeaderboardData[i].userId === window.currentUserId) {
+                            foundHighestRank = i + 1; // Ranks are 1-based
+                            break; // Found the highest (lowest number) rank for this user, no need to check further
+                        }
+                    }
+                }
+                highestRank = foundHighestRank; // Update the global highestRank variable
+                // --- End of Highest Rank Calculation Correction ---
+
                 if (goToUserScorePage && userIdToFind) {
                     let userRank = -1;
-                    // Find the highest rank for the current user
+                    // Find the highest rank for the current user for navigation purposes
                     for (let i = 0; i < globalLeaderboardData.length; i++) {
                         if (globalLeaderboardData[i].userId === userIdToFind) {
                             userRank = i + 1; // Ranks are 1-based
@@ -3325,6 +3499,14 @@
                 // After new data is fetched (and currentPage potentially adjusted), re-render the current page
                 renderLeaderboardPage(latestSubmittedDocId); // Pass latestSubmittedDocId to render function
 
+                // NEW: Update highest scorer display after data is loaded and sorted
+                updateHighestScorerDisplay();
+
+                // If stats screen is active, update it
+                if (statsScreen.classList.contains('active')) {
+                    updateStatsDisplay();
+                }
+
             }, (error) => {
                 console.error("Error fetching global leaderboard:", error);
                 leaderboardLoading.classList.add('hidden');
@@ -3339,6 +3521,8 @@
 
                 leaderboardBody.innerHTML = `<tr><td colspan="3">${errorMessage}</td></tr>`;
                 showCustomModal("Leaderboard Error", errorMessage);
+                // NEW: Show error for highest scorer display too
+                highestScorerOverallDisplay.textContent = "Could not load top scorer.";
             });
         }
 
@@ -3377,6 +3561,93 @@
             });
         }
 
+        // Function to update games played in Firestore
+        async function updateGamesPlayedFirestore() {
+            if (!window.firebaseInitialized || !window.currentUserId || !window.db) {
+                console.warn("Firestore not ready for updating games played.");
+                return;
+            }
+
+            const userStatsDocRef = window.doc(window.db, `artifacts/${window.appId}/users/${window.currentUserId}/userStats/statsDoc`);
+
+            try {
+                const docSnap = await retryFirebaseCall(() => window.getDoc(userStatsDocRef));
+                let currentGamesPlayed = 0;
+                if (docSnap.exists()) {
+                    currentGamesPlayed = docSnap.data().gamesPlayed || 0;
+                }
+
+                currentGamesPlayed++; // Increment locally
+                gamesPlayed = currentGamesPlayed; // Update global local variable
+
+                await retryFirebaseCall(() => window.setDoc(userStatsDocRef, {
+                    gamesPlayed: currentGamesPlayed,
+                    lastPlayed: window.serverTimestamp() // Optional: add last played timestamp
+                }, { merge: true })); // Use merge: true to avoid overwriting other fields if they existed
+
+                console.log("Games played updated in Firestore:", gamesPlayed);
+                updateStatsDisplay(); // Update display immediately after successful save
+            } catch (e) {
+                console.error("Error updating games played in Firestore:", e);
+                window.showCustomModal("Stat Save Error", `Could not save game count: ${e.message}`);
+            }
+        }
+
+        // Function to load and display user-specific stats from Firestore (or derived)
+        window.loadUserStats = async function() {
+            if (!window.firebaseInitialized || !window.currentUserId || !window.db) {
+                gamesPlayedStat.textContent = "N/A (Loading...)";
+                highestRankStat.textContent = "N/A (Loading...)";
+                console.warn("Firebase not ready for loading user stats.");
+                return;
+            }
+
+            const userStatsDocRef = window.doc(window.db, `artifacts/${window.appId}/users/${window.currentUserId}/userStats/statsDoc`);
+            
+            try {
+                const docSnap = await retryFirebaseCall(() => window.getDoc(userStatsDocRef));
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    gamesPlayed = userData.gamesPlayed || 0;
+                } else {
+                    gamesPlayed = 0; // No user stats doc found, initialize games played to 0
+                    console.log("No existing user stats document found for current user. Initializing gamesPlayed to 0.");
+                }
+                
+                // The highestRank variable is updated by loadGlobalLeaderboard's onSnapshot listener.
+                // So, ensure updateStatsDisplay uses the global variables.
+                updateStatsDisplay(); 
+
+            } catch (e) {
+                console.error("Error loading user stats from Firestore:", e);
+                gamesPlayedStat.textContent = "Error";
+                highestRankStat.textContent = "Error";
+                window.showCustomModal("Stats Load Error", `Could not load your stats: ${e.message}`);
+            }
+        }
+
+        // Displays the stats screen - This function now just updates the DOM elements
+        function updateStatsDisplay() {
+            gamesPlayedStat.textContent = gamesPlayed;
+            highestRankStat.textContent = highestRank;
+        }
+
+        // Displays the stats screen
+        function showStatsScreen() {
+            showScreen('stats-screen');
+            // updateStatsDisplay() is called within showScreen for 'stats-screen'
+        }
+
+        // NEW: Function to update the highest scorer display
+        function updateHighestScorerDisplay() {
+            if (globalLeaderboardData.length > 0) {
+                const topScorer = globalLeaderboardData[0];
+                highestScorerOverallDisplay.innerHTML = `Current Highest Scorer: <span class="text-yellow-400">${topScorer.name}</span> with <span class="text-yellow-400">${topScorer.score}</span> points!`;
+            } else {
+                highestScorerOverallDisplay.textContent = "No scores yet! Be the first to set a record!";
+            }
+        }
+
 
         // --- Music Control ---
         function toggleMusic() {
@@ -3413,16 +3684,19 @@
                 toggleMusicButton.textContent = "Play Music";
                 console.error("Autoplay music failed:", e);
                 // Pass a null callback for generic music blocked modal
-                showCustomModal("Music Blocked", "Your browser blocked automatic music playback. Click 'Toggle Music' to enable it.");
+                showCustomModal("Music Error", "Autoplay blocked. Please interact with the page first or try again.");
             });
             // Initial call to load leaderboard (will wait for Firebase to initialize)
             window.loadGlobalLeaderboard();
+            // Ensure the initial screen is the main menu and highest scorer display is handled
+            showScreen('main-menu');
         };
 
         // Main Menu Buttons
         playSoloButton.addEventListener('click', startGame);
         // Changed to call displayGlobalLeaderboard without goToUserScorePage or latestSubmittedDocId
         showLeaderboardMainMenuButton.addEventListener('click', () => displayGlobalLeaderboard()); 
+        showStatsButton.addEventListener('click', showStatsScreen); // Event listener for new Stats button
         toggleMusicButton.addEventListener('click', toggleMusic);
 
         // Game Over Buttons
@@ -3436,10 +3710,10 @@
 
         // Custom Modal Close Button - Single, persistent listener
         modalCloseButton.addEventListener('click', hideCustomModalAndExecuteCallback);
-        
-        // Ensure the initial screen is the main menu
-        showScreen('main-menu');
 
+        // Stats Screen Button
+        mainMenuFromStatsButton.addEventListener('click', () => showScreen('main-menu')); // New button for stats page
+        
         // Add logging for the specific button
         if (mainMenuFromLeaderboardButton) {
             console.log("Leaderboard Main Menu button element found:", mainMenuFromLeaderboardButton);
