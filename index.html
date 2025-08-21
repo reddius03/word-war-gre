@@ -29,22 +29,20 @@
             padding: 1rem;
             box-sizing: border-box;
             overflow: hidden; /* Prevent scrollbars */
-            /* Removed scanline and grid for cleaner look */
         }
 
         .game-container {
             background-color: var(--dark-background);
-            border: 4px solid var(--primary-bright); /* Thinner, bright border */
-            border-radius: 10px; /* Slightly less rounded for sharper feel */
-            padding: 2rem; /* Increased padding for more breathing room */
-            box-shadow:
-                0 0 25px var(--primary-bright); /* Single, strong bright glow */
+            border: 4px solid var(--primary-bright);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 25px var(--primary-bright);
             max-width: 95%;
             width: 100%;
-            max-width: 800px; /* Adjusted max width for slightly more compact feel */
+            max-width: 800px;
             text-align: center;
             position: relative;
-            animation: pulse-border 1.8s infinite alternate ease-in-out; /* Slower, smoother pulse */
+            animation: pulse-border 1.8s infinite alternate ease-in-out;
         }
 
         @keyframes pulse-border {
@@ -53,55 +51,47 @@
                 box-shadow: 0 0 25px var(--primary-bright);
             }
             to {
-                border-color: #00FFFF; /* Slightly different cyan/aqua for pulse effect */
+                border-color: #00FFFF;
                 box-shadow: 0 0 35px #00FFFF;
             }
         }
 
         h1 {
-            color: var(--primary-bright); /* Title in bright color */
-            text-shadow: none; /* Removed heavy shadow for minimalism */
+            color: var(--primary-bright);
+            text-shadow: none;
             font-size: 2.2rem;
             margin-bottom: 1.2rem;
             text-transform: uppercase;
         }
-        @media (min-width: 640px) {
-            h1 { font-size: 2.8rem; }
-        }
-        @media (min-width: 768px) {
-            h1 { font-size: 3.2rem; }
-        }
+        @media (min-width: 640px) { h1 { font-size: 2.8rem; } }
+        @media (min-width: 768px) { h1 { font-size: 3.2rem; } }
 
         h2 {
             color: var(--primary-bright);
-            text-shadow: none; /* Removed heavy shadow for minimalism */
+            text-shadow: none;
             font-size: 1.8rem;
             margin-bottom: 1rem;
         }
-        @media (min-width: 640px) {
-            h2 { font-size: 2rem; }
-        }
-        @media (min-width: 768px) {
-            h2 { font-size: 2.2rem; }
-        }
+        @media (min-width: 640px) { h2 { font-size: 2rem; } }
+        @media (min-width: 768px) { h2 { font-size: 2.2rem; } }
 
         button {
-            background-color: transparent; /* Transparent background */
-            color: var(--primary-bright); /* Text in bright color */
+            background-color: transparent;
+            color: var(--primary-bright);
             padding: 0.9rem 1.4rem;
-            border: 2px solid var(--primary-bright); /* Thinner bright border */
-            border-radius: 8px; /* Slightly less rounded */
+            border: 2px solid var(--primary-bright);
+            border-radius: 8px;
             font-family: 'Press Start 2P', cursive;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.2s ease-in-out; /* Smoother transition */
-            text-shadow: none; /* Removed shadow */
-            box-shadow: 0 3px #0080A0; /* Subtle dark shadow for depth */
+            transition: all 0.2s ease-in-out;
+            text-shadow: none;
+            box-shadow: 0 3px #0080A0;
             outline: none;
             position: relative;
             top: 0;
             left: 0;
-            letter-spacing: 0.5px; /* Slightly tighter spacing */
+            letter-spacing: 0.5px;
         }
 
         button:active {
@@ -109,49 +99,56 @@
             box-shadow: none;
         }
 
-        @media (min-width: 640px) {
-            button { padding: 1rem 1.8rem; font-size: 1.05rem; }
-        }
-        @media (min-width: 768px) {
-            button { padding: 1.1rem 2rem; font-size: 1.15rem; }
-        }
+        @media (min-width: 640px) { button { padding: 1rem 1.8rem; font-size: 1.05rem; } }
+        @media (min-width: 768px) { button { padding: 1.1rem 2rem; font-size: 1.15rem; } }
 
         button:hover {
-            background-color: var(--primary-bright); /* Fill with bright color on hover */
+            background-color: var(--primary-bright);
             border-color: var(--primary-bright);
-            color: #000; /* Black text on hover */
-            box-shadow: 0 5px #00B0D0; /* Slightly stronger shadow on hover */
+            color: #000;
+            box-shadow: 0 5px #00B0D0;
+        }
+        
+        /* Style for active toggle buttons */
+        .toggle-button.active {
+            background-color: var(--primary-bright);
+            color: #000;
+            box-shadow: 0 2px #00B0D0;
+        }
+        
+        /* Style for prominent Save Score button */
+        #game-over-screen #save-score-button {
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border-width: 3px;
+            box-shadow: 0 5px #0080A0;
         }
 
-        .screen {
-            display: none;
+        #game-over-screen #save-score-button:active {
+            top: 5px;
+            box-shadow: none;
         }
 
-        .screen.active {
-            display: block;
-        }
 
-        /* Game specific styles */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
         #score-display, #wrong-attempts-display, #timer-display {
             font-size: 1.4rem;
             margin: 0.6rem 0;
-            color: #FFF; /* White for score and timer */
+            color: #FFF;
             text-shadow: none;
         }
-        @media (min-width: 640px) {
-            #score-display, #wrong-attempts-display, #timer-display { font-size: 1.6rem; }
-        }
+        @media (min-width: 640px) { #score-display, #wrong-attempts-display, #timer-display { font-size: 1.6rem; } }
 
-        #wrong-attempts-display {
-            color: #FF4500; /* Orange-red for wrong attempts */
-        }
+        #wrong-attempts-display { color: #FF4500; }
 
         #word-display {
             font-size: 2.2rem;
             font-weight: bold;
-            color: #FFFFFF; /* White for the word */
+            color: #FFFFFF;
             margin-bottom: 2rem;
-            text-shadow: 0 0 12px #4B0082, 0 0 25px #4B0082; /* Dark purple glow */
+            text-shadow: 0 0 12px #4B0082, 0 0 25px #4B0082;
             word-wrap: break-word;
             transition: color 0.1s ease-in-out, text-shadow 0.1s ease-in-out;
             min-height: 4rem;
@@ -160,88 +157,65 @@
             justify-content: center;
             padding: 0.5rem;
         }
-        @media (max-width: 480px) {
-            #word-display { font-size: 1.8rem; min-height: 3.5rem; }
-        }
-        @media (min-width: 640px) {
-            #word-display { font-size: 2.8rem; min-height: 5rem; }
-        }
-        @media (min-width: 768px) {
-            #word-display { font-size: 3.2rem; min-height: 5rem; }
-        }
-
+        @media (max-width: 480px) { #word-display { font-size: 1.8rem; min-height: 3.5rem; } }
+        @media (min-width: 640px) { #word-display { font-size: 2.8rem; min-height: 5rem; } }
+        @media (min-width: 768px) { #word-display { font-size: 3.2rem; min-height: 5rem; } }
 
         #word-display.correct-feedback {
-            color: #00FF00; /* Bright green */
+            color: #00FF00;
             text-shadow: 0 0 15px #00FF00, 0 0 30px #00FF00;
         }
-
         #word-display.wrong-feedback {
-            color: #FF0000; /* Bright red */
+            color: #FF0000;
             text-shadow: 0 0 15px #FF0000, 0 0 30px #FF0000;
         }
 
         .choices-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 0.8rem; /* Reduced gap for a tighter, cleaner look */
+            gap: 0.8rem;
             margin-top: 1.5rem;
         }
-
-        @media (min-width: 640px) {
-            .choices-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-            }
-        }
+        @media (min-width: 640px) { .choices-grid { grid-template-columns: 1fr 1fr; gap: 1rem; } }
 
         .choice-button {
-            background-color: var(--dark-background); /* Dark background for choices */
-            border: 2px solid var(--primary-bright); /* Bright border */
-            color: #FFFFFF; /* White text for choices */
+            background-color: var(--dark-background);
+            border: 2px solid var(--primary-bright);
+            color: #FFFFFF;
             padding: 0.9rem;
             border-radius: 8px;
             font-size: 0.85rem;
-            text-align: left;
+            text-align: center;
             word-wrap: break-word;
-            min-height: 4.5rem; /* Slightly reduced height */
-            
-            /* New styles for line clamping */
-            overflow: hidden; /* Hide overflowing text */
-            text-overflow: ellipsis; /* Add ellipsis for overflow */
-            display: -webkit-box; /* Required for -webkit-line-clamp */
-            -webkit-line-clamp: 4; /* Limit to 4 lines */
-            -webkit-box-orient: vertical; /* Required for -webkit-line-clamp */
-            max-height: 6.5rem; /* Calculated to roughly fit 4 lines with padding (approx 104px) */
-            
-            display: flex; /* Kept display flex for vertical centering */
+            min-height: 4.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            max-height: 6.5rem;
+            display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: none; /* Removed choice button shadow */
-            touch-action: manipulation; /* Added to improve touch handling on mobile */
+            box-shadow: none;
+            touch-action: manipulation;
         }
-        @media (min-width: 640px) {
-            .choice-button { font-size: 0.95rem; padding: 1rem; min-height: 5rem; max-height: 7rem; /* Adjusted for larger font and padding */ }
-        }
-        @media (min-width: 768px) {
-            .choice-button { font-size: 1rem; padding: 1.1rem; min-height: 5.5rem; max-height: 7.5rem; /* Adjusted for larger font and padding */ }
-        }
+        @media (min-width: 640px) { .choice-button { font-size: 0.95rem; padding: 1rem; min-height: 5rem; max-height: 7rem; } }
+        @media (min-width: 768px) { .choice-button { font-size: 1rem; padding: 1.1rem; min-height: 5.5rem; max-height: 7.5rem; } }
 
         .choice-button:hover {
-            background-color: var(--primary-bright); /* Fill with bright color on hover */
+            background-color: var(--primary-bright);
             border-color: var(--primary-bright);
-            color: #000; /* Black text on hover */
+            color: #000;
             box-shadow: none;
         }
 
-        /* Class for selected button feedback */
         .choice-button.selected-feedback {
-            background-color: var(--primary-bright) !important; /* Blue background */
-            color: #000 !important; /* Black text */
-            box-shadow: none !important; /* Override any active/hover shadows */
-            top: 0 !important; /* Reset position */
+            background-color: var(--primary-bright) !important;
+            color: #000 !important;
+            box-shadow: none !important;
+            top: 0 !important;
         }
-
 
         #leaderboard-table {
             width: 100%;
@@ -249,79 +223,35 @@
             border-collapse: collapse;
             font-size: 0.9rem;
         }
-        @media (min-width: 640px) {
-            #leaderboard-table { font-size: 1rem; }
-        }
-        @media (min-width: 768px) {
-            #leaderboard-table { font-size: 1.1rem; }
-        }
+        @media (min-width: 640px) { #leaderboard-table { font-size: 1rem; } }
+        @media (min-width: 768px) { #leaderboard-table { font-size: 1.1rem; } }
 
         #leaderboard-table th, #leaderboard-table td {
-            border: 1px solid #333; /* Subtle dark grey borders */
+            border: 1px solid #333;
             padding: 0.6rem;
             text-align: left;
-            color: #E0E0E0; /* Default text color for table cells */
+            color: #E0E0E0;
         }
-        @media (min-width: 640px) {
-            #leaderboard-table th, #leaderboard-table td { padding: 0.8rem; }
-        }
+        @media (min-width: 640px) { #leaderboard-table th, #leaderboard-table td { padding: 0.8rem; } }
 
         #leaderboard-table th {
-            background-color: var(--primary-bright); /* Header in bright color */
-            color: #000; /* Black text for header */
+            background-color: var(--primary-bright);
+            color: #000;
             text-shadow: none;
         }
+        #leaderboard-table tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.05); }
 
-        #leaderboard-table tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.05); /* Very subtle lighter row */
-        }
-
-        /* Removed specific styles for top 3 ranks to make them same as rest */
-        /*
-        .leaderboard-rank-1 {
-            background-color: transparent !important;
-            font-weight: bold;
-            border: 2px solid #00FFFF !important;
-        }
-        .leaderboard-rank-1 td {
-            color: #FFF !important;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
-        }
-
-        .leaderboard-rank-2 {
-            background-color: transparent !important;
-            font-weight: bold;
-            border: 2px solid #00FFFF !important;
-        }
-        .leaderboard-rank-2 td {
-            color: #FFF !important;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
-        }
-
-        .leaderboard-rank-3 {
-            background-color: transparent !important;
-            font-weight: bold;
-            border: 2px solid #00FFFF !important;
-        }
-        .leaderboard-rank-3 td {
-            color: #FFF !important;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
-        }
-        */
-
-        /* New class for highlighting the most recently submitted score */
         .recent-score-highlight {
-            background-color: #007bff !important; /* A distinct blue */
-            color: #FFF !important; /* Ensure text is white */
-            border: 2px solid #00FFFF !important; /* Consistent bright border */
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7) !important; /* Subtle glow */
+            background-color: #007bff !important;
+            color: #FFF !important;
+            border: 2px solid #00FFFF !important;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7) !important;
         }
-
 
         input[type="text"] {
             background-color: #1A1A1A;
-            border: 1px solid #555; /* Softer border */
-            color: #FFF; /* White text */
+            border: 1px solid #555;
+            color: #FFF;
             font-family: 'Press Start 2P', cursive;
             padding: 0.6rem;
             font-size: 0.9rem;
@@ -331,267 +261,85 @@
             margin-top: 0.8rem;
             text-align: center;
         }
-        @media (min-width: 640px) {
-            input[type="text"] { padding: 0.8rem; font-size: 1rem; }
-        }
-
+        @media (min-width: 640px) { input[type="text"] { padding: 0.8rem; font-size: 1rem; } }
         input[type="text"]:focus {
             outline: none;
             border-color: var(--primary-bright);
             box-shadow: 0 0 8px var(--primary-bright);
         }
 
-        /* Custom Modal Styles */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             z-index: 1000;
-            backdrop-filter: blur(5px); /* Softer blur */
+            backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
         }
-
         .modal-content {
             background-color: var(--dark-background);
             border: 4px solid var(--primary-bright);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
+            border-radius: 15px; padding: 2rem; text-align: center;
             box-shadow: 0 0 30px var(--primary-bright);
-            max-width: 85%;
-            width: 500px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1rem;
-            color: #E0E0E0;
-            position: relative;
+            max-width: 85%; width: 500px;
+            font-family: 'Press Start 2P', cursive; font-size: 1rem;
+            color: #E0E0E0; position: relative;
             animation: modal-pop-in 0.3s ease-out;
         }
-        @media (min-width: 640px) {
-            .modal-content { font-size: 1.1rem; padding: 2.5rem; }
-        }
-
+        @media (min-width: 640px) { .modal-content { font-size: 1.1rem; padding: 2.5rem; } }
         .modal-content h3 {
-            color: var(--primary-bright);
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-            text-shadow: none;
+            color: var(--primary-bright); font-size: 1.6rem;
+            margin-bottom: 1rem; text-shadow: none;
         }
-        @media (min-width: 640px) {
-            .modal-content h3 { font-size: 1.8rem; }
-        }
-
+        @media (min-width: 640px) { .modal-content h3 { font-size: 1.8rem; } }
         .modal-content button {
-            background-color: var(--primary-bright);
-            border: none;
-            color: #000; /* Black text on modal button */
-            margin-top: 1.5rem;
-            padding: 0.6rem 1.2rem;
-            font-size: 0.9rem;
-            box-shadow: 0 4px #0080A0;
+            background-color: var(--primary-bright); border: none;
+            color: #000; margin-top: 1.5rem; padding: 0.6rem 1.2rem;
+            font-size: 0.9rem; box-shadow: 0 4px #0080A0;
         }
-        @media (min-width: 640px) {
-            .modal-content button { padding: 0.8rem 1.5rem; font-size: 1.1rem; }
-        }
+        @media (min-width: 640px) { .modal-content button { padding: 0.8rem 1.5rem; font-size: 1.1rem; } }
+        .modal-content button:hover { background-color: #00FFFF; color: #000; }
 
-        .modal-content button:hover {
-            background-color: #00FFFF;
-            color: #000;
-        }
-
-        /* Responsive adjustments for overall layout */
-        /* Adjusted max-height and padding for game-container on small screens */
         @media (max-width: 639px) {
-            .game-container {
-                padding: 0.8rem;
-                border-width: 3px;
-                border-radius: 8px;
-                box-shadow: 0 0 15px var(--primary-bright);
-                max-height: 95vh; /* Limit height to 95% of viewport height */
-                overflow-y: auto; /* Add scrolling if content overflows */
-            }
-            button {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.75rem;
-                border-width: 2px;
-                border-radius: 6px;
-                box-shadow: 0 3px #0080A0;
-            }
-            .choice-button {
-                padding: 0.6rem;
-                min-height: 3.5rem;
-                font-size: 0.8rem;
-            }
-            #word-display {
-                font-size: 1.6rem;
-                min-height: 3rem;
-            }
-            #score-display, #wrong-attempts-display {
-                font-size: 1.2rem;
-            }
-             /* Game Over Screen adjustments for small screens */
-            #game-over-screen .flex-col > button { /* Target buttons directly */
-                margin-top: 0.8rem; /* Add more space between buttons */
-                width: 90%; /* Make buttons take up more width */
-                max-width: 250px; /* Limit max width for a stack */
-            }
-            #game-over-screen input[type="text"] {
-                margin-bottom: 1rem; /* More space below input */
-            }
+            .game-container { padding: 0.8rem; border-width: 3px; border-radius: 8px; box-shadow: 0 0 15px var(--primary-bright); max-height: 95vh; overflow-y: auto; }
+            button { padding: 0.6rem 0.8rem; font-size: 0.75rem; border-width: 2px; border-radius: 6px; box-shadow: 0 3px #0080A0; }
+            .choice-button { padding: 0.6rem; min-height: 3.5rem; font-size: 0.8rem; }
+            #word-display { font-size: 1.6rem; min-height: 3rem; }
+            #score-display, #wrong-attempts-display { font-size: 1.2rem; }
+            #game-over-screen .flex-col > button { margin-top: 0.8rem; width: 90%; max-width: 250px; }
+            #game-over-screen input[type="text"] { margin-bottom: 1rem; }
         }
-
-        /* Specific styles for phones (e.g., up to 480px width) */
         @media (max-width: 480px) {
-             .game-container {
-                padding: 0.6rem;
-                max-height: 98vh; /* Slightly larger max-height for tiny screens to prevent excessive scrolling */
-            }
-            h1 { font-size: 1.8rem; }
-            h2 { font-size: 1.5rem; }
-            button {
-                padding: 0.5rem 0.7rem;
-                font-size: 0.7rem;
-            }
-            .choice-button {
-                padding: 0.5rem;
-                min-height: 3rem;
-                font-size: 0.75rem;
-            }
-            #word-display {
-                font-size: 1.4rem;
-                min-height: 2.5rem;
-            }
-            #score-display, #wrong-attempts-display {
-                font-size: 1.1rem;
-            }
+            .game-container { padding: 0.6rem; max-height: 98vh; }
+            h1 { font-size: 1.8rem; } h2 { font-size: 1.5rem; }
+            button { padding: 0.5rem 0.7rem; font-size: 0.7rem; }
+            .choice-button { padding: 0.5rem; min-height: 3rem; font-size: 0.75rem; }
+            #word-display { font-size: 1.4rem; min-height: 2.5rem; }
+            #score-display, #wrong-attempts-display { font-size: 1.1rem; }
         }
-
-        /* Specific styles for 1920x1080 resolution (leaderboard only) */
-        @media (min-width: 1920px) {
-            body {
-                padding: 2rem; /* Give a bit more room on very large screens */
-            }
-
-            .game-container {
-                max-width: 1000px; /* Increase max-width for leaderboard for more horizontal space */
-                padding: 3rem; /* More padding for larger container */
-            }
-
-            #leaderboard-screen {
-                /* Ensure leaderboard screen adapts within the larger container */
-                min-height: 60vh; /* Allow it to take up more vertical space */
-                justify-content: space-between; /* Space out title, table, and buttons */
-                padding-bottom: 0; /* Remove extra padding if flex is handling spacing */
-            }
-
-            #leaderboard-screen h2 {
-                font-size: 3rem; /* Larger title for 1920px */
-            }
-
-            #leaderboard-table {
-                font-size: 1.2rem; /* Larger font size for readability */
-                margin-top: 2rem; /* More margin above table */
-            }
-
-            #leaderboard-table th, #leaderboard-table td {
-                padding: 1rem; /* More padding in table cells */
-            }
-
-            #leaderboard-pagination {
-                margin-top: 2rem;
-            }
-        }
-
-        /* Max height for leaderboard screen with scrollbar styling */
-        #leaderboard-screen {
-            max-height: 500px; /* Set maximum height */
-            overflow-y: auto; /* Enable vertical scrolling if content exceeds max-height */
-            scrollbar-width: thin; /* For Firefox */
-            scrollbar-color: var(--primary-bright) var(--dark-background); /* Thumb and track color for Firefox */
-        }
-
-        /* Webkit (Chrome, Safari) scrollbar styling */
-        #leaderboard-screen::-webkit-scrollbar {
-            width: 8px; /* Width of the scrollbar */
-        }
-
-        #leaderboard-screen::-webkit-scrollbar-track {
-            background: var(--dark-background); /* Track color */
-            border-radius: 10px;
-        }
-
-        #leaderboard-screen::-webkit-scrollbar-thumb {
-            background-color: var(--primary-bright); /* Thumb color */
-            border-radius: 10px;
-            border: 2px solid var(--dark-background); /* Border around the thumb */
-        }
-
-        #leaderboard-screen::-webkit-scrollbar-thumb:hover {
-            background-color: #00FFFF; /* Lighter blue on hover */
-        }
-
-        /* Styles for Stats Page */
-        .stats-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 1rem;
-            margin-bottom: 0.5rem;
-            background-color: #1A1A1A; /* Slightly lighter dark background */
-            border: 1px solid var(--primary-bright);
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-        .stats-item span:first-child {
-            color: var(--primary-bright); /* Icon/label color */
-        }
-        .stats-item span:last-child {
-            color: #FFF; /* Value color */
-            font-weight: bold;
-        }
-        .stats-icon {
-            margin-right: 0.8rem;
-        }
-
-        /* For the chess icon */
-        .chess-icon::before {
-            content: "\2655"; /* Unicode chess pawn or other piece */
-            font-size: 1.2em;
-            vertical-align: middle;
-            margin-right: 5px;
-        }
+        #leaderboard-screen { max-height: 500px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--primary-bright) var(--dark-background); }
+        #leaderboard-screen::-webkit-scrollbar { width: 8px; }
+        #leaderboard-screen::-webkit-scrollbar-track { background: var(--dark-background); border-radius: 10px; }
+        #leaderboard-screen::-webkit-scrollbar-thumb { background-color: var(--primary-bright); border-radius: 10px; border: 2px solid var(--dark-background); }
+        #leaderboard-screen::-webkit-scrollbar-thumb:hover { background-color: #00FFFF; }
+        .stats-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; margin-bottom: 0.5rem; background-color: #1A1A1A; border: 1px solid var(--primary-bright); border-radius: 8px; font-size: 1rem; }
+        .stats-item span:first-child { color: var(--primary-bright); }
+        .stats-item span:last-child { color: #FFF; font-weight: bold; }
+        .stats-icon { margin-right: 0.8rem; }
+        .chess-icon::before { content: "\2655"; font-size: 1.2em; vertical-align: middle; margin-right: 5px; }
     </style>
 </head>
 <body>
-    <!-- Background Music Placeholder -->
-    <audio id="background-music" loop autoplay>
-        <!-- IMPORTANT: Ensure this path is correct relative to your index.html file on GitHub! -->
-        <!-- If "Run As Fast As You Can.mp3" is in the same folder as index.html, this is correct. -->
-        <source src="Run As Fast As You Can.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Audio Elements -->
+    <audio id="background-music" loop><source src="Run As Fast As You Can.mp3" type="audio/mpeg"></audio>
+    <audio id="correct-sound"><source src="correct.mp3" type="audio/mpeg"></audio>
+    <audio id="wrong-sound"><source src="Error - Sound Effect Non copyright sound effe....mp3" type="audio/mpeg"></audio>
 
-    <!-- Sound Effects Placeholders -->
-    <audio id="correct-sound">
-        <!-- Replace with your public URL or relative path -->
-        <source src="correct.mp3" type="audio/mpeg">
-        Your browser does not conduct the audio element.
-    </audio>
-    <audio id="wrong-sound">
-        <!-- New error audio file added -->
-        <source src="Error - Sound Effect Non copyright sound effe....mp3" type="audio/mpeg">
-        Your browser does not conduct the audio element.
-    </audio>
-
-    <!-- Highest Scorer Display - Now controlled by JavaScript's showScreen function -->
-    <div id="highest-scorer-overall-display" class="text-sm text-white mb-4 text-center relative top-[-10px] hidden">
-        Loading top scorer...
+    <div class="top-scorers-container text-center mb-2" style="position: relative; top: -7px;">
+        <div id="highest-scorer-overall-display" class="text-sm text-white hidden">Loading top scorer...</div>
+        <div id="untimed-highest-scorer-display" class="text-sm text-white hidden">Loading top untimed scorer...</div>
     </div>
+
 
     <div class="game-container">
         <!-- Main Menu Screen -->
@@ -599,14 +347,24 @@
             <h1 class="text-3xl sm:text-4xl md:text-5xl">Word War GRE</h1>
             <p class="text-sm sm:text-base md:text-lg mb-8">Test your GRE vocabulary skills!</p>
             <div class="flex flex-col space-y-4 items-center w-full md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
-                <button id="play-solo-button" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Play Game</button>
+                <button id="play-game-button" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Play Game</button>
                 <button id="show-leaderboard-main" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Leaderboard</button>
                 <button id="show-stats-button" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Stats</button>
                 <button id="toggle-music-button" class="text-base sm:text-lg md:text-xl w-full md:w-auto px-4 py-2">Toggle Music</button>
             </div>
         </div>
 
-        <!-- Game Screen (Solo) -->
+        <!-- Game Mode Selection Screen -->
+        <div id="game-mode-screen" class="screen">
+            <h2 class="text-xl sm:text-2xl md:text-3xl">Select Game Mode</h2>
+            <div class="flex flex-col space-y-4 items-center w-full mt-8">
+                <button id="timed-mode-button" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Timed (60s)</button>
+                <button id="untimed-mode-button" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Untimed</button>
+                <button id="back-to-main-menu-button" class="text-sm sm:text-base mt-4">Back</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
         <div id="game-screen" class="screen">
             <div class="flex justify-between items-center mb-6">
                 <div id="score-display" class="text-lg sm:text-xl">Score: 0</div>
@@ -614,18 +372,16 @@
                 <div id="timer-display" class="text-lg sm:text-xl">Time: 60</div>
             </div>
             <div id="word-display" class="text-2xl sm:text-3xl md:text-4xl mb-8"></div>
-            <div id="choices-container" class="choices-grid">
-                <!-- Choice buttons will be injected here by JavaScript -->
-            </div>
+            <div id="choices-container" class="choices-grid"></div>
         </div>
 
         <!-- Game Over Screen -->
         <div id="game-over-screen" class="screen">
             <h2 class="text-xl sm:text-2xl md:text-3xl">GAME OVER!</h2>
-            <p class="text-lg mt-4 mb-4">Your final score: <span id="final-score" class="font-bold text-yellow-400">0</span></p>
+            <p class="text-lg mt-4 mb-4">Final score: <span id="final-score" class="font-bold text-yellow-400">0</span></p>
             <p class="text-md mb-2">Enter your name for the Leaderboard:</p>
             <input type="text" id="player-name-input" placeholder="Your Name" class="text-sm sm:text-base">
-            <div class="flex flex-col space-y-3 items-center w-full mt-4"> <!-- Added flex column for buttons -->
+            <div class="flex flex-col space-y-3 items-center w-full mt-4">
                 <button id="save-score-button" class="text-sm sm:text-base w-full max-w-xs">Save Score</button>
                 <button id="play-again-button" class="text-sm sm:text-base w-full max-w-xs">Play Again</button>
                 <button id="main-menu-from-gameover" class="text-sm sm:text-base w-full max-w-xs">Main Menu</button>
@@ -634,22 +390,18 @@
 
         <!-- Leaderboard Screen -->
         <div id="leaderboard-screen" class="screen">
-            <h2 class="text-xl sm:text-2xl md:text-3xl">Global Leaderboard</h2>
-            <div id="leaderboard-loading" class="text-xl text-yellow-400 my-4">Loading Leaderboard...</div>
+            <h2 id="leaderboard-title" class="text-xl sm:text-2xl md:text-3xl">Global Leaderboard</h2>
+            <div class="flex justify-center space-x-4 my-4">
+                <button id="show-timed-leaderboard" class="toggle-button text-sm sm:text-base active">Timed</button>
+                <button id="show-untimed-leaderboard" class="toggle-button text-sm sm:text-base">Untimed</button>
+            </div>
+            <div id="leaderboard-loading" class="text-xl text-yellow-400 my-4">Loading...</div>
             <table id="leaderboard-table" class="mx-auto text-sm sm:text-base">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body">
-                    <!-- Leaderboard entries will be injected here by JavaScript -->
-                </tbody>
+                <thead><tr><th>Rank</th><th>Name</th><th>Score</th></tr></thead>
+                <tbody id="leaderboard-body"></tbody>
             </table>
             <div id="leaderboard-pagination" class="flex justify-center space-x-4 mt-8">
-                <button id="prev-page-button" class="text-sm sm:text-base">&lt; Previous</button>
+                <button id="prev-page-button" class="text-sm sm:text-base">&lt; Prev</button>
                 <span id="page-info" class="text-sm sm:text-base flex items-center"></span>
                 <button id="next-page-button" class="text-sm sm:text-base">Next &gt;</button>
             </div>
@@ -659,1449 +411,243 @@
         <!-- Stats Screen -->
         <div id="stats-screen" class="screen">
             <h2 class="text-xl sm:text-2xl md:text-3xl">Your Stats</h2>
-            <div class="flex flex-col space-y-3 mt-8">
-                <div class="stats-item">
-                    <span class="stats-icon">&#x2655; Games Played:</span>
-                    <span id="games-played-stat">0</span>
-                </div>
-                <div class="stats-item">
-                    <span class="stats-icon">🏆 Highest Rank:</span>
-                    <span id="highest-rank-stat">N/A</span>
-                </div>
+             <div class="flex justify-center space-x-4 my-4">
+                <button id="show-timed-stats" class="toggle-button text-sm sm:text-base active">Timed</button>
+                <button id="show-untimed-stats" class="toggle-button text-sm sm:text-base">Untimed</button>
+            </div>
+            <div class="flex flex-col space-y-3 mt-4">
+                <div class="stats-item"><span class="stats-icon">&#x1F3C6; Highest Score:</span><span id="highest-score-stat">0</span></div>
+                <div class="stats-item"><span class="stats-icon">&#x1F4AF; Accuracy:</span><span id="accuracy-stat">N/A</span></div>
+                <div class="stats-item"><span class="stats-icon">&#x2655; Games Played:</span><span id="games-played-stat">0</span></div>
+                <div class="stats-item"><span class="stats-icon">🏆 Highest Rank:</span><span id="highest-rank-stat">N/A</span></div>
             </div>
             <button id="main-menu-from-stats" class="text-sm sm:text-base mt-8">Main Menu</button>
         </div>
     </div>
 
-    <!-- NEW: Developer Note Display -->
-    <div id="developer-note-display" class="text-base text-white mt-5 text-center hidden">
-        Developer Note: <a href="https://wordwargre.blogspot.com/2025/08/update-aug-19th-2025.html" target="_blank" class="text-yellow-400 underline">Aug 19th Updates</a>
-    </div>
-
-    <!-- Custom Modal for Alerts -->
-    <div id="custom-modal-overlay" class="modal-overlay hidden">
-        <div class="modal-content">
-            <h3 id="modal-title" class="text-xl sm:text-2xl">Attention!</h3>
-            <p id="modal-message" class="text-base sm:text-lg"></p>
-            <button id="modal-close-button" class="text-sm sm:text-base">OK</button>
-        </div>
-    </div>
+    <!-- Developer Note & Modal -->
+    <div id="developer-note-display" class="text-base text-white mt-5 text-center hidden">Developer Note: <a href="https://wordwargre.blogspot.com/2025/08/update-aug-22th-2025.html" target="_blank" class="text-yellow-400 underline">Aug 22nd Updates</a></div>
+    <div id="custom-modal-overlay" class="modal-overlay hidden"><div class="modal-content"><h3 id="modal-title">Attention!</h3><p id="modal-message"></p><button id="modal-close-button">OK</button></div></div>
 
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc, updateDoc, increment, deleteField } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Your web app's Firebase configuration - Copied from your message
         const firebaseConfig = {
             apiKey: "AIzaSyCodVJigrQK0craiXfsbaWi6oJpLZTMKso",
             authDomain: "wordwargre.firebaseapp.com",
             projectId: "wordwargre",
-            storageBucket: "wordwargre.firebasestorage.app",
+            storageBucket: "wordwargre.appspot.com",
             messagingSenderId: "710867911424",
             appId: "1:710867911424:web:f3703741b9455278e329e5",
             measurementId: "G-TH2KBW28JP"
         };
 
-        // We use the projectId for the artifacts collection path. This ensures it's unique to your project.
-        const appIdForCollectionPath = firebaseConfig.projectId;
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Expose Firebase objects and functions to the global window object
         window.firebaseInitialized = false;
         window.currentUserId = null;
         window.db = db;
         window.auth = auth;
-        window.appId = appIdForCollectionPath; // Use the projectId for the collection path
+        window.appId = firebaseConfig.projectId;
         window.addDoc = addDoc;
         window.collection = collection;
         window.query = query;
         window.orderBy = orderBy;
         window.onSnapshot = onSnapshot;
         window.serverTimestamp = serverTimestamp;
-        window.doc = doc; // Expose doc for Firestore
-        window.getDoc = getDoc; // Expose getDoc for Firestore
-        window.setDoc = setDoc; // Expose setDoc for Firestore
+        window.doc = doc;
+        window.getDoc = getDoc;
+        window.setDoc = setDoc;
+        window.updateDoc = updateDoc;
+        window.increment = increment;
+        window.deleteField = deleteField;
 
-        // Authenticate user when Firebase is ready
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 window.currentUserId = user.uid;
-                console.log("Firebase Auth State Changed: User signed in:", user.uid);
             } else {
-                console.log("Firebase Auth State Changed: No user signed in. Attempting anonymous sign-in...");
                 try {
-                    // Try to sign in anonymously if not already signed in
                     await signInAnonymously(auth);
                     window.currentUserId = auth.currentUser.uid;
-                    console.log("Firebase: Signed in anonymously. User ID:", window.currentUserId);
                 } catch (error) {
-                    console.error("Firebase Auth Error during anonymous sign-in:", error);
-                    window.showCustomModal("Auth Error", "Could not sign in for leaderboard. Please try refreshing. Check console for details.");
+                    console.error("Anonymous sign-in error:", error);
+                    window.showCustomModal("Auth Error", "Could not sign in for leaderboard.");
                 }
             }
-            window.firebaseInitialized = true; // Mark Firebase as ready
-            console.log("Firebase: Initialization complete. firebaseInitialized =", window.firebaseInitialized, "currentUserId =", window.currentUserId);
-
-            // Trigger loading of global leaderboard data after Firebase is initialized and user is authenticated
-            // This ensures data is ready if leaderboard is opened immediately or after some time.
-            if (document.getElementById('leaderboard-screen').classList.contains('active') || document.getElementById('main-menu').classList.contains('active') || document.getElementById('stats-screen').classList.contains('active')) {
+            window.firebaseInitialized = true;
+            if (document.getElementById('main-menu').classList.contains('active')) {
                 window.loadGlobalLeaderboard();
-                window.loadUserStats(); // Load user stats when Firebase is ready
+                window.loadUserStats();
             }
         });
     </script>
 
-
     <script>
-        // No longer need truncateDefinition helper function as definitions are pre-rephrased.
-
-        // Game Data: GRE Words and Definitions
-        // All definitions and options have been manually rephrased to be 8 words or less.
         const words = [
-            {
-                word: "Acrimonious",
-                definition: "Stinging, bitter in temper or tone.",
-                options: [
-                    "Stinging, bitter in temper or tone.",
-                    "Sweet and harmonious.",
-                    "Calm and collected.",
-                    "Full of joy and laughter."
-                ]
-            },
-            {
-                word: "Capricious",
-                definition: "Sudden, unpredictable changes in mood or behavior.",
-                options: [
-                    "Sudden, unpredictable changes in mood or behavior.",
-                    "Stable and predictable.",
-                    "Careful and cautious.",
-                    "Determined and resolute."
-                ]
-            },
-            {
-                word: "Deleterious",
-                definition: "Causing harm or damage.",
-                options: [
-                    "Causing harm or damage.",
-                    "Beneficial and helpful.",
-                    "Nourishing and healthy.",
-                    "Pleasant and enjoyable."
-                ]
-            },
-            {
-                word: "Ephemeral",
-                definition: "Lasting for a very short time.",
-                options: [
-                    "Lasting for a very short time.",
-                    "Lasting for an eternity.",
-                    "Permanent and enduring.",
-                    "Slow to change."
-                ]
-            },
-            {
-                word: "Fugacious",
-                definition: "Fleeting; lasting a short time.",
-                options: [
-                    "Fleeting; lasting a short time.",
-                    "Permanent and unchangeable.",
-                    "Strong and durable.",
-                    "Moving very slowly."
-                ]
-            },
-            {
-                word: "Gregarious",
-                definition: "Fond of company; sociable.",
-                options: [
-                    "Fond of company; sociable.",
-                    "Reserved and quiet.",
-                    "Solitary and reclusive.",
-                    "Shy and introverted."
-                ]
-            },
-            {
-                word: "Harangue",
-                definition: "A lengthy and aggressive speech.",
-                options: [
-                    "A lengthy and aggressive speech.",
-                    "A brief and polite conversation.",
-                    "A gentle whisper.",
-                    "A soothing lullaby."
-                ]
-            },
-            {
-                word: "Ingenious",
-                definition: "Clever, original, and inventive.",
-                options: [
-                    "Clever, original, and inventive.",
-                    "Unimaginative and dull.",
-                    "Simple and straightforward.",
-                    "Confused and disoriented."
-                ]
-            },
-            {
-                word: "Laconic",
-                definition: "Using very few words.",
-                options: [
-                    "Using very few words.",
-                    "Talkative and verbose.",
-                    "Eloquent and persuasive.",
-                    "Loud and boisterous."
-                ]
-            },
-            {
-                word: "Mellifluous",
-                definition: "Sweet or musical; pleasant to hear.",
-                options: [
-                    "Sweet or musical; pleasant to hear.",
-                    "Harsh and discordant.",
-                    "Loud and piercing.",
-                    "Rough and abrasive."
-                ]
-            },
-            {
-                word: "Obfuscate",
-                definition: "Render obscure, unclear, or unintelligible.",
-                options: [
-                    "Render obscure, unclear, or unintelligible.",
-                    "Make clear and understandable.",
-                    "Illuminate and enlighten.",
-                    "Simplify and clarify."
-                ]
-            },
-            {
-                word: "Perfunctory",
-                definition: "Done with minimal effort or thought.",
-                options: [
-                    "Done with minimal effort or thought.",
-                    "Thorough and meticulous.",
-                    "Energetic and enthusiastic.",
-                    "Careful and precise."
-                ]
-            },
-            {
-                word: "Quixotic",
-                definition: "Extremely idealistic; unrealistic and impractical.",
-                options: [
-                    "Extremely idealistic; unrealistic and impractical.",
-                    "Realistic and pragmatic.",
-                    "Cynical and pessimistic.",
-                    "Cautious and conservative."
-                ]
-            },
-            {
-                word: "Recalcitrant",
-                definition: "Stubbornly uncooperative toward authority or discipline.",
-                options: [
-                    "Stubbornly uncooperative toward authority or discipline.",
-                    "Obedient and compliant.",
-                    "Eager to cooperate.",
-                    "Submissive and docile."
-                ]
-            },
-            {
-                word: "Sycophant",
-                definition: "One who flatters to gain advantage.",
-                options: [
-                    "One who flatters to gain advantage.",
-                    "An honest and straightforward person.",
-                    "A true leader.",
-                    "A humble and modest individual."
-                ]
-            },
-            {
-                word: "Aberrant",
-                definition: "Deviating from the norm.",
-                options: [
-                    "Deviating from the norm.",
-                    "Typical and standard.",
-                    "Conforming to rules.",
-                    "Common and usual."
-                ]
-            },
-            {
-                word: "Ameliorate",
-                definition: "To make something better; to improve.",
-                options: [
-                    "To make something better; to improve.",
-                    "To make something worse.",
-                    "To hinder progress.",
-                    "To cause deterioration."
-                ]
-            },
-            {
-                word: "Anomalous",
-                definition: "Deviating from standard or normal expectation.",
-                options: [
-                    "Deviating from standard or normal expectation.",
-                    "Normal and customary.",
-                    "Regular and typical.",
-                    "Expected and predictable."
-                ]
-            },
-            {
-                word: "Arbiter",
-                definition: "Person settling disputes, having ultimate authority.",
-                options: [
-                    "Person settling disputes, having ultimate authority.",
-                    "Someone who causes conflict.",
-                    "A biased participant.",
-                    "One who lacks authority."
-                ]
-            },
-            {
-                word: "Assuage",
-                definition: "To make less severe; satisfy or relieve.",
-                options: [
-                    "To make less severe; satisfy or relieve.",
-                    "To intensify or worsen.",
-                    "To irritate or annoy.",
-                    "To aggravate or exacerbate."
-                ]
-            },
-            {
-                word: "Avarice",
-                definition: "Extreme greed for wealth or material gain.",
-                options: [
-                    "Extreme greed for wealth or material gain.",
-                    "Generosity and charity.",
-                    "Selflessness and altruism.",
-                    "Contentment and moderation."
-                ]
-            },
-            {
-                word: "Banal",
-                definition: "Lacking originality; obvious and boring.",
-                options: [
-                    "Lacking originality; obvious and boring.",
-                    "Original and exciting.",
-                    "Unique and innovative.",
-                    "Fresh and stimulating."
-                ]
-            },
-            {
-                word: "Bombastic",
-                definition: "High-sounding but with little meaning; inflated.",
-                options: [
-                    "High-sounding but with little meaning; inflated.",
-                    "Simple and understated.",
-                    "Modest and humble.",
-                    "Concise and clear."
-                ]
-            },
-            {
-                word: "Cacophony",
-                definition: "A harsh, discordant mixture of sounds.",
-                options: [
-                    "A harsh, discordant mixture of sounds.",
-                    "A pleasant melody.",
-                    "Harmonious music.",
-                    "A soothing sound."
-                ]
-            },
-            {
-                word: "Candid",
-                definition: "Truthful and straightforward; frank.",
-                options: [
-                    "Truthful and straightforward; frank.",
-                    "Deceptive and cunning.",
-                    "Secretive and evasive.",
-                    "Dishonest and insincere."
-                ]
-            },
-            {
-                word: "Castigate",
-                definition: "To reprimand severely.",
-                options: [
-                    "To reprimand severely.",
-                    "To praise highly.",
-                    "To encourage gently.",
-                    "To forgive kindly."
-                ]
-            },
-            {
-                word: "Caustic",
-                definition: "Burning or corrosive; sharply sarcastic.",
-                options: [
-                    "Burning or corrosive; sharply sarcastic.",
-                    "Mild and soothing.",
-                    "Gentle and agreeable.",
-                    "Sweet and pleasant."
-                ]
-            },
-            {
-                word: "Chicanery",
-                definition: "Trickery for political, financial, or legal gain.",
-                options: [
-                    "Trickery for political, financial, or legal gain.",
-                    "Honesty and integrity.",
-                    "Frankness and candor.",
-                    "Sincerity and trustworthiness."
-                ]
-            },
-            {
-                word: "Coalesce",
-                definition: "To come together and form one mass or whole.",
-                options: [
-                    "To come together and form one mass or whole.",
-                    "To separate and divide.",
-                    "To scatter and disperse.",
-                    "To break apart."
-                ]
-            },
-            {
-                word: "Cogent",
-                definition: "Clear, logical, and convincing.",
-                options: [
-                    "Clear, logical, and convincing.",
-                    "Confusing and illogical.",
-                    "Weak and unconvincing.",
-                    "Ambiguous and unclear."
-                ]
-            },
-            {
-                word: "Commensurate",
-                definition: "Proportionate; corresponding in size or degree.",
-                options: [
-                    "Proportionate; corresponding in size or degree.",
-                    "Disproportionate; unequal.",
-                    "Unrelated or irrelevant.",
-                    "Opposite in measure."
-                ]
-            },
-            {
-                word: "Contentious",
-                definition: "Causing argument; controversial.",
-                options: [
-                    "Causing argument; controversial.",
-                    "Agreeable and peaceful.",
-                    "Harmonious and calm.",
-                    "Cooperative and compliant."
-                ]
-            },
-            {
-                word: "Conundrum",
-                definition: "A confusing and difficult problem or question.",
-                options: [
-                    "A confusing and difficult problem or question.",
-                    "A simple solution.",
-                    "A clear answer.",
-                    "An easy task."
-                ]
-            },
-            {
-                word: "Credulous",
-                definition: "Too ready to believe things.",
-                options: [
-                    "Too ready to believe things.",
-                    "Skeptical and doubting.",
-                    "Critical and discerning.",
-                    "Distrustful and suspicious."
-                ]
-            },
-            {
-                word: "Diatribe",
-                definition: "A forceful, bitter verbal attack.",
-                options: [
-                    "A forceful, bitter verbal attack.",
-                    "A polite discussion.",
-                    "A calm debate.",
-                    "A sincere compliment."
-                ]
-            },
-            {
-                word: "Dilettante",
-                definition: "Person pursuing interest without real commitment.",
-                options: [
-                    "Person pursuing interest without real commitment.",
-                    "A professional expert.",
-                    "A dedicated master.",
-                    "A serious scholar."
-                ]
-            },
-            {
-                word: "Disabuse",
-                definition: "To undeceive; free from error.",
-                options: [
-                    "To undeceive; free from error.",
-                    "To mislead or deceive.",
-                    "To confuse or perplex.",
-                    "To reinforce a false belief."
-                ]
-            },
-            {
-                word: "Discordant",
-                definition: "Disagreeing; characterized by conflict.",
-                options: [
-                    "Disagreeing; characterized by conflict.",
-                    "Harmonious and consistent.",
-                    "Agreeable and compatible.",
-                    "Peaceful and unified."
-                ]
-            },
-            {
-                word: "Disparate",
-                definition: "Essentially different; not comparable.",
-                options: [
-                    "Essentially different; not comparable.",
-                    "Similar and comparable.",
-                    "Identical and alike.",
-                    "Homogeneous and uniform."
-                ]
-            },
-            {
-                word: "Divulge",
-                definition: "To make known (private or sensitive information).",
-                options: [
-                    "To make known (private or sensitive information).",
-                    "To keep secret.",
-                    "To conceal or hide.",
-                    "To guard information."
-                ]
-            },
-            {
-                word: "Dogmatic",
-                definition: "Laying down principles as undeniably true.",
-                options: [
-                    "Laying down principles as undeniably true.",
-                    "Open-minded and flexible.",
-                    "Skeptical and questioning.",
-                    "Uncertain and doubtful."
-                ]
-            },
-            {
-                word: "Eclectic",
-                definition: "Ideas from a broad and diverse range.",
-                options: [
-                    "Ideas from a broad and diverse range.",
-                    "Narrow and limited.",
-                    "Uniform and unvaried.",
-                    "Exclusive and selective."
-                ]
-            },
-            {
-                word: "Effrontery",
-                definition: "Shameless audacity or impudence.",
-                options: [
-                    "Shameless audacity or impudence.",
-                    "Modesty and humility.",
-                    "Respect and politeness.",
-                    "Shyness and timidity."
-                ]
-            },
-            {
-                word: "Egalitarian",
-                definition: "Believing in equal rights for all people.",
-                options: [
-                    "Believing in equal rights for all people.",
-                    "Supporting inequality.",
-                    "Promoting hierarchy.",
-                    "Advocating for privilege."
-                ]
-            },
-            {
-                word: "Enervate",
-                definition: "To drain energy or vitality; to weaken.",
-                options: [
-                    "To drain energy or vitality; to weaken.",
-                    "To strengthen or energize.",
-                    "To invigorate or stimulate.",
-                    "To empower or fortify."
-                ]
-            },
-            {
-                word: "Equivocate",
-                definition: "Use ambiguous language to conceal truth.",
-                options: [
-                    "Use ambiguous language to conceal truth.",
-                    "To speak clearly and directly.",
-                    "To state firmly and precisely.",
-                    "To be straightforward and honest."
-                ]
-            },
-            {
-                word: "Exacerbate",
-                definition: "To make a problem or situation worse.",
-                options: [
-                    "To make a problem or situation worse.",
-                    "To improve or alleviate.",
-                    "To mitigate or lessen.",
-                    "To calm or soothe."
-                ]
-            },
-            {
-                word: "Exculpate",
-                definition: "To declare someone not guilty.",
-                options: [
-                    "To declare someone not guilty.",
-                    "To incriminate or accuse.",
-                    "To blame or censure.",
-                    "To find guilty."
-                ]
-            },
-            {
-                word: "Exigent",
-                definition: "Pressing; demanding; urgent.",
-                options: [
-                    "Pressing; demanding; urgent.",
-                    "Non-essential; trivial.",
-                    "Unimportant; unnecessary.",
-                    "Relaxed; undemanding."
-                ]
-            },
-            {
-                word: "Expurgate",
-                definition: "To remove objectionable content from media.",
-                options: [
-                    "To remove objectionable content from media.",
-                    "To add content to.",
-                    "To preserve original content.",
-                    "To endorse objectionable material."
-                ]
-            },
-            {
-                word: "Extant",
-                definition: "Still in existence; surviving.",
-                options: [
-                    "Still in existence; surviving.",
-                    "Extinct; no longer existing.",
-                    "Lost; vanished.",
-                    "Forgotten; archaic."
-                ]
-            },
-            {
-                word: "Fastidious",
-                definition: "Very attentive to accuracy and detail.",
-                options: [
-                    "Very attentive to accuracy and detail.",
-                    "Careless and sloppy.",
-                    "Indifferent and unconcerned.",
-                    "Hasty and imprecise."
-                ]
-            },
-            {
-                word: "Fervent",
-                definition: "Having or displaying a passionate intensity.",
-                options: [
-                    "Having or displaying a passionate intensity.",
-                    "Apathetic and indifferent.",
-                    "Dispassionate and cold.",
-                    "Unenthusiastic and mild."
-                ]
-            },
-            {
-                word: "Flag",
-                definition: "To decline in strength, vigor, or interest.",
-                options: [
-                    "To decline in strength, vigor, or interest.",
-                    "To gain strength or vigor.",
-                    "To grow or flourish.",
-                    "To improve or recover."
-                ]
-            },
-            {
-                word: "Florid",
-                definition: "Having a red or flushed complexion; elaborately intricate.",
-                options: [
-                    "Having a red or flushed complexion; elaborately intricate.",
-                    "Pale and simple.",
-                    "Unadorned and plain.",
-                    "Understated and modest."
-                ]
-            },
-            {
-                word: "Foment",
-                definition: "To instigate or stir up undesirable action.",
-                options: [
-                    "To instigate or stir up undesirable action.",
-                    "To suppress or calm.",
-                    "To discourage or prevent.",
-                    "To alleviate or ease."
-                ]
-            },
-            {
-                word: "Garrulous",
-                definition: "Excessively talkative, especially on trivial matters.",
-                options: [
-                    "Excessively talkative, especially on trivial matters.",
-                    "Quiet and reserved.",
-                    "Silent and introverted.",
-                    "Concise and brief."
-                ]
-            },
-            {
-                word: "Guileless",
-                definition: "Innocent and without deception.",
-                options: [
-                    "Innocent and without deception.",
-                    "Cunning and deceptive.",
-                    "Sly and tricky.",
-                    "Dishonest and artful."
-                ]
-            },
-            {
-                word: "Homogenous",
-                definition: "Of the same kind; alike.",
-                options: [
-                    "Of the same kind; alike.",
-                    "Diverse and varied.",
-                    "Different and distinct.",
-                    "Heterogeneous and mixed."
-                ]
-            },
-            {
-                word: "Impecunious",
-                definition: "Having little or no money; penniless.",
-                options: [
-                    "Having little or no money; penniless.",
-                    "Wealthy and affluent.",
-                    "Prosperous and rich.",
-                    "Well-off and comfortable."
-                ]
-            },
-            {
-                word: "Imperturbable",
-                definition: "Unable to be upset or excited; calm.",
-                options: [
-                    "Unable to be upset or excited; calm.",
-                    "Easily agitated or excited.",
-                    "Anxious or nervous.",
-                    "Disturbed or rattled."
-                ]
-            },
-            {
-                word: "Impious",
-                definition: "Not religious; lacking reverence for God.",
-                options: [
-                    "Not religious; lacking reverence for God.",
-                    "Pious and devout.",
-                    "Reverent and holy.",
-                    "Religious and spiritual."
-                ]
-            },
-            {
-                word: "Impute",
-                definition: "To attribute (something bad) to someone.",
-                options: [
-                    "To attribute (something bad) to someone.",
-                    "To exonerate or clear.",
-                    "To praise or commend.",
-                    "To absolve or forgive."
-                ]
-            },
-            {
-                word: "Inchoate",
-                definition: "Not yet completely formed or organized; rudimentary.",
-                options: [
-                    "Not yet completely formed or organized; rudimentary.",
-                    "Fully formed and developed.",
-                    "Complete and perfected.",
-                    "Well-organized and structured."
-                ]
-            },
-            {
-                word: "Incipient",
-                definition: "Beginning to happen or develop.",
-                options: [
-                    "Beginning to happen or develop.",
-                    "Fully developed; mature.",
-                    "Ending or concluding.",
-                    "Declining or waning."
-                ]
-            },
-            {
-                word: "Incongruous",
-                definition: "Not in harmony with surroundings.",
-                options: [
-                    "Not in harmony with surroundings.",
-                    "Consistent and harmonious.",
-                    "Appropriate and fitting.",
-                    "Compatible and suitable."
-                ]
-            },
-            {
-                word: "Inert",
-                definition: "Lacking the ability or strength to move.",
-                options: [
-                    "Lacking the ability or strength to move.",
-                    "Active and energetic.",
-                    "Vigorous and lively.",
-                    "Dynamic and mobile."
-                ]
-            },
-            {
-                word: "Inherent",
-                definition: "Existing as a permanent, essential attribute.",
-                options: [
-                    "Existing as a permanent, essential attribute.",
-                    "Acquired or external.",
-                    "Temporary or transient.",
-                    "Superficial or accidental."
-                ]
-            },
-            {
-                word: "Iniquity",
-                definition: "Immoral or grossly unfair behavior.",
-                options: [
-                    "Immoral or grossly unfair behavior.",
-                    "Morality and righteousness.",
-                    "Justice and fairness.",
-                    "Virtue and goodness."
-                ]
-            },
-            {
-                word: "Innate",
-                definition: "Inborn; natural.",
-                options: [
-                    "Inborn; natural.",
-                    "Acquired or learned.",
-                    "Artificial or unnatural.",
-                    "Developed or cultivated."
-                ]
-            },
-            {
-                word: "Innocuous",
-                definition: "Not harmful or offensive.",
-                options: [
-                    "Not harmful or offensive.",
-                    "Harmful or injurious.",
-                    "Offensive or hurtful.",
-                    "Dangerous or toxic."
-                ]
-            },
-            {
-                word: "Insipid",
-                definition: "Lacking flavor, vigor, or interest.",
-                options: [
-                    "Lacking flavor, vigor, or interest.",
-                    "Flavorful and exciting.",
-                    "Vigorous and stimulating.",
-                    "Engaging and interesting."
-                ]
-            },
-            {
-                word: "Intransigent",
-                definition: "Unwilling to change views or agree.",
-                options: [
-                    "Unwilling to change views or agree.",
-                    "Flexible and adaptable.",
-                    "Compliant and yielding.",
-                    "Agreeable and compromising."
-                ]
-            },
-            {
-                word: "Inundate",
-                definition: "To overwhelm or flood with many things.",
-                options: [
-                    "To overwhelm or flood with many things.",
-                    "To deprive or drain.",
-                    "To underwhelm or lessen.",
-                    "To alleviate or reduce."
-                ]
-            },
-            {
-                word: "Irascible",
-                definition: "Having or showing a tendency to be easily angered.",
-                options: [
-                    "Having or showing a tendency to be easily angered.",
-                    "Even-tempered and calm.",
-                    "Patient and serene.",
-                    "Placid and amiable."
-                ]
-            },
-            {
-                word: "Lackluster",
-                definition: "Lacking vitality, uninspired.",
-                options: [
-                    "Lacking vitality, uninspired.",
-                    "Vibrant and dynamic.",
-                    "Forceful and compelling.",
-                    "Inspiring and spirited."
-                ]
-            },
-            {
-                word: "Lament",
-                definition: "To mourn (a person's loss or death).",
-                options: [
-                    "To mourn (a person's loss or death).",
-                    "To celebrate or rejoice.",
-                    "To praise or commend.",
-                    "To ignore or disregard."
-                ]
-            },
-            {
-                word: "Laud",
-                definition: "To praise highly, especially publicly.",
-                options: [
-                    "To praise highly, especially publicly.",
-                    "To criticize or condemn.",
-                    "To deprecate or disparage.",
-                    "To blame or censure."
-                ]
-            },
-            {
-                word: "Loquacious",
-                definition: "Tending to talk a great deal; talkative.",
-                options: [
-                    "Tending to talk a great deal; talkative.",
-                    "Quiet and reserved.",
-                    "Silent and uncommunicative.",
-                    "Concise and succinct."
-                ]
-            },
-            {
-                word: "Lucid",
-                definition: "Expressed clearly; easy to understand; bright or luminous.",
-                options: [
-                    "Expressed clearly; easy to understand; bright or luminous.",
-                    "Confusing and unclear.",
-                    "Obscure and vague.",
-                    "Dull and murky."
-                ]
-            },
-            {
-                word: "Malinger",
-                definition: "To feign illness to avoid work.",
-                options: [
-                    "To feign illness to avoid work.",
-                    "To work diligently.",
-                    "To be healthy and active.",
-                    "To perform duties honestly."
-                ]
-            },
-            {
-                word: "Meticulous",
-                definition: "Showing great attention to detail.",
-                options: [
-                    "Showing great attention to detail.",
-                    "Careless and negligent.",
-                    "Hasty and inaccurate.",
-                    "Disregardful of details."
-                ]
-            },
-            {
-                word: "Mollify",
-                definition: "To appease anger or anxiety.",
-                options: [
-                    "To appease anger or anxiety.",
-                    "To anger or irritate.",
-                    "To provoke or incite.",
-                    "To exacerbate emotions."
-                ]
-            },
-            {
-                word: "Obdurate",
-                definition: "Stubbornly refusing to change opinion.",
-                options: [
-                    "Stubbornly refusing to change opinion.",
-                    "Flexible and amenable.",
-                    "Cooperative and compliant.",
-                    "Open-minded and yielding."
-                ]
-            },
-            {
-                word: "Obsequious",
-                definition: "Excessively obedient or servile.",
-                options: [
-                    "Excessively obedient or servile.",
-                    "Assertive and independent.",
-                    "Commanding and dominant.",
-                    "Disobedient and defiant."
-                ]
-            },
-            {
-                word: "Ostracize",
-                definition: "To exclude from a group.",
-                options: [
-                    "To exclude from a group.",
-                    "To include or welcome.",
-                    "To accept or embrace.",
-                    "To integrate or admit."
-                ]
-            },
-            {
-                word: "Paradox",
-                definition: "A seemingly contradictory statement that is true.",
-                options: [
-                    "A seemingly contradictory statement that is true.",
-                    "A logical conclusion.",
-                    "A straightforward fact.",
-                    "A consistent belief."
-                ]
-            },
-            {
-                word: "Paucity",
-                definition: "Small or insufficient amount; scarcity.",
-                options: [
-                    "Small or insufficient amount; scarcity.",
-                    "Abundance and plenty.",
-                    "Surplus and excess.",
-                    "Profusion and wealth."
-                ]
-            },
-            {
-                word: "Pellucid",
-                definition: "Translucently clear; easily understood.",
-                options: [
-                    "Translucently clear; easily understood.",
-                    "Opaque and murky.",
-                    "Confusing and ambiguous.",
-                    "Dark and obscure."
-                ]
-            },
-            {
-                word: "Philanthropic",
-                definition: "Of or relating to philanthropy; benevolent.",
-                options: [
-                    "Of or relating to philanthropy; benevolent.",
-                    "Selfish and greedy.",
-                    "Miserly and ungenerous.",
-                    "Hateful and malicious."
-                ]
-            },
-            {
-                word: "Placate",
-                definition: "To make (someone) less angry or hostile.",
-                options: [
-                    "To make (someone) less angry or hostile.",
-                    "To provoke or anger.",
-                    "To inflame or agitate.",
-                    "To irritate or annoy."
-                ]
-            },
-            {
-                word: "Plethora",
-                definition: "A large or excessive amount of something.",
-                options: [
-                    "A large or excessive amount of something.",
-                    "Scarcity or lack.",
-                    "Paucity or deficiency.",
-                    "Shortage or dearth."
-                ]
-            },
-            {
-                word: "Pragmatic",
-                definition: "Dealing with things practically, not theoretically.",
-                options: [
-                    "Dealing with things practically, not theoretically.",
-                    "Idealistic and impractical.",
-                    "Theoretical and abstract.",
-                    "Utopian and unrealistic."
-                ]
-            },
-            {
-                word: "Preclude",
-                definition: "To prevent from happening; to make impossible.",
-                options: [
-                    "To prevent from happening; to make impossible.",
-                    "To allow or permit.",
-                    "To facilitate or enable.",
-                    "To encourage or assist."
-                ]
-            },
-            {
-                word: "Prodigal",
-                definition: "Spending money recklessly; wasteful.",
-                options: [
-                    "Spending money recklessly; wasteful.",
-                    "Thrifty and economical.",
-                    "Frugal and parsimonious.",
-                    "Cautious and conservative with money."
-                ]
-            },
-            {
-                word: "Profound",
-                definition: "Very great; showing great knowledge or insight.",
-                options: [
-                    "Very great; showing great knowledge or insight.",
-                    "Shallow and superficial.",
-                    "Trivial and insignificant.",
-                    "Superficial and slight."
-                ]
-            },
-            {
-                word: "Proliferate",
-                definition: "To increase rapidly in numbers; multiply.",
-                options: [
-                    "To increase rapidly in numbers; multiply.",
-                    "To decrease or diminish.",
-                    "To shrink or contract.",
-                    "To reduce or decline."
-                ]
-            },
-            {
-                word: "Propitiate",
-                definition: "To win favor by pleasing someone.",
-                options: [
-                    "To win favor by pleasing someone.",
-                    "To anger or provoke.",
-                    "To alienate or estrange.",
-                    "To offend or displease."
-                ]
-            },
-            {
-                word: "Propriety",
-                definition: "Conforming to accepted standards of behavior.",
-                options: [
-                    "Conforming to accepted standards of behavior.",
-                    "Impropriety and indecency.",
-                    "Rudeness and vulgarity.",
-                    "Disregard for customs."
-                ]
-            },
-            {
-                word: "Pungent",
-                definition: "Sharp taste/smell; caustic criticism.",
-                options: [
-                    "Sharp taste/smell; caustic criticism.",
-                    "Mild and bland.",
-                    "Pleasant and agreeable.",
-                    "Gentle and soothing."
-                ]
-            },
-            {
-                word: "Quotidian",
-                definition: "Occurring daily; ordinary or commonplace.",
-                options: [
-                    "Occurring daily; ordinary or commonplace.",
-                    "Unusual and rare.",
-                    "Extraordinary and uncommon.",
-                    "Exceptional and unique."
-                ]
-            },
-            {
-                word: "Redoubtable",
-                definition: "(Of a person) formidable, especially as an opponent.",
-                options: [
-                    "(Of a person) formidable, especially as an opponent.",
-                    "Weak and negligible.",
-                    "Harmless and unthreatening.",
-                    "Insignificant and unimpressive."
-                ]
-            },
-            {
-                word: "Refute",
-                definition: "To prove a statement wrong; disprove.",
-                options: [
-                    "To prove a statement wrong; disprove.",
-                    "To confirm or prove.",
-                    "To support or uphold.",
-                    "To validate or corroborate."
-                ]
-            },
-            {
-                word: "Remonstrate",
-                definition: "To make a forceful protest.",
-                options: [
-                    "To make a forceful protest.",
-                    "To agree or assent.",
-                    "To comply or obey.",
-                    "To approve or endorse."
-                ]
-            },
-            {
-                word: "Repudiate",
-                definition: "Refuse to accept or deny truth.",
-                options: [
-                    "Refuse to accept or deny truth.",
-                    "To accept or embrace.",
-                    "To affirm or endorse.",
-                    "To acknowledge or validate."
-                ]
-            },
-            {
-                word: "Reticent",
-                definition: "Not revealing thoughts or feelings easily; reserved.",
-                options: [
-                    "Not revealing thoughts or feelings easily; reserved.",
-                    "Open and communicative.",
-                    "Talkative and expressive.",
-                    "Forthcoming and frank."
-                ]
-            },
-            {
-                word: "Satiate",
-                definition: "To satisfy a desire fully.",
-                options: [
-                    "To satisfy a desire fully.",
-                    "To starve or deprive.",
-                    "To leave unsatisfied.",
-                    "To make hungry."
-                ]
-            },
-            {
-                word: "Soporific",
-                definition: "Tending to induce drowsiness or sleep.",
-                options: [
-                    "Tending to induce drowsiness or sleep.",
-                    "Stimulating or awakening.",
-                    "Energizing or invigorating.",
-                    "Enlivening or exciting."
-                ]
-            },
-            {
-                word: "Specious",
-                definition: "Superficially plausible, but actually wrong.",
-                options: [
-                    "Superficially plausible, but actually wrong.",
-                    "Valid and logical.",
-                    "Correct and accurate.",
-                    "Genuine and true."
-                ]
-            },
-            {
-                word: "Stymie",
-                definition: "To prevent or hinder the progress of.",
-                options: [
-                    "To prevent or hinder the progress of.",
-                    "To facilitate or assist.",
-                    "To enable or promote.",
-                    "To encourage or aid."
-                ]
-            },
-            {
-                word: "Ubiquitous",
-                definition: "Present, appearing, or found everywhere.",
-                options: [
-                    "Present, appearing, or found everywhere.",
-                    "Rare and uncommon.",
-                    "Scarce and limited.",
-                    "Absent and nowhere to be found."
-                ]
-            },
-            {
-                word: "Vacillate",
-                definition: "To waver between opinions; be indecisive.",
-                options: [
-                    "To waver between opinions; be indecisive.",
-                    "To be firm and resolute.",
-                    "To be steadfast and unwavering.",
-                    "To decide quickly and firmly."
-                ]
-            },
-            {
-                word: "Vilify",
-                definition: "To speak abusively about.",
-                options: [
-                    "To speak abusively about.",
-                    "To praise or commend.",
-                    "To extol or laud.",
-                    "To flatter or admire."
-                ]
-            },
-            {
-                word: "Vituperative",
-                definition: "Bitter and abusive.",
-                options: [
-                    "Bitter and abusive.",
-                    "Kind and gentle.",
-                    "Polite and courteous.",
-                    "Complimentary and laudatory."
-                ]
-            },
-            {
-                word: "Wane",
-                definition: "To decrease in vigor, power, or extent.",
-                options: [
-                    "To decrease in vigor, power, or extent.",
-                    "To increase or grow.",
-                    "To strengthen or expand.",
-                    "To flourish or prosper."
-                ]
-            },
-            {
-                word: "Zealot",
-                definition: "A fanatical, uncompromising person pursuing ideals.",
-                options: [
-                    "A fanatical, uncompromising person pursuing ideals.",
-                    "A moderate or tolerant person.",
-                    "An indifferent or apathetic individual.",
-                    "A compromiser or peacemaker."
-                ]
-            },
-            {
-                word: "Abscond",
-                definition: "To leave secretly, escaping custody or arrest.",
-                options: [
-                    "To leave secretly, escaping custody or arrest.",
-                    "To stay and face consequences.",
-                    "To appear publicly.",
-                    "To surrender openly."
-                ]
-            },
-            {
-                word: "Alacrity",
-                definition: "Brisk and cheerful readiness.",
-                options: [
-                    "Brisk and cheerful readiness.",
-                    "Reluctance and unwillingness.",
-                    "Slowness and hesitation.",
-                    "Apathy and indifference."
-                ]
-            },
-            {
-                word: "Antipathy",
-                definition: "A deep-seated feeling of dislike; aversion.",
-                options: [
-                    "A deep-seated feeling of dislike; aversion.",
-                    "Affection and fondness.",
-                    "Sympathy and empathy.",
-                    "Attraction and admiration."
-                ]
-            },
-            {
-                word: "Apathy",
-                definition: "Lack of interest, enthusiasm, or concern.",
-                options: [
-                    "Lack of interest, enthusiasm, or concern.",
-                    "Enthusiasm and passion.",
-                    "Interest and excitement.",
-                    "Concern and caring."
-                ]
-            },
-            {
-                word: "Assiduous",
-                definition: "Showing great care and perseverance.",
-                options: [
-                    "Showing great care and perseverance.",
-                    "Careless and lazy.",
-                    "Indifferent and negligent.",
-                    "Hasty and superficial."
-                ]
-            },
-            {
-                word: "Audacious",
-                definition: "Willing to take bold risks; impudent.",
-                options: [
-                    "Willing to take bold risks; impudent.",
-                    "Cautious and timid.",
-                    "Meek and humble.",
-                    "Hesitant and fearful."
-                ]
-            },
-            {
-                word: "Bolster",
-                definition: "To support or strengthen; to prop up.",
-                options: [
-                    "To support or strengthen; to prop up.",
-                    "To weaken or undermine.",
-                    "To hinder or impede.",
-                    "To deter or discourage."
-                ]
-            },
-            {
-                word: "Churlish",
-                definition: "Rude in a mean-spirited and surly way.",
-                options: [
-                    "Rude in a mean-spirited and surly way.",
-                    "Polite and courteous.",
-                    "Gracious and charming.",
-                    "Kind and agreeable."
-                ]
-            },
-            {
-                word: "Corroborate",
-                definition: "Confirm or give support to a statement.",
-                options: [
-                    "Confirm or give support to a statement.",
-                    "To contradict or refute.",
-                    "To deny or invalidate.",
-                    "To undermine or discredit."
-                ]
-            },
-            {
-                word: "Demur",
-                definition: "To raise doubts or objections or show reluctance.",
-                options: [
-                    "To raise doubts or objections or show reluctance.",
-                    "To agree or accept.",
-                    "To consent or comply.",
-                    "To endorse or approve."
-                ]
-            },
-            {
-                word: "Deride",
-                definition: "To express contempt for; ridicule.",
-                options: [
-                    "To express contempt for; ridicule.",
-                    "To praise or admire.",
-                    "To respect or honor.",
-                    "To commend or laud."
-                ]
-            },
-            {
-                word: "Desiccate",
-                definition: "Remove moisture from something; to dry completely.",
-                options: [
-                    "Remove moisture from something; to dry completely.",
-                    "To moisten or hydrate.",
-                    "To soak or drench.",
-                    "To wet or dampen."
-                ]
-            },
-            {
-                word: "Diffident",
-                definition: "Modest or shy due to lack of confidence.",
-                options: [
-                    "Modest or shy due to lack of confidence.",
-                    "Confident and assertive.",
-                    "Bold and self-assured.",
-                    "Outgoing and brave."
-                ]
-            },
-            {
-                word: "Disparage",
-                definition: "To represent as of little worth.",
-                options: [
-                    "To represent as of little worth.",
-                    "To praise or commend.",
-                    "To esteem or value.",
-                    "To flatter or admire."
-                ]
-            },
-            {
-                word: "Ebullient",
-                definition: "Cheerful and full of energy.",
-                options: [
-                    "Cheerful and full of energy.",
-                    "Depressed and lethargic.",
-                    "Gloomy and sad.",
-                    "Quiet and reserved."
-                ]
-            },
-            {
-                word: "Enigma",
-                definition: "A mysterious, puzzling, hard to understand thing.",
-                options: [
-                    "A mysterious, puzzling, hard to understand thing.",
-                    "A clear explanation.",
-                    "A simple solution.",
-                    "An obvious truth."
-                ]
-            }
+            { word: "Acrimonious", definition: "Stinging, bitter in temper or tone.", options: ["Stinging, bitter in temper or tone.", "Sweet and harmonious.", "Calm and collected.", "Full of joy and laughter."] },
+            { word: "Capricious", definition: "Sudden, unpredictable changes in mood or behavior.", options: ["Sudden, unpredictable changes in mood or behavior.", "Stable and predictable.", "Careful and cautious.", "Determined and resolute."] },
+            { word: "Deleterious", definition: "Causing harm or damage.", options: ["Causing harm or damage.", "Beneficial and helpful.", "Nourishing and healthy.", "Pleasant and enjoyable."] },
+            { word: "Ephemeral", definition: "Lasting for a very short time.", options: ["Lasting for a very short time.", "Lasting for an eternity.", "Permanent and enduring.", "Slow to change."] },
+            { word: "Fugacious", definition: "Fleeting; lasting a short time.", options: ["Fleeting; lasting a short time.", "Permanent and unchangeable.", "Strong and durable.", "Moving very slowly."] },
+            { word: "Gregarious", definition: "Fond of company; sociable.", options: ["Fond of company; sociable.", "Reserved and quiet.", "Solitary and reclusive.", "Shy and introverted."] },
+            { word: "Harangue", definition: "A lengthy and aggressive speech.", options: ["A lengthy and aggressive speech.", "A brief and polite conversation.", "A gentle whisper.", "A soothing lullaby."] },
+            { word: "Ingenious", definition: "Clever, original, and inventive.", options: ["Clever, original, and inventive.", "Unimaginative and dull.", "Simple and straightforward.", "Confused and disoriented."] },
+            { word: "Laconic", definition: "Using very few words.", options: ["Using very few words.", "Talkative and verbose.", "Eloquent and persuasive.", "Loud and boisterous."] },
+            { word: "Mellifluous", definition: "Sweet or musical; pleasant to hear.", options: ["Sweet or musical; pleasant to hear.", "Harsh and discordant.", "Loud and piercing.", "Rough and abrasive."] },
+            { word: "Obfuscate", definition: "Render obscure, unclear, or unintelligible.", options: ["Render obscure, unclear, or unintelligible.", "Make clear and understandable.", "Illuminate and enlighten.", "Simplify and clarify."] },
+            { word: "Perfunctory", definition: "Done with minimal effort or thought.", options: ["Done with minimal effort or thought.", "Thorough and meticulous.", "Energetic and enthusiastic.", "Careful and precise."] },
+            { word: "Quixotic", definition: "Extremely idealistic; unrealistic and impractical.", options: ["Extremely idealistic; unrealistic and impractical.", "Realistic and pragmatic.", "Cynical and pessimistic.", "Cautious and conservative."] },
+            { word: "Recalcitrant", definition: "Stubbornly uncooperative toward authority or discipline.", options: ["Stubbornly uncooperative toward authority or discipline.", "Obedient and compliant.", "Eager to cooperate.", "Submissive and docile."] },
+            { word: "Sycophant", definition: "One who flatters to gain advantage.", options: ["One who flatters to gain advantage.", "An honest and straightforward person.", "A true leader.", "A humble and modest individual."] },
+            { word: "Aberrant", definition: "Deviating from the norm.", options: ["Deviating from the norm.", "Typical and standard.", "Conforming to rules.", "Common and usual."] },
+            { word: "Ameliorate", definition: "To make something better; to improve.", options: ["To make something better; to improve.", "To make something worse.", "To hinder progress.", "To cause deterioration."] },
+            { word: "Anomalous", definition: "Deviating from standard or normal expectation.", options: ["Deviating from standard or normal expectation.", "Normal and customary.", "Regular and typical.", "Expected and predictable."] },
+            { word: "Arbiter", definition: "Person settling disputes, having ultimate authority.", options: ["Person settling disputes, having ultimate authority.", "Someone who causes conflict.", "A biased participant.", "One who lacks authority."] },
+            { word: "Assuage", definition: "To make less severe; satisfy or relieve.", options: ["To make less severe; satisfy or relieve.", "To intensify or worsen.", "To irritate or annoy.", "To aggravate or exacerbate."] },
+            { word: "Avarice", definition: "Extreme greed for wealth or material gain.", options: ["Extreme greed for wealth or material gain.", "Generosity and charity.", "Selflessness and altruism.", "Contentment and moderation."] },
+            { word: "Banal", definition: "Lacking originality; obvious and boring.", options: ["Lacking originality; obvious and boring.", "Original and exciting.", "Unique and innovative.", "Fresh and stimulating."] },
+            { word: "Bombastic", definition: "High-sounding but with little meaning; inflated.", options: ["High-sounding but with little meaning; inflated.", "Simple and understated.", "Modest and humble.", "Concise and clear."] },
+            { word: "Cacophony", definition: "A harsh, discordant mixture of sounds.", options: ["A harsh, discordant mixture of sounds.", "A pleasant melody.", "Harmonious music.", "A soothing sound."] },
+            { word: "Candid", definition: "Truthful and straightforward; frank.", options: ["Truthful and straightforward; frank.", "Deceptive and cunning.", "Secretive and evasive.", "Dishonest and insincere."] },
+            { word: "Castigate", definition: "To reprimand severely.", options: ["To reprimand severely.", "To praise highly.", "To encourage gently.", "To forgive kindly."] },
+            { word: "Caustic", definition: "Burning or corrosive; sharply sarcastic.", options: ["Burning or corrosive; sharply sarcastic.", "Mild and soothing.", "Gentle and agreeable.", "Sweet and pleasant."] },
+            { word: "Chicanery", definition: "Trickery for political, financial, or legal gain.", options: ["Trickery for political, financial, or legal gain.", "Honesty and integrity.", "Frankness and candor.", "Sincerity and trustworthiness."] },
+            { word: "Coalesce", definition: "To come together and form one mass or whole.", options: ["To come together and form one mass or whole.", "To separate and divide.", "To scatter and disperse.", "To break apart."] },
+            { word: "Cogent", definition: "Clear, logical, and convincing.", options: ["Clear, logical, and convincing.", "Confusing and illogical.", "Weak and unconvincing.", "Ambiguous and unclear."] },
+            { word: "Commensurate", definition: "Proportionate; corresponding in size or degree.", options: ["Proportionate; corresponding in size or degree.", "Disproportionate; unequal.", "Unrelated or irrelevant.", "Opposite in measure."] },
+            { word: "Contentious", definition: "Causing argument; controversial.", options: ["Causing argument; controversial.", "Agreeable and peaceful.", "Harmonious and calm.", "Cooperative and compliant."] },
+            { word: "Conundrum", definition: "A confusing and difficult problem or question.", options: ["A confusing and difficult problem or question.", "A simple solution.", "A clear answer.", "An easy task."] },
+            { word: "Credulous", definition: "Too ready to believe things.", options: ["Too ready to believe things.", "Skeptical and doubting.", "Critical and discerning.", "Distrustful and suspicious."] },
+            { word: "Diatribe", definition: "A forceful, bitter verbal attack.", options: ["A forceful, bitter verbal attack.", "A polite discussion.", "A calm debate.", "A sincere compliment."] },
+            { word: "Dilettante", definition: "Person pursuing interest without real commitment.", options: ["Person pursuing interest without real commitment.", "A professional expert.", "A dedicated master.", "A serious scholar."] },
+            { word: "Disabuse", definition: "To undeceive; free from error.", options: ["To undeceive; free from error.", "To mislead or deceive.", "To confuse or perplex.", "To reinforce a false belief."] },
+            { word: "Discordant", definition: "Disagreeing; characterized by conflict.", options: ["Disagreeing; characterized by conflict.", "Harmonious and consistent.", "Agreeable and compatible.", "Peaceful and unified."] },
+            { word: "Disparate", definition: "Essentially different; not comparable.", options: ["Essentially different; not comparable.", "Similar and comparable.", "Identical and alike.", "Homogeneous and uniform."] },
+            { word: "Divulge", definition: "To make known (private or sensitive information).", options: ["To make known (private or sensitive information).", "To keep secret.", "To conceal or hide.", "To guard information."] },
+            { word: "Dogmatic", definition: "Laying down principles as undeniably true.", options: ["Laying down principles as undeniably true.", "Open-minded and flexible.", "Skeptical and questioning.", "Uncertain and doubtful."] },
+            { word: "Eclectic", definition: "Ideas from a broad and diverse range.", options: ["Ideas from a broad and diverse range.", "Narrow and limited.", "Uniform and unvaried.", "Exclusive and selective."] },
+            { word: "Effrontery", definition: "Shameless audacity or impudence.", options: ["Shameless audacity or impudence.", "Modesty and humility.", "Respect and politeness.", "Shyness and timidity."] },
+            { word: "Egalitarian", definition: "Believing in equal rights for all people.", options: ["Believing in equal rights for all people.", "Supporting inequality.", "Promoting hierarchy.", "Advocating for privilege."] },
+            { word: "Enervate", definition: "To drain energy or vitality; to weaken.", options: ["To drain energy or vitality; to weaken.", "To strengthen or energize.", "To invigorate or stimulate.", "To empower or fortify."] },
+            { word: "Equivocate", definition: "Use ambiguous language to conceal truth.", options: ["Use ambiguous language to conceal truth.", "To speak clearly and directly.", "To state firmly and precisely.", "To be straightforward and honest."] },
+            { word: "Exacerbate", definition: "To make a problem or situation worse.", options: ["To make a problem or situation worse.", "To improve or alleviate.", "To mitigate or lessen.", "To calm or soothe."] },
+            { word: "Exculpate", definition: "To declare someone not guilty.", options: ["To declare someone not guilty.", "To incriminate or accuse.", "To blame or censure.", "To find guilty."] },
+            { word: "Exigent", definition: "Pressing; demanding; urgent.", options: ["Pressing; demanding; urgent.", "Non-essential; trivial.", "Unimportant; unnecessary.", "Relaxed; undemanding."] },
+            { word: "Expurgate", definition: "To remove objectionable content from media.", options: ["To remove objectionable content from media.", "To add content to.", "To preserve original content.", "To endorse objectionable material."] },
+            { word: "Extant", definition: "Still in existence; surviving.", options: ["Still in existence; surviving.", "Extinct; no longer existing.", "Lost; vanished.", "Forgotten; archaic."] },
+            { word: "Fastidious", definition: "Very attentive to accuracy and detail.", options: ["Very attentive to accuracy and detail.", "Careless and sloppy.", "Indifferent and unconcerned.", "Hasty and imprecise."] },
+            { word: "Fervent", definition: "Having or displaying a passionate intensity.", options: ["Having or displaying a passionate intensity.", "Apathetic and indifferent.", "Dispassionate and cold.", "Unenthusiastic and mild."] },
+            { word: "Flag", definition: "To decline in strength, vigor, or interest.", options: ["To decline in strength, vigor, or interest.", "To gain strength or vigor.", "To grow or flourish.", "To improve or recover."] },
+            { word: "Florid", definition: "Having a red or flushed complexion; elaborately intricate.", options: ["Having a red or flushed complexion; elaborately intricate.", "Pale and simple.", "Unadorned and plain.", "Understated and modest."] },
+            { word: "Foment", definition: "To instigate or stir up undesirable action.", options: ["To instigate or stir up undesirable action.", "To suppress or calm.", "To discourage or prevent.", "To alleviate or ease."] },
+            { word: "Garrulous", definition: "Excessively talkative, especially on trivial matters.", options: ["Excessively talkative, especially on trivial matters.", "Quiet and reserved.", "Silent and introverted.", "Concise and brief."] },
+            { word: "Guileless", definition: "Innocent and without deception.", options: ["Innocent and without deception.", "Cunning and deceptive.", "Sly and tricky.", "Dishonest and artful."] },
+            { word: "Homogenous", definition: "Of the same kind; alike.", options: ["Of the same kind; alike.", "Diverse and varied.", "Different and distinct.", "Heterogeneous and mixed."] },
+            { word: "Impecunious", definition: "Having little or no money; penniless.", options: ["Having little or no money; penniless.", "Wealthy and affluent.", "Prosperous and rich.", "Well-off and comfortable."] },
+            { word: "Imperturbable", definition: "Unable to be upset or excited; calm.", options: ["Unable to be upset or excited; calm.", "Easily agitated or excited.", "Anxious or nervous.", "Disturbed or rattled."] },
+            { word: "Impious", definition: "Not religious; lacking reverence for God.", options: ["Not religious; lacking reverence for God.", "Pious and devout.", "Reverent and holy.", "Religious and spiritual."] },
+            { word: "Impute", definition: "To attribute (something bad) to someone.", options: ["To attribute (something bad) to someone.", "To exonerate or clear.", "To praise or commend.", "To absolve or forgive."] },
+            { word: "Inchoate", definition: "Not yet completely formed or organized; rudimentary.", options: ["Not yet completely formed or organized; rudimentary.", "Fully formed and developed.", "Complete and perfected.", "Well-organized and structured."] },
+            { word: "Incipient", definition: "Beginning to happen or develop.", options: ["Beginning to happen or develop.", "Fully developed; mature.", "Ending or concluding.", "Declining or waning."] },
+            { word: "Incongruous", definition: "Not in harmony with surroundings.", options: ["Not in harmony with surroundings.", "Consistent and harmonious.", "Appropriate and fitting.", "Compatible and suitable."] },
+            { word: "Inert", definition: "Lacking the ability or strength to move.", options: ["Lacking the ability or strength to move.", "Active and energetic.", "Vigorous and lively.", "Dynamic and mobile."] },
+            { word: "Inherent", definition: "Existing as a permanent, essential attribute.", options: ["Existing as a permanent, essential attribute.", "Acquired or external.", "Temporary or transient.", "Superficial or accidental."] },
+            { word: "Iniquity", definition: "Immoral or grossly unfair behavior.", options: ["Immoral or grossly unfair behavior.", "Morality and righteousness.", "Justice and fairness.", "Virtue and goodness."] },
+            { word: "Innate", definition: "Inborn; natural.", options: ["Inborn; natural.", "Acquired or learned.", "Artificial or unnatural.", "Developed or cultivated."] },
+            { word: "Innocuous", definition: "Not harmful or offensive.", options: ["Not harmful or offensive.", "Harmful or injurious.", "Offensive or hurtful.", "Dangerous or toxic."] },
+            { word: "Insipid", definition: "Lacking flavor, vigor, or interest.", options: ["Lacking flavor, vigor, or interest.", "Flavorful and exciting.", "Vigorous and stimulating.", "Engaging and interesting."] },
+            { word: "Intransigent", definition: "Unwilling to change views or agree.", options: ["Unwilling to change views or agree.", "Flexible and adaptable.", "Compliant and yielding.", "Agreeable and compromising."] },
+            { word: "Inundate", definition: "To overwhelm or flood with many things.", options: ["To overwhelm or flood with many things.", "To deprive or drain.", "To underwhelm or lessen.", "To alleviate or reduce."] },
+            { word: "Irascible", definition: "Having or showing a tendency to be easily angered.", options: ["Having or showing a tendency to be easily angered.", "Even-tempered and calm.", "Patient and serene.", "Placid and amiable."] },
+            { word: "Lackluster", definition: "Lacking vitality, uninspired.", options: ["Lacking vitality, uninspired.", "Vibrant and dynamic.", "Forceful and compelling.", "Inspiring and spirited."] },
+            { word: "Lament", definition: "To mourn (a person's loss or death).", options: ["To mourn (a person's loss or death).", "To celebrate or rejoice.", "To praise or commend.", "To ignore or disregard."] },
+            { word: "Laud", definition: "To praise highly, especially publicly.", options: ["To praise highly, especially publicly.", "To criticize or condemn.", "To deprecate or disparage.", "To blame or censure."] },
+            { word: "Loquacious", definition: "Tending to talk a great deal; talkative.", options: ["Tending to talk a great deal; talkative.", "Quiet and reserved.", "Silent and uncommunicative.", "Concise and succinct."] },
+            { word: "Lucid", definition: "Expressed clearly; easy to understand; bright or luminous.", options: ["Expressed clearly; easy to understand; bright or luminous.", "Confusing and unclear.", "Obscure and vague.", "Dull and murky."] },
+            { word: "Malinger", definition: "To feign illness to avoid work.", options: ["To feign illness to avoid work.", "To work diligently.", "To be healthy and active.", "To perform duties honestly."] },
+            { word: "Meticulous", definition: "Showing great attention to detail.", options: ["Showing great attention to detail.", "Careless and negligent.", "Hasty and inaccurate.", "Disregardful of details."] },
+            { word: "Mollify", definition: "To appease anger or anxiety.", options: ["To appease anger or anxiety.", "To anger or irritate.", "To provoke or incite.", "To exacerbate emotions."] },
+            { word: "Obdurate", definition: "Stubbornly refusing to change opinion.", options: ["Stubbornly refusing to change opinion.", "Flexible and amenable.", "Cooperative and compliant.", "Open-minded and yielding."] },
+            { word: "Obsequious", definition: "Excessively obedient or servile.", options: ["Excessively obedient or servile.", "Assertive and independent.", "Commanding and dominant.", "Disobedient and defiant."] },
+            { word: "Ostracize", definition: "To exclude from a group.", options: ["To exclude from a group.", "To include or welcome.", "To accept or embrace.", "To integrate or admit."] },
+            { word: "Paradox", definition: "A seemingly contradictory statement that is true.", options: ["A seemingly contradictory statement that is true.", "A logical conclusion.", "A straightforward fact.", "A consistent belief."] },
+            { word: "Paucity", definition: "Small or insufficient amount; scarcity.", options: ["Small or insufficient amount; scarcity.", "Abundance and plenty.", "Surplus and excess.", "Profusion and wealth."] },
+            { word: "Pellucid", definition: "Translucently clear; easily understood.", options: ["Translucently clear; easily understood.", "Opaque and murky.", "Confusing and ambiguous.", "Dark and obscure."] },
+            { word: "Philanthropic", definition: "Of or relating to philanthropy; benevolent.", options: ["Of or relating to philanthropy; benevolent.", "Selfish and greedy.", "Miserly and ungenerous.", "Hateful and malicious."] },
+            { word: "Placate", definition: "To make (someone) less angry or hostile.", options: ["To make (someone) less angry or hostile.", "To provoke or anger.", "To inflame or agitate.", "To irritate or annoy."] },
+            { word: "Plethora", definition: "A large or excessive amount of something.", options: ["A large or excessive amount of something.", "Scarcity or lack.", "Paucity or deficiency.", "Shortage or dearth."] },
+            { word: "Pragmatic", definition: "Dealing with things practically, not theoretically.", options: ["Dealing with things practically, not theoretically.", "Idealistic and impractical.", "Theoretical and abstract.", "Utopian and unrealistic."] },
+            { word: "Preclude", definition: "To prevent from happening; to make impossible.", options: ["To prevent from happening; to make impossible.", "To allow or permit.", "To facilitate or enable.", "To encourage or assist."] },
+            { word: "Prodigal", definition: "Spending money recklessly; wasteful.", options: ["Spending money recklessly; wasteful.", "Thrifty and economical.", "Frugal and parsimonious.", "Cautious and conservative with money."] },
+            { word: "Profound", definition: "Very great; showing great knowledge or insight.", options: ["Very great; showing great knowledge or insight.", "Shallow and superficial.", "Trivial and insignificant.", "Superficial and slight."] },
+            { word: "Proliferate", definition: "To increase rapidly in numbers; multiply.", options: ["To increase rapidly in numbers; multiply.", "To decrease or diminish.", "To shrink or contract.", "To reduce or decline."] },
+            { word: "Propitiate", definition: "To win favor by pleasing someone.", options: ["To win favor by pleasing someone.", "To anger or provoke.", "To alienate or estrange.", "To offend or displease."] },
+            { word: "Propriety", definition: "Conforming to accepted standards of behavior.", options: ["Conforming to accepted standards of behavior.", "Impropriety and indecency.", "Rudeness and vulgarity.", "Disregard for customs."] },
+            { word: "Pungent", definition: "Sharp taste/smell; caustic criticism.", options: ["Sharp taste/smell; caustic criticism.", "Mild and bland.", "Pleasant and agreeable.", "Gentle and soothing."] },
+            { word: "Quotidian", definition: "Occurring daily; ordinary or commonplace.", options: ["Occurring daily; ordinary or commonplace.", "Unusual and rare.", "Extraordinary and uncommon.", "Exceptional and unique."] },
+            { word: "Redoubtable", definition: "(Of a person) formidable, especially as an opponent.", options: ["(Of a person) formidable, especially as an opponent.", "Weak and negligible.", "Harmless and unthreatening.", "Insignificant and unimpressive."] },
+            { word: "Refute", definition: "To prove a statement wrong; disprove.", options: ["To prove a statement wrong; disprove.", "To confirm or prove.", "To support or uphold.", "To validate or corroborate."] },
+            { word: "Remonstrate", definition: "To make a forceful protest.", options: ["To make a forceful protest.", "To agree or assent.", "To comply or obey.", "To approve or endorse."] },
+            { word: "Repudiate", definition: "Refuse to accept or deny truth.", options: ["Refuse to accept or deny truth.", "To accept or embrace.", "To affirm or endorse.", "To acknowledge or validate."] },
+            { word: "Reticent", definition: "Not revealing thoughts or feelings easily; reserved.", options: ["Not revealing thoughts or feelings easily; reserved.", "Open and communicative.", "Talkative and expressive.", "Forthcoming and frank."] },
+            { word: "Satiate", definition: "To satisfy a desire fully.", options: ["To satisfy a desire fully.", "To starve or deprive.", "To leave unsatisfied.", "To make hungry."] },
+            { word: "Soporific", definition: "Tending to induce drowsiness or sleep.", options: ["Tending to induce drowsiness or sleep.", "Stimulating or awakening.", "Energizing or invigorating.", "Enlivening or exciting."] },
+            { word: "Specious", definition: "Superficially plausible, but actually wrong.", options: ["Superficially plausible, but actually wrong.", "Valid and logical.", "Correct and accurate.", "Genuine and true."] },
+            { word: "Stymie", definition: "To prevent or hinder the progress of.", options: ["To prevent or hinder the progress of.", "To facilitate or assist.", "To enable or promote.", "To encourage or aid."] },
+            { word: "Ubiquitous", definition: "Present, appearing, or found everywhere.", options: ["Present, appearing, or found everywhere.", "Rare and uncommon.", "Scarce and limited.", "Absent and nowhere to be found."] },
+            { word: "Vacillate", definition: "To waver between opinions; be indecisive.", options: ["To waver between opinions; be indecisive.", "To be firm and resolute.", "To be steadfast and unwavering.", "To decide quickly and firmly."] },
+            { word: "Vilify", definition: "To speak abusively about.", options: ["To speak abusively about.", "To praise or commend.", "To extol or laud.", "To flatter or admire."] },
+            { word: "Vituperative", definition: "Bitter and abusive.", options: ["Bitter and abusive.", "Kind and gentle.", "Polite and courteous.", "Complimentary and laudatory."] },
+            { word: "Wane", definition: "To decrease in vigor, power, or extent.", options: ["To decrease in vigor, power, or extent.", "To increase or grow.", "To strengthen or expand.", "To flourish or prosper."] },
+            { word: "Zealot", definition: "A fanatical, uncompromising person pursuing ideals.", options: ["A fanatical, uncompromising person pursuing ideals.", "A moderate or tolerant person.", "An indifferent or apathetic individual.", "A compromiser or peacemaker."] },
+            { word: "Abscond", definition: "To leave secretly, escaping custody or arrest.", options: ["To leave secretly, escaping custody or arrest.", "To stay and face consequences.", "To appear publicly.", "To surrender openly."] },
+            { word: "Alacrity", definition: "Brisk and cheerful readiness.", options: ["Brisk and cheerful readiness.", "Reluctance and unwillingness.", "Slowness and hesitation.", "Apathy and indifference."] },
+            { word: "Antipathy", definition: "A deep-seated feeling of dislike; aversion.", options: ["A deep-seated feeling of dislike; aversion.", "Affection and fondness.", "Sympathy and empathy.", "Attraction and admiration."] },
+            { word: "Apathy", definition: "Lack of interest, enthusiasm, or concern.", options: ["Lack of interest, enthusiasm, or concern.", "Enthusiasm and passion.", "Interest and excitement.", "Concern and caring."] },
+            { word: "Assiduous", definition: "Showing great care and perseverance.", options: ["Showing great care and perseverance.", "Careless and lazy.", "Indifferent and negligent.", "Hasty and superficial."] },
+            { word: "Audacious", definition: "Willing to take bold risks; impudent.", options: ["Willing to take bold risks; impudent.", "Cautious and timid.", "Meek and humble.", "Hesitant and fearful."] },
+            { word: "Bolster", definition: "To support or strengthen; to prop up.", options: ["To support or strengthen; to prop up.", "To weaken or undermine.", "To hinder or impede.", "To deter or discourage."] },
+            { word: "Churlish", definition: "Rude in a mean-spirited and surly way.", options: ["Rude in a mean-spirited and surly way.", "Polite and courteous.", "Gracious and charming.", "Kind and agreeable."] },
+            { word: "Corroborate", definition: "Confirm or give support to a statement.", options: ["Confirm or give support to a statement.", "To contradict or refute.", "To deny or invalidate.", "To undermine or discredit."] },
+            { word: "Demur", definition: "To raise doubts or objections or show reluctance.", options: ["To raise doubts or objections or show reluctance.", "To agree or accept.", "To consent or comply.", "To endorse or approve."] },
+            { word: "Deride", definition: "To express contempt for; ridicule.", options: ["To express contempt for; ridicule.", "To praise or admire.", "To respect or honor.", "To commend or laud."] },
+            { word: "Desiccate", definition: "Remove moisture from something; to dry completely.", options: ["Remove moisture from something; to dry completely.", "To moisten or hydrate.", "To soak or drench.", "To wet or dampen."] },
+            { word: "Diffident", definition: "Modest or shy due to lack of confidence.", options: ["Modest or shy due to lack of confidence.", "Confident and assertive.", "Bold and self-assured.", "Outgoing and brave."] },
+            { word: "Disparage", definition: "To represent as of little worth.", options: ["To represent as of little worth.", "To praise or commend.", "To esteem or value.", "To flatter or admire."] },
+            { word: "Ebullient", definition: "Cheerful and full of energy.", options: ["Cheerful and full of energy.", "Depressed and lethargic.", "Gloomy and sad.", "Quiet and reserved."] },
+            { word: "Enigma", definition: "A mysterious, puzzling, hard to understand thing.", options: ["A mysterious, puzzling, hard to understand thing.", "A clear explanation.", "A simple solution.", "An obvious truth."] }
         ];
 
         // Global Game State
         let currentScore = 0;
         let wrongAttempts = 0;
         let currentWord = {};
-        let globalLeaderboardData = []; // This will hold scores from Firestore
-        let musicPlaying = false; // Track music state
-        let modalOnCloseCallback = null; // New: Stores a callback for when the modal closes
+        let timedLeaderboardData = [];
+        let untimedLeaderboardData = [];
+        let musicPlaying = false;
+        let modalOnCloseCallback = null;
+        let gameMode = 'timed'; // 'timed' or 'untimed'
+        let currentLeaderboardMode = 'timed';
+        let latestSubmittedDocIdForHighlight = null; // To highlight the new score
+        let questionsAnsweredThisGame = 0;
+        let correctAnswersThisGame = 0;
 
         // Timer State
-        let gameTimer = null; // Holds the setInterval ID
-        let timeLeft = 60; // Initial time in seconds
-        let isTimerPausedForModal = false; // Track if timer is paused specifically for a modal
+        let gameTimer = null;
+        let timeLeft = 60;
+        let isTimerPausedForModal = false;
 
         // Stats State
-        let gamesPlayed = 0; // This will now be loaded from Firestore
-        let highestRank = "N/A"; // This will be derived from global leaderboard data
+        let currentStatsMode = 'timed';
+        let userStats = {
+            timed: { gamesPlayed: 0, highestScore: 0, totalCorrect: 0, totalAnswered: 0 },
+            untimed: { gamesPlayed: 0, highestScore: 0, totalCorrect: 0, totalAnswered: 0 }
+        };
 
         // Pagination state
         let currentPage = 1;
@@ -2110,21 +656,24 @@
 
         // DOM Elements
         const mainMenuScreen = document.getElementById('main-menu');
+        const gameModeScreen = document.getElementById('game-mode-screen');
         const gameScreen = document.getElementById('game-screen');
         const gameOverScreen = document.getElementById('game-over-screen');
         const leaderboardScreen = document.getElementById('leaderboard-screen');
-        const leaderboardLoading = document.getElementById('leaderboard-loading'); // New loading indicator
-        const statsScreen = document.getElementById('stats-screen'); // New Stats screen
-
-        const playSoloButton = document.getElementById('play-solo-button');
+        const leaderboardLoading = document.getElementById('leaderboard-loading');
+        const statsScreen = document.getElementById('stats-screen');
+        const playGameButton = document.getElementById('play-game-button');
+        const timedModeButton = document.getElementById('timed-mode-button');
+        const untimedModeButton = document.getElementById('untimed-mode-button');
+        const backToMainMenuButton = document.getElementById('back-to-main-menu-button');
         const showLeaderboardMainMenuButton = document.getElementById('show-leaderboard-main');
-        const showStatsButton = document.getElementById('show-stats-button'); // New Stats button
+        const showStatsButton = document.getElementById('show-stats-button');
         const toggleMusicButton = document.getElementById('toggle-music-button');
         const wordDisplay = document.getElementById('word-display');
         const choicesContainer = document.getElementById('choices-container');
-        const scoreDisplay = document = document.getElementById('score-display');
+        const scoreDisplay = document.getElementById('score-display');
         const wrongAttemptsDisplay = document.getElementById('wrong-attempts-display');
-        const timerDisplay = document.getElementById('timer-display'); // New timer display element
+        const timerDisplay = document.getElementById('timer-display');
         const finalScoreDisplay = document.getElementById('final-score');
         const playerNameInput = document.getElementById('player-name-input');
         const saveScoreButton = document.getElementById('save-score-button');
@@ -2135,718 +684,532 @@
         const backgroundMusic = document.getElementById('background-music');
         const correctSound = document.getElementById('correct-sound');
         const wrongSound = document.getElementById('wrong-sound');
-
-        // Pagination Elements
         const prevPageButton = document.getElementById('prev-page-button');
         const nextPageButton = document.getElementById('next-page-button');
         const pageInfoSpan = document.getElementById('page-info');
-
-        // Stats Elements
         const gamesPlayedStat = document.getElementById('games-played-stat');
         const highestRankStat = document.getElementById('highest-rank-stat');
-        const mainMenuFromStatsButton = document.getElementById('main-menu-from-stats'); // New button for stats page
-
-        // NEW: Highest Scorer DOM Element
+        const highestScoreStat = document.getElementById('highest-score-stat');
+        const accuracyStat = document.getElementById('accuracy-stat');
+        const mainMenuFromStatsButton = document.getElementById('main-menu-from-stats');
         const highestScorerOverallDisplay = document.getElementById('highest-scorer-overall-display');
-        // NEW: Developer Note DOM Element
+        const untimedHighestScorerDisplay = document.getElementById('untimed-highest-scorer-display');
         const developerNoteDisplay = document.getElementById('developer-note-display');
-
-
-        // Custom Modal Elements
         const customModalOverlay = document.getElementById('custom-modal-overlay');
         const modalTitle = document.getElementById('modal-title');
         const modalMessage = document.getElementById('modal-message');
         const modalCloseButton = document.getElementById('modal-close-button');
+        const showTimedLeaderboardButton = document.getElementById('show-timed-leaderboard');
+        const showUntimedLeaderboardButton = document.getElementById('show-untimed-leaderboard');
+        const showTimedStatsButton = document.getElementById('show-timed-stats');
+        const showUntimedStatsButton = document.getElementById('show-untimed-stats');
+        const leaderboardTitle = document.getElementById('leaderboard-title');
 
-
-        // --- Utility Functions ---
-
-        // Function to shuffle an array (Fisher-Yates algorithm)
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+                [array[i], array[j]] = [array[j], array[i]];
             }
             return array;
         }
 
-        // Function to switch between game screens
         function showScreen(screenId) {
-            console.log(`Attempting to show screen: ${screenId}`); // Log screen transition
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
-
-            // Control visibility of highest scorer display based on current screen
             if (screenId === 'main-menu') {
                 highestScorerOverallDisplay.classList.remove('hidden');
-                developerNoteDisplay.classList.remove('hidden'); // Show developer note on main menu
-                updateHighestScorerDisplay(); // Ensure it's updated when shown
+                untimedHighestScorerDisplay.classList.remove('hidden');
+                developerNoteDisplay.classList.remove('hidden');
+                updateHighestScorerDisplay();
             } else {
                 highestScorerOverallDisplay.classList.add('hidden');
-                developerNoteDisplay.classList.add('hidden'); // Hide developer note on other screens
+                untimedHighestScorerDisplay.classList.add('hidden');
+                developerNoteDisplay.classList.add('hidden');
             }
-
-            // If going to leaderboard, ensure it's loaded and display the first page
             if (screenId === 'leaderboard-screen') {
-                if (window.firebaseInitialized) {
-                    loadGlobalLeaderboard(); // This fetches all data
-                } else {
-                    leaderboardBody.innerHTML = '<tr><td colspan="3">Initializing Firebase...</td></tr>';
-                    leaderboardLoading.classList.add('hidden'); // Hide loading indicator if Firebase not ready
-                }
+                if (window.firebaseInitialized) loadGlobalLeaderboard();
+                else leaderboardBody.innerHTML = '<tr><td colspan="3">Initializing...</td></tr>';
             } else if (screenId === 'stats-screen') {
-                updateStatsDisplay(); // Update stats when navigating to the stats screen
+                updateStatsDisplay();
             }
         }
 
-        // Function to show custom modal - now accepts an optional callback
         window.showCustomModal = function(title, message, onCloseCallback = null) {
             modalTitle.textContent = title;
-            // Use innerHTML for modal message to allow for HTML formatting (like colored spans)
             modalMessage.innerHTML = message;
             customModalOverlay.classList.remove('hidden');
-            modalOnCloseCallback = onCloseCallback; // Store the callback
-            console.log(`Modal Shown: Title - "${title}", Message - "${message}"`);
+            modalOnCloseCallback = onCloseCallback;
         }
 
-        // Function to hide custom modal - now executes the stored callback
         function hideCustomModalAndExecuteCallback() {
             customModalOverlay.classList.add('hidden');
-            console.log("Modal Hidden.");
             if (modalOnCloseCallback) {
-                // Small delay to allow modal to visually close before executing callback
                 setTimeout(() => {
                     modalOnCloseCallback();
-                    modalOnCloseCallback = null; // Clear the callback after execution
-                }, 100); // Shorter delay for general modals
+                    modalOnCloseCallback = null;
+                }, 100);
             }
         }
 
-        // --- Game Logic ---
-
-        // Updates the timer display
         function updateTimerDisplay() {
             timerDisplay.textContent = `Time: ${timeLeft}`;
         }
 
-        // The countdown function for the timer
         function countdown() {
-            if (isTimerPausedForModal) {
-                return; // Do nothing if timer is explicitly paused for a modal
-            }
+            if (isTimerPausedForModal) return;
             timeLeft--;
             updateTimerDisplay();
-            if (timeLeft <= 0) {
+            if (timeLeft <= 0 && gameMode === 'timed') {
                 clearInterval(gameTimer);
-                gameTimer = null; // Clear the timer ID
-                endGame(); // End the game when time runs out
+                gameTimer = null;
+                endGame();
             }
         }
 
-        // Initializes the game state and displays a new word
-        function startGame() {
+        function startGame(mode) {
+            gameMode = mode;
             currentScore = 0;
             wrongAttempts = 0;
-            timeLeft = 60; // Reset timer
-            isTimerPausedForModal = false; // Ensure timer is not paused initially
-
-            updateGamesPlayedFirestore(); // Call async function to update persisted count
+            questionsAnsweredThisGame = 0;
+            correctAnswersThisGame = 0;
+            isTimerPausedForModal = false;
+            
             updateScoreDisplay();
-            updateTimerDisplay(); // Initial timer display
-
-            // Clear any existing timer before starting a new one
-            if (gameTimer) {
-                clearInterval(gameTimer);
+            if (gameMode === 'timed') {
+                timeLeft = 60;
+                timerDisplay.style.display = 'block';
+                updateTimerDisplay();
+                if (gameTimer) clearInterval(gameTimer);
+                gameTimer = setInterval(countdown, 1000);
+            } else {
+                timerDisplay.style.display = 'none';
+                if (gameTimer) clearInterval(gameTimer);
+                gameTimer = null;
             }
-            gameTimer = setInterval(countdown, 1000); // Start the countdown
-
             showScreen('game-screen');
-            console.log("Game started."); // Log game start
             pickAndDisplayWord();
         }
 
-        // Updates the score and wrong attempts display
         function updateScoreDisplay() {
             scoreDisplay.textContent = `Score: ${currentScore}`;
             wrongAttemptsDisplay.textContent = `Wrong: ${wrongAttempts}/3`;
         }
 
-        // Selects a random word and prepares its options
         function pickAndDisplayWord() {
             const randomIndex = Math.floor(Math.random() * words.length);
-            currentWord = { ...words[randomIndex] }; // Clone to avoid modifying original
-
-            // Create choices: correct definition + 3 random incorrect definitions
+            currentWord = { ...words[randomIndex] };
             let allDefinitions = words.map(w => w.definition);
-            // Filter out the correct definition to pick distractors from others
             let incorrectDefinitions = allDefinitions.filter(def => def !== currentWord.definition);
-
-            // Ensure we have enough unique incorrect definitions
-            while (incorrectDefinitions.length < 3) {
-                const randomOtherDefinition = words[Math.floor(Math.random() * words.length)].definition;
-                if (!incorrectDefinitions.includes(randomOtherDefinition) && randomOtherDefinition !== currentWord.definition) {
-                    incorrectDefinitions.push(randomOtherDefinition);
-                }
-            }
-
-            // Shuffle incorrect definitions and pick 3
             shuffleArray(incorrectDefinitions);
             const distractors = incorrectDefinitions.slice(0, 3);
-
-            // Combine correct definition with distractors
             let choices = [currentWord.definition, ...distractors];
-            shuffleArray(choices); // Shuffle all choices
-
-            currentWord.shuffledOptions = choices; // Store shuffled options for display
-
+            shuffleArray(choices);
+            currentWord.shuffledOptions = choices;
             wordDisplay.textContent = currentWord.word;
-            wordDisplay.classList.remove('correct-feedback', 'wrong-feedback'); // Clear previous feedback
-            
-            // Crucial: Clear choicesContainer *before* adding new buttons to prevent sticky state
-            choicesContainer.innerHTML = ''; 
-            displayChoices(); // This will now always build into a clean container.
+            wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
+            choicesContainer.innerHTML = '';
+            displayChoices();
         }
 
-
-        // Renders the choice buttons
         function displayChoices() {
-            // This function is now solely responsible for creating and appending buttons.
-            // choicesContainer.innerHTML is now cleared in pickAndDisplayWord()
             currentWord.shuffledOptions.forEach((option, index) => {
                 const button = document.createElement('button');
-                button.classList.add('choice-button', 'rounded-lg', 'text-sm', 'md:text-base');
+                button.className = 'choice-button rounded-lg text-sm md:text-base';
                 button.textContent = option;
-                button.dataset.index = index; // Store index to identify choice
-                // Pass the button element itself to checkAnswer
+                button.dataset.index = index;
                 button.addEventListener('click', (event) => checkAnswer(option, event.currentTarget));
                 choicesContainer.appendChild(button);
             });
         }
 
-        // Checks the player's answer
         function checkAnswer(selectedDefinition, clickedButton) {
-            let isCorrect = false;
-            if (selectedDefinition === currentWord.definition) {
+            questionsAnsweredThisGame++;
+            let isCorrect = (selectedDefinition === currentWord.definition);
+            if (isCorrect) {
                 currentScore++;
-                isCorrect = true;
-                if (correctSound) correctSound.play().catch(e => console.error("Correct sound playback failed:", e));
-                console.log("Answer: CORRECT. Score:", currentScore); // Log correct answer
+                correctAnswersThisGame++;
+                if (correctSound) correctSound.play().catch(e => {});
             } else {
                 wrongAttempts++;
-                isCorrect = false;
-                if (wrongSound) wrongSound.play().catch(e => console.error("Wrong sound playback failed:", e));
-                console.log("Answer: WRONG. Wrong attempts:", wrongAttempts); // Log wrong answer
+                if (wrongSound) wrongSound.play().catch(e => {});
             }
-
-            // Disable all choice buttons immediately after a selection
             document.querySelectorAll('.choice-button').forEach(btn => btn.disabled = true);
-
-            // Apply feedback to the clicked button immediately AFTER disabling others
-            if (clickedButton) {
-                clickedButton.classList.add('selected-feedback');
-            }
-
-            // Apply visual feedback to the word display BEFORE the timeout
-            if (isCorrect) {
-                wordDisplay.classList.add('correct-feedback');
-            } else {
-                wordDisplay.classList.add('wrong-feedback');
-            }
-
+            if (clickedButton) clickedButton.classList.add('selected-feedback');
+            wordDisplay.classList.add(isCorrect ? 'correct-feedback' : 'wrong-feedback');
             updateScoreDisplay();
 
-            // Store a reference to the specific clicked button for later explicit removal and reflow.
-            const clickedButtonRef = clickedButton;
-
-            // This timeout handles the visual feedback duration and then proceeds
             setTimeout(() => {
-                // Clear word feedback classes
                 wordDisplay.classList.remove('correct-feedback', 'wrong-feedback');
-                
-                // Explicitly remove the 'selected-feedback' class from the clicked button.
-                if (clickedButtonRef) {
-                    clickedButtonRef.classList.remove('selected-feedback');
-                }
+                if (clickedButton) clickedButton.classList.remove('selected-feedback');
+                document.querySelectorAll('.choice-button').forEach(btn => btn.disabled = false);
 
-                // Force a reflow/repaint on the container.
-                void choicesContainer.offsetWidth; // forces reflow
+                const gameOverCondition = wrongAttempts >= 3 || (gameMode === 'timed' && timeLeft <= 0);
 
-                // Re-enable all buttons. (Though they will be replaced by pickAndDisplayWord anyway).
-                document.querySelectorAll('.choice-button').forEach(btn => {
-                    btn.disabled = false;
-                });
-
-                // Decide next step: show correct answer modal (if wrong), then check for game over or next word.
                 if (!isCorrect) {
-                    isTimerPausedForModal = true; // Pause timer before showing modal
-                    clearInterval(gameTimer); // Stop timer interval temporarily
-                    gameTimer = null; // Clear ID so it's not mistakenly resumed by countdown()
-
-                    const message = `The correct answer for "${currentWord.word}" was: <br><br><span class="text-green-400">"${currentWord.definition}"</span>`;
-                    
-                    // Show modal. After modal closes, THEN check for game over or next word.
-                    window.showCustomModal("Incorrect Answer", message, () => {
-                        isTimerPausedForModal = false; // Unpause timer state
-                        if (wrongAttempts >= 3 || timeLeft <= 0) { // Check for game over condition
+                    isTimerPausedForModal = true;
+                    if(gameTimer) clearInterval(gameTimer);
+                    gameTimer = null;
+                    const message = `Correct answer for "${currentWord.word}": <br><br><span class="text-green-400">"${currentWord.definition}"</span>`;
+                    window.showCustomModal("Incorrect", message, () => {
+                        isTimerPausedForModal = false;
+                        if (gameOverCondition) {
                             endGame();
                         } else {
-                            // Only resume timer if game is not over and we're not already at 0 seconds
-                            if (!gameTimer) { // Only start a new interval if one isn't already running
-                                gameTimer = setInterval(countdown, 1000); // Resume timer
+                            if (gameMode === 'timed' && !gameTimer) {
+                                gameTimer = setInterval(countdown, 1000);
                             }
                             pickAndDisplayWord();
                         }
                     });
                 } else {
-                    // If correct, no modal, just proceed.
-                    if (wrongAttempts >= 3 || timeLeft <= 0) { // Check for game over condition (should be rare if correct)
-                        endGame(); 
-                    } else {
-                        pickAndDisplayWord();
-                    }
+                    if (gameOverCondition) endGame();
+                    else pickAndDisplayWord();
                 }
-            }, 500); // 500ms delay for visual feedback for the user
+            }, 500);
         }
 
-        // Ends the game, shows final score, and prompts for name
         function endGame() {
-            if (gameTimer) { // Ensure timer is stopped if game ends
+            if (gameTimer) {
                 clearInterval(gameTimer);
                 gameTimer = null;
             }
+            updateStatsInFirestore();
             showScreen('game-over-screen');
             finalScoreDisplay.textContent = currentScore;
-            playerNameInput.value = ''; // Clear input field
-            saveScoreButton.disabled = false; // Enable save button
-            console.log("Game Over. Final Score:", currentScore); // Log game over
+            playerNameInput.value = '';
+            saveScoreButton.disabled = false;
         }
 
-        // --- Global Leaderboard Logic (Firestore) ---
-
-        // Function to retry Firebase operations with exponential backoff
         async function retryFirebaseCall(fn, retries = 5, delay = 1000) {
             for (let i = 0; i < retries; i++) {
                 try {
                     return await fn();
                 } catch (error) {
-                    if (error.code === 'unavailable' || error.code === 'resource-exhausted' || error.code === 'aborted') {
-                        console.warn(`Firebase call failed (${error.code}). Retrying in ${delay / 1000}s...`);
+                    if (['unavailable', 'resource-exhausted', 'aborted'].includes(error.code)) {
                         await new Promise(res => setTimeout(res, delay));
-                        delay *= 2; // Exponential backoff
-                    } else {
-                        throw error; // Re-throw non-transient errors
-                    }
+                        delay *= 2;
+                    } else { throw error; }
                 }
             }
             throw new Error(`Firebase call failed after ${retries} retries.`);
         }
 
-
-        // Saves the current score to the global leaderboard
         async function saveScore() {
             const playerName = playerNameInput.value.trim();
             if (!playerName) {
-                // Pass a null callback for generic "Oops!" modal
                 showCustomModal("Oops!", "Please enter your name to save your score!");
                 return;
             }
-
-            // Explicitly check for Firebase readiness AND user ID before attempting save
-            console.log("Save Score Attempt:");
-            console.log("  firebaseInitialized:", window.firebaseInitialized);
-            console.log("  db:", !!window.db); // Check if db object exists
-            console.log("  addDoc:", !!window.addDoc); // Check if addDoc function exists
-            console.log("  collection:", !!window.collection); // Check if collection function exists
-            console.log("  currentUserId:", window.currentUserId); // Crucial: check if user is authenticated
-
-            if (!window.firebaseInitialized || !window.db || !window.addDoc || !window.collection || !window.currentUserId) {
-                console.warn("Save Score Aborted: Firebase or User not ready.");
-                showCustomModal("Error", "Leaderboard service not ready. Please wait a moment and try again.");
-                saveScoreButton.disabled = false; // Ensure button isn't stuck disabled
+            if (!window.firebaseInitialized || !window.currentUserId) {
+                showCustomModal("Error", "Leaderboard service not ready. Try again.");
                 return;
             }
-
-            saveScoreButton.disabled = true; // Disable to prevent multiple submissions
-            console.log("Attempting to save score..."); // Log save attempt
-
+            saveScoreButton.disabled = true;
             try {
-                const docRef = await retryFirebaseCall(() => window.addDoc(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), { // This line is already correct
+                const docRef = await retryFirebaseCall(() => window.addDoc(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`), {
                     name: playerName,
                     score: currentScore,
                     timestamp: window.serverTimestamp(),
-                    userId: window.currentUserId
+                    userId: window.currentUserId,
+                    mode: gameMode // Save the game mode
                 }));
-                
-                // Pass the specific leaderboard navigation as a callback
-                showCustomModal("Score Saved!", "Your score has been added to the global leaderboard!", () => {
-                    displayGlobalLeaderboard(true, docRef.id); // Pass docRef.id here
+                showCustomModal("Score Saved!", "Your score has been added to the leaderboard!", () => {
+                    latestSubmittedDocIdForHighlight = docRef.id; // Set global highlight ID
+                    displayGlobalLeaderboard(true); // Navigate to leaderboard
                 });
-                console.log(`Score saved for ${playerName}: ${currentScore}. Document ID: ${docRef.id}`);
-                
             } catch (e) {
-                console.error("Error saving score to Firestore:", e);
-                showCustomModal("Save Error", `Could could not save score: ${e.message}`);
-                saveScoreButton.disabled = false; // Re-enable on error
+                console.error("Error saving score:", e);
+                showCustomModal("Save Error", `Could not save score: ${e.message}`);
+                saveScoreButton.disabled = false;
             }
         }
 
-        // Renders the leaderboard table for the current page
-        function renderLeaderboardPage(latestSubmittedDocId = null) { // Accept latestSubmittedDocId
-            leaderboardBody.innerHTML = ''; // Clear previous entries
-            leaderboardLoading.classList.add('hidden'); // Hide loading indicator if data is available
-            console.log(`Rendering leaderboard page ${currentPage}. Total scores: ${globalLeaderboardData.length}`); // Log page rendering
-
-            if (globalLeaderboardData.length === 0) {
+        function renderLeaderboardPage(latestSubmittedDocId = null) {
+            leaderboardLoading.classList.add('hidden');
+            const sourceData = currentLeaderboardMode === 'timed' ? timedLeaderboardData : untimedLeaderboardData;
+            
+            if (sourceData.length === 0) {
                 leaderboardBody.innerHTML = '<tr><td colspan="3">No scores yet! Be the first!</td></tr>';
                 pageInfoSpan.textContent = "Page 0/0";
                 prevPageButton.disabled = true;
                 nextPageButton.disabled = true;
                 return;
             }
-
-            // Calculate pagination details
-            totalPages = Math.ceil(globalLeaderboardData.length / itemsPerPage);
+            
+            totalPages = Math.ceil(sourceData.length / itemsPerPage);
             const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const scoresToDisplay = globalLeaderboardData.slice(startIndex, endIndex);
+            const scoresToDisplay = sourceData.slice(startIndex, startIndex + itemsPerPage);
+
+            leaderboardBody.innerHTML = '';
+            scoresToDisplay.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                const rank = startIndex + index + 1;
+                
+                // Highlight all scores by the current user in blue
+                if (window.currentUserId && entry.userId === window.currentUserId) {
+                    row.classList.add('bg-blue-900', 'text-blue-100');
+                }
+
+                // Override with a more prominent highlight for the score just submitted
+                if (latestSubmittedDocId && entry.id === latestSubmittedDocId) {
+                    row.classList.add('recent-score-highlight');
+                }
+
+                row.innerHTML = `<td>${rank}</td><td>${entry.name}</td><td>${entry.score}</td>`;
+                leaderboardBody.appendChild(row);
+            });
 
             pageInfoSpan.textContent = `Page ${currentPage}/${totalPages}`;
             prevPageButton.disabled = currentPage === 1;
             nextPageButton.disabled = currentPage === totalPages;
-
-            scoresToDisplay.forEach((entry, index) => {
-                const row = document.createElement('tr');
-                const rank = startIndex + index + 1; // Calculate actual rank
-
-                // If this is the *latest submitted score*, apply its specific highlight
-                // This will override any default row styling or previously applied rank styles.
-                if (latestSubmittedDocId && entry.id === latestSubmittedDocId) {
-                    row.classList.add('recent-score-highlight');
-                }
-                // If it's by the current user but NOT the specific latest submitted doc
-                else if (window.currentUserId && entry.userId === window.currentUserId) {
-                    row.classList.add('bg-blue-900', 'text-blue-100'); 
-                }
-
-                row.innerHTML = `
-                    <td>${rank}</td>
-                    <td>${entry.name}</td>
-                    <td>${entry.score}</td>
-                `;
-                leaderboardBody.appendChild(row);
-            });
         }
 
-        // Function to load all global leaderboard data from Firestore
-        window.loadGlobalLeaderboard = function(options = {}) { // Accept options object
-            const { goToUserScorePage = false, userIdToFind = null, latestSubmittedDocId = null } = options;
-            leaderboardLoading.classList.remove('hidden'); // Show loading indicator
-            leaderboardBody.innerHTML = ''; // Clear previous entries
-            console.log("Loading global leaderboard data..."); // Log data load initiation
+        window.loadGlobalLeaderboard = function() {
+            leaderboardLoading.classList.remove('hidden');
+            leaderboardBody.innerHTML = '';
+            if (!window.firebaseInitialized) return;
 
-            if (!window.firebaseInitialized || !window.db || !window.collection || !window.query || !window.orderBy || !window.onSnapshot) {
-                leaderboardBody.innerHTML = '<tr><td colspan="3">Leaderboard service not available or Firebase not fully initialized.</td></tr>';
-                leaderboardLoading.classList.add('hidden');
-                console.warn("Firebase not fully initialized for leaderboard. Current state: firebaseInitialized=", window.firebaseInitialized, "db=", !!window.db, "collection=", !!window.collection);
-                return;
-            }
-
-            // Order by score descending, then by timestamp ascending for consistent tie-breaking
             const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`),
                 window.orderBy('score', 'desc'),
-                window.orderBy('timestamp', 'asc') 
+                window.orderBy('timestamp', 'asc')
             );
 
-            // Listen for real-time updates to the leaderboard
             window.onSnapshot(q, (querySnapshot) => {
-                console.log("Leaderboard data received from Firestore."); // Log data receipt
-                const scores = [];
-                querySnapshot.forEach((doc) => {
-                    const data = { id: doc.id, ...doc.data() };
-                    scores.push(data); 
-                });
+                const allScores = [];
+                querySnapshot.forEach((doc) => allScores.push({ id: doc.id, ...doc.data() }));
 
-                // Sort in memory (Firestore's orderBy is primary source, but double-check consistency)
-                scores.sort((a, b) => {
-                    if (b.score !== a.score) {
-                        return b.score - a.score; // Primary sort by score descending
-                    }
-                    // Secondary sort by timestamp ascending for ties (older entries first)
-                    return (a.timestamp?.toMillis() || 0) - (b.timestamp?.toMillis() || 0); // Handle potential null timestamps
-                });
-                globalLeaderboardData = scores; // Store all fetched scores
+                timedLeaderboardData = allScores.filter(s => s.mode === 'timed');
+                untimedLeaderboardData = allScores.filter(s => s.mode !== 'timed'); // Default old scores to untimed
 
-                // --- Start of Highest Rank Calculation Correction ---
-                let foundHighestRank = "N/A";
-                if (window.currentUserId) {
-                    // Iterate through the already sorted globalLeaderboardData to find the user's highest rank
-                    for (let i = 0; i < globalLeaderboardData.length; i++) {
-                        if (globalLeaderboardData[i].userId === window.currentUserId) {
-                            foundHighestRank = i + 1; // Ranks are 1-based
-                            break; // Found the highest (lowest number) rank for this user, no need to check further
-                        }
-                    }
-                }
-                highestRank = foundHighestRank; // Update the global highestRank variable
-                // --- End of Highest Rank Calculation Correction ---
-
-                if (goToUserScorePage && userIdToFind) {
-                    let userRank = -1;
-                    // Find the highest rank for the current user for navigation purposes
-                    for (let i = 0; i < globalLeaderboardData.length; i++) {
-                        if (globalLeaderboardData[i].userId === userIdToFind) {
-                            userRank = i + 1; // Ranks are 1-based
-                            // If a specific document ID was provided, prioritize finding that one
-                            if (latestSubmittedDocId && globalLeaderboardData[i].id === latestSubmittedDocId) {
-                                userRank = i + 1;
-                                break; // Found the specific document, break out
-                            } else if (!latestSubmittedDocId) {
-                                // If no specific document ID, take the first one found for the user (highest score)
-                                userRank = i + 1;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (userRank !== -1) {
+                if (latestSubmittedDocIdForHighlight) {
+                    const sourceData = currentLeaderboardMode === 'timed' ? timedLeaderboardData : untimedLeaderboardData;
+                    const userScoreEntry = sourceData.find(s => s.id === latestSubmittedDocIdForHighlight);
+                    if (userScoreEntry) {
+                        const userRank = sourceData.indexOf(userScoreEntry) + 1;
                         currentPage = Math.ceil(userRank / itemsPerPage);
-                        console.log(`User (ID: ${userIdToFind}) score at rank ${userRank}, navigating to page ${currentPage}`);
-                    } else {
-                        currentPage = 1; // User score not found (e.g., deleted or not yet in data), default to first page
-                        console.log(`User (ID: ${userIdToFind}) score not found in current leaderboard data, defaulting to page 1.`);
                     }
                 }
 
-                // After new data is fetched (and currentPage potentially adjusted), re-render the current page
-                renderLeaderboardPage(latestSubmittedDocId); // Pass latestSubmittedDocId to render function
-
-                // NEW: Update highest scorer display after data is loaded and sorted
-                updateHighestScorerDisplay();
-
-                // If stats screen is active, update it
-                if (statsScreen.classList.contains('active')) {
-                    updateStatsDisplay();
+                renderLeaderboardPage(latestSubmittedDocIdForHighlight);
+                
+                if (latestSubmittedDocIdForHighlight) {
+                    latestSubmittedDocIdForHighlight = null;
                 }
+
+                updateHighestScorerDisplay();
+                updateStatsDisplay(); // Update stats in case rank changed
 
             }, (error) => {
-                console.error("Error fetching global leaderboard:", error);
+                console.error("Error fetching leaderboard:", error);
                 leaderboardLoading.classList.add('hidden');
-                let errorMessage = "Could not load global leaderboard. Check console for details.";
-
-                // More specific error message for missing indexes
-                if (error.code === 'failed-precondition' && error.message.includes('The query requires an index')) {
-                    errorMessage = "Leaderboard requires a Firestore index. Please create a composite index on 'globalLeaderboard' collection with 'score' (descending) and 'timestamp' (ascending) fields in your Firebase console (under Firestore -> Indexes tab).";
-                } else if (error.code === 'permission-denied') {
-                    errorMessage = "Leaderboard access denied. Please check your Firebase Firestore Security Rules to ensure 'read' permissions for authenticated users on 'artifacts/{appId}/public/data/globalLeaderboard'.";
-                }
-
-                leaderboardBody.innerHTML = `<tr><td colspan="3">${errorMessage}</td></tr>`;
-                showCustomModal("Leaderboard Error", errorMessage);
-                // NEW: Show error for highest scorer display too
-                highestScorerOverallDisplay.textContent = "Could not load top scorer.";
+                leaderboardBody.innerHTML = `<tr><td colspan="3">Could not load leaderboard.</td></tr>`;
             });
         }
 
-        // Navigates to the previous page
-        function goToPreviousPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderLeaderboardPage();
-                console.log("Navigated to previous page:", currentPage); // Log page change
-            }
-        }
+        function goToPreviousPage() { if (currentPage > 1) { currentPage--; renderLeaderboardPage(); } }
+        function goToNextPage() { if (currentPage < totalPages) { currentPage++; renderLeaderboardPage(); } }
 
-        // Navigates to the next page
-        function goToNextPage() {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderLeaderboardPage();
-                console.log("Navigated to next page:", currentPage); // Log page change
-            }
-        }
-
-        // Displays the leaderboard screen (this just switches screens, data is loaded by onSnapshot)
-        function displayGlobalLeaderboard(goToUserScore = false, latestSubmittedDocId = null) { // Accept latestSubmittedDocId
-            // Only reset to page 1 if not trying to go to user's specific page or if coming from main menu
-            if (!goToUserScore || !latestSubmittedDocId) { // Reset to page 1 if not going to a specific user score, or if no specific doc ID is provided
-                currentPage = 1; 
+        function displayGlobalLeaderboard(goToUserScore = false) {
+            if (goToUserScore) {
+                currentLeaderboardMode = gameMode;
+                
+                if (gameMode === 'timed') {
+                    leaderboardTitle.textContent = "Timed Leaderboard";
+                    showTimedLeaderboardButton.classList.add('active');
+                    showUntimedLeaderboardButton.classList.remove('active');
+                } else {
+                    leaderboardTitle.textContent = "Untimed Leaderboard";
+                    showUntimedLeaderboardButton.classList.add('active');
+                    showTimedLeaderboardButton.classList.remove('active');
+                }
+            } else {
+                latestSubmittedDocIdForHighlight = null;
+                currentPage = 1;
             }
             showScreen('leaderboard-screen');
-            console.log("Displaying global leaderboard screen.");
-
-            // Pass options to loadGlobalLeaderboard. If goToUserScore is true, also pass currentUserId
-            window.loadGlobalLeaderboard({
-                goToUserScorePage: goToUserScore,
-                userIdToFind: goToUserScore ? window.currentUserId : null,
-                latestSubmittedDocId: latestSubmittedDocId // Pass the latest submitted doc ID
-            });
         }
 
-        // Function to update games played in Firestore
-        async function updateGamesPlayedFirestore() {
-            if (!window.firebaseInitialized || !window.currentUserId || !window.db) {
-                console.warn("Firestore not ready for updating games played.");
-                return;
-            }
-
-            const userStatsDocRef = window.doc(window.db, `artifacts/${window.appId}/users/${window.currentUserId}/userStats/statsDoc`);
-
-            try {
-                const docSnap = await retryFirebaseCall(() => window.getDoc(userStatsDocRef));
-                let currentGamesPlayed = 0;
-                if (docSnap.exists()) {
-                    currentGamesPlayed = docSnap.data().gamesPlayed || 0;
-                }
-
-                currentGamesPlayed++; // Increment locally
-                gamesPlayed = currentGamesPlayed; // Update global local variable
-
-                await retryFirebaseCall(() => window.setDoc(userStatsDocRef, {
-                    gamesPlayed: currentGamesPlayed,
-                    lastPlayed: window.serverTimestamp() // Optional: add last played timestamp
-                }, { merge: true })); // Use merge: true to avoid overwriting other fields if they existed
-
-                console.log("Games played updated in Firestore:", gamesPlayed);
-                updateStatsDisplay(); // Update display immediately after successful save
-            } catch (e) {
-                console.error("Error updating games played in Firestore:", e);
-                window.showCustomModal("Stat Save Error", `Could not save game count: ${e.message}`);
-            }
-        }
-
-        // Function to load and display user-specific stats from Firestore (or derived)
-        window.loadUserStats = async function() {
-            if (!window.firebaseInitialized || !window.currentUserId || !window.db) {
-                gamesPlayedStat.textContent = "N/A (Loading...)";
-                highestRankStat.textContent = "N/A (Loading...)";
-                console.warn("Firebase not ready for loading user stats.");
-                return;
-            }
-
+        async function updateStatsInFirestore() {
+            if (!window.firebaseInitialized || !window.currentUserId) return;
             const userStatsDocRef = window.doc(window.db, `artifacts/${window.appId}/users/${window.currentUserId}/userStats/statsDoc`);
             
+            const statsForMode = userStats[gameMode];
+            const newHighestScore = Math.max(statsForMode.highestScore, currentScore);
+
+            const updateData = {};
+            updateData[`${gameMode}.gamesPlayed`] = window.increment(1);
+            updateData[`${gameMode}.totalCorrect`] = window.increment(correctAnswersThisGame);
+            updateData[`${gameMode}.totalAnswered`] = window.increment(questionsAnsweredThisGame);
+            updateData[`${gameMode}.highestScore`] = newHighestScore;
+
+            try {
+                await retryFirebaseCall(() => window.updateDoc(userStatsDocRef, updateData));
+                // Update local stats to match
+                userStats[gameMode].gamesPlayed++;
+                userStats[gameMode].totalCorrect += correctAnswersThisGame;
+                userStats[gameMode].totalAnswered += questionsAnsweredThisGame;
+                userStats[gameMode].highestScore = newHighestScore;
+
+            } catch (e) {
+                 if (e.code === 'not-found') {
+                    // If doc doesn't exist, create it
+                    const initialStats = {
+                        gamesPlayed: 1,
+                        totalCorrect: correctAnswersThisGame,
+                        totalAnswered: questionsAnsweredThisGame,
+                        highestScore: currentScore
+                    };
+                    const fullDocData = { timed: {}, untimed: {} };
+                    fullDocData[gameMode] = initialStats;
+                    await retryFirebaseCall(() => window.setDoc(userStatsDocRef, fullDocData));
+                    userStats[gameMode] = initialStats;
+                 } else {
+                    console.error("Error updating stats:", e);
+                 }
+            }
+        }
+
+        window.loadUserStats = async function() {
+            if (!window.firebaseInitialized || !window.currentUserId) return;
+            const userStatsDocRef = window.doc(window.db, `artifacts/${window.appId}/users/${window.currentUserId}/userStats/statsDoc`);
             try {
                 const docSnap = await retryFirebaseCall(() => window.getDoc(userStatsDocRef));
                 if (docSnap.exists()) {
-                    const userData = docSnap.data();
-                    gamesPlayed = userData.gamesPlayed || 0;
-                } else {
-                    gamesPlayed = 0; // No user stats doc found, initialize games played to 0
-                    console.log("No existing user stats document found for current user. Initializing gamesPlayed to 0.");
+                    const data = docSnap.data();
+                    
+                    const timedStats = data.timed || {};
+                    const untimedStats = data.untimed || {};
+                    
+                    userStats.timed = { ...userStats.timed, ...timedStats };
+                    userStats.untimed = { ...userStats.untimed, ...untimedStats };
+
+                    // One-time migration for legacy gamesPlayed count
+                    if (data.gamesPlayed && data.gamesPlayed > 0) {
+                        const legacyGames = data.gamesPlayed;
+                        userStats.untimed.gamesPlayed += legacyGames;
+                        
+                        // Update Firestore to move the count and remove the old field
+                        await retryFirebaseCall(() => window.updateDoc(userStatsDocRef, {
+                            'untimed.gamesPlayed': window.increment(legacyGames),
+                            'gamesPlayed': window.deleteField()
+                        }));
+                        console.log(`Migrated ${legacyGames} legacy games to untimed stats.`);
+                    }
                 }
-                
-                // The highestRank variable is updated by loadGlobalLeaderboard's onSnapshot listener.
-                // So, ensure updateStatsDisplay uses the global variables.
-                updateStatsDisplay(); 
-
-            } catch (e) {
-                console.error("Error loading user stats from Firestore:", e);
-                gamesPlayedStat.textContent = "Error";
-                highestRankStat.textContent = "Error";
-                window.showCustomModal("Stats Load Error", `Could not load your stats: ${e.message}`);
-            }
+                updateStatsDisplay();
+            } catch (e) { console.error("Error loading/migrating user stats:", e); }
         }
 
-        // Displays the stats screen - This function now just updates the DOM elements
         function updateStatsDisplay() {
-            gamesPlayedStat.textContent = gamesPlayed;
-            highestRankStat.textContent = highestRank;
-        }
+            const stats = userStats[currentStatsMode];
+            const leaderboardData = currentStatsMode === 'timed' ? timedLeaderboardData : untimedLeaderboardData;
+            
+            gamesPlayedStat.textContent = stats.gamesPlayed;
+            highestScoreStat.textContent = stats.highestScore;
 
-        // Displays the stats screen
-        function showStatsScreen() {
-            showScreen('stats-screen');
-            // updateStatsDisplay() is called within showScreen for 'stats-screen'
-        }
-
-        // NEW: Function to update the highest scorer display
-        function updateHighestScorerDisplay() {
-            if (globalLeaderboardData.length > 0) {
-                const topScorer = globalLeaderboardData[0];
-                highestScorerOverallDisplay.innerHTML = `Current Highest Scorer: <span class="text-yellow-400">${topScorer.name}</span> with <span class="text-yellow-400">${topScorer.score}</span> points!`;
+            if (stats.totalAnswered > 0) {
+                const accuracy = (stats.totalCorrect / stats.totalAnswered) * 100;
+                accuracyStat.textContent = `${accuracy.toFixed(1)}%`;
             } else {
-                highestScorerOverallDisplay.textContent = "No scores yet! Be the first to set a record!";
+                accuracyStat.textContent = "N/A";
+            }
+            
+            let rank = "N/A";
+            const userScores = leaderboardData.filter(s => s.userId === window.currentUserId);
+            if (userScores.length > 0) {
+                // find the index of the highest score
+                const highestUserScore = userScores.reduce((max, score) => max.score > score.score ? max : score);
+                const rankIndex = leaderboardData.indexOf(highestUserScore);
+                if (rankIndex !== -1) {
+                    rank = rankIndex + 1;
+                }
+            }
+            highestRankStat.textContent = rank;
+        }
+
+        function showStatsScreen() { showScreen('stats-screen'); }
+
+        function updateHighestScorerDisplay() {
+            // Timed Scorer
+            if (timedLeaderboardData.length > 0) {
+                const topScorer = timedLeaderboardData[0];
+                highestScorerOverallDisplay.innerHTML = `Top Timed Scorer: <span class="text-yellow-400">${topScorer.name}</span> (${topScorer.score} pts)`;
+            } else {
+                highestScorerOverallDisplay.textContent = `No timed scores yet!`;
+            }
+            // Untimed Scorer
+            if (untimedLeaderboardData.length > 0) {
+                const topScorer = untimedLeaderboardData[0];
+                untimedHighestScorerDisplay.innerHTML = `Top Untimed Scorer: <span class="text-red-400">${topScorer.name}</span> (${topScorer.score} pts)`;
+            } else {
+                untimedHighestScorerDisplay.textContent = `No untimed scores yet!`;
             }
         }
 
-
-        // --- Music Control ---
         function toggleMusic() {
             if (musicPlaying) {
                 backgroundMusic.pause();
                 toggleMusicButton.textContent = "Play Music";
-                musicPlaying = false;
-                console.log("Music paused."); // Log music state change
             } else {
-                backgroundMusic.volume = 0.5; // Set volume
-                backgroundMusic.play().then(() => {
-                    toggleMusicButton.textContent = "Pause Music";
-                    musicPlaying = true;
-                    console.log("Music playing."); // Log music state change
-                }).catch(e => {
-                    musicPlaying = false;
-                    toggleMusicButton.textContent = "Play Music";
-                    // Pass a null callback for generic music error modal
-                    showCustomModal("Music Error", "Autoplay blocked. Please interact with the page first or try again.");
-                });
+                backgroundMusic.volume = 0.5;
+                backgroundMusic.play().then(() => toggleMusicButton.textContent = "Pause Music").catch(e => {});
             }
+            musicPlaying = !musicPlaying;
         }
 
-        // --- Event Listeners ---
         window.onload = function() {
-            console.log("Window loaded. Initializing game."); // Log window load
-            // Attempt to autoplay music (subject to browser policies)
-            backgroundMusic.volume = 0.5;
-            backgroundMusic.play().then(() => {
-                musicPlaying = true;
-                toggleMusicButton.textContent = "Pause Music";
-            }).catch(e => {
-                musicPlaying = false;
-                toggleMusicButton.textContent = "Play Music";
-                console.error("Autoplay music failed:", e);
-                // Pass a null callback for generic music blocked modal
-                showCustomModal("Music Error", "Autoplay blocked. Please interact with the page first or try again.");
-            });
-            // Initial call to load leaderboard (will wait for Firebase to initialize)
+            toggleMusic(); // Attempt to play music on load
             window.loadGlobalLeaderboard();
-            // Ensure the initial screen is the main menu and highest scorer display is handled
             showScreen('main-menu');
         };
 
-        // Main Menu Buttons
-        playSoloButton.addEventListener('click', startGame);
-        // Changed to call displayGlobalLeaderboard without goToUserScorePage or latestSubmittedDocId
-        showLeaderboardMainMenuButton.addEventListener('click', () => displayGlobalLeaderboard()); 
-        showStatsButton.addEventListener('click', showStatsScreen); // Event listener for new Stats button
+        playGameButton.addEventListener('click', () => showScreen('game-mode-screen'));
+        timedModeButton.addEventListener('click', () => startGame('timed'));
+        untimedModeButton.addEventListener('click', () => startGame('untimed'));
+        backToMainMenuButton.addEventListener('click', () => showScreen('main-menu'));
+        showLeaderboardMainMenuButton.addEventListener('click', () => displayGlobalLeaderboard());
+        showStatsButton.addEventListener('click', showStatsScreen);
         toggleMusicButton.addEventListener('click', toggleMusic);
-
-        // Game Over Buttons
         saveScoreButton.addEventListener('click', saveScore);
-        playAgainButton.addEventListener('click', startGame);
+        playAgainButton.addEventListener('click', () => startGame(gameMode));
         mainMenuFromGameOverButton.addEventListener('click', () => showScreen('main-menu'));
-
-        // Leaderboard Pagination Buttons
         prevPageButton.addEventListener('click', goToPreviousPage);
         nextPageButton.addEventListener('click', goToNextPage);
-
-        // Custom Modal Close Button - Single, persistent listener
         modalCloseButton.addEventListener('click', hideCustomModalAndExecuteCallback);
-
-        // Stats Screen Button
-        mainMenuFromStatsButton.addEventListener('click', () => showScreen('main-menu')); 
+        mainMenuFromStatsButton.addEventListener('click', () => showScreen('main-menu'));
+        mainMenuFromLeaderboardButton.addEventListener('click', () => showScreen('main-menu'));
         
-        // Add logging for the specific button
-        if (mainMenuFromLeaderboardButton) {
-            console.log("Leaderboard Main Menu button element found:", mainMenuFromLeaderboardButton);
-            mainMenuFromLeaderboardButton.addEventListener('click', () => {
-                console.log("Leaderboard Main Menu button clicked!"); // This is the key log
-                showScreen('main-menu');
-            });
-        } else {
-            console.error("Leaderboard Main Menu button element NOT FOUND!");
-        }
+        showTimedLeaderboardButton.addEventListener('click', () => {
+            currentLeaderboardMode = 'timed';
+            leaderboardTitle.textContent = "Timed Leaderboard";
+            showTimedLeaderboardButton.classList.add('active');
+            showUntimedLeaderboardButton.classList.remove('active');
+            currentPage = 1;
+            renderLeaderboardPage();
+        });
+
+        showUntimedLeaderboardButton.addEventListener('click', () => {
+            currentLeaderboardMode = 'untimed';
+            leaderboardTitle.textContent = "Untimed Leaderboard";
+            showUntimedLeaderboardButton.classList.add('active');
+            showTimedLeaderboardButton.classList.remove('active');
+            currentPage = 1;
+            renderLeaderboardPage();
+        });
+
+        showTimedStatsButton.addEventListener('click', () => {
+            currentStatsMode = 'timed';
+            showTimedStatsButton.classList.add('active');
+            showUntimedStatsButton.classList.remove('active');
+            updateStatsDisplay();
+        });
+
+        showUntimedStatsButton.addEventListener('click', () => {
+            currentStatsMode = 'untimed';
+            showUntimedStatsButton.classList.add('active');
+            showTimedStatsButton.classList.remove('active');
+            updateStatsDisplay();
+        });
     </script>
 </body>
 </html>
