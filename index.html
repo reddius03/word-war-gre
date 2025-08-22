@@ -459,7 +459,8 @@
                 <button id="show-timed-stats" class="toggle-button text-sm sm:text-base active">Rapid</button>
                 <button id="show-untimed-stats" class="toggle-button text-sm sm:text-base">Endless</button>
             </div>
-            <div class="flex flex-col space-y-3 mt-4">
+            <div id="stats-loading" class="text-xl text-yellow-400 my-4">Loading stats... (est. 1-3 seconds)</div>
+            <div id="stats-content" class="flex flex-col space-y-3 mt-4 hidden">
                 <div class="stats-item"><span class="stats-icon">&#x1F3C6; Highest Score:</span><span id="highest-score-stat">0</span></div>
                 <div class="stats-item"><span class="stats-icon">&#x1F4AF; Accuracy:</span><span id="accuracy-stat">N/A</span></div>
                 <div class="stats-item"><span class="stats-icon">&#x2655; Games Played:</span><span id="games-played-stat">0</span></div>
@@ -751,6 +752,8 @@
         const showTimedStatsButton = document.getElementById('show-timed-stats');
         const showUntimedStatsButton = document.getElementById('show-untimed-stats');
         const leaderboardTitle = document.getElementById('leaderboard-title');
+        const statsLoading = document.getElementById('stats-loading');
+        const statsContent = document.getElementById('stats-content');
 
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -777,7 +780,7 @@
                 if (window.firebaseInitialized) loadGlobalLeaderboard();
                 else leaderboardBody.innerHTML = '<tr><td colspan="3">Initializing...</td></tr>';
             } else if (screenId === 'stats-screen') {
-                updateStatsDisplay();
+                showStatsScreen();
             }
         }
 
@@ -1172,9 +1175,18 @@
                 }
             }
             highestRankStat.textContent = rank;
+            
+            // Show stats content and hide loading message
+            statsLoading.classList.add('hidden');
+            statsContent.classList.remove('hidden');
         }
 
-        function showStatsScreen() { showScreen('stats-screen'); }
+        async function showStatsScreen() {
+            showScreen('stats-screen');
+            statsLoading.classList.remove('hidden');
+            statsContent.classList.add('hidden');
+            await loadUserStats(); // This will fetch the latest stats and then call updateStatsDisplay
+        }
 
         function updateHighestScorerDisplay() {
             // Timed Scorer
