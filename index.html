@@ -529,9 +529,9 @@
             }
             window.firebaseInitialized = true;
             if (document.getElementById('main-menu').classList.contains('active')) {
-                // Trigger both loads, the check function will handle rendering
-                window.loadGlobalLeaderboard();
-                window.loadUserStats();
+                // Trigger both listeners, the check function will handle rendering
+                listenForLeaderboardChanges();
+                listenForUserStatsChanges();
             }
         });
     </script>
@@ -780,8 +780,11 @@
                 developerNoteDisplay.classList.add('hidden');
             }
             if (screenId === 'leaderboard-screen') {
-                if (window.firebaseInitialized) loadGlobalLeaderboard();
-                else leaderboardBody.innerHTML = '<tr><td colspan="3">Initializing...</td></tr>';
+                if (isLeaderboardLoaded) {
+                    renderLeaderboardPage();
+                } else {
+                    leaderboardLoading.classList.remove('hidden');
+                }
             } else if (screenId === 'stats-screen') {
                 showStatsScreen();
             }
@@ -1024,9 +1027,7 @@
             }
         }
 
-        window.loadGlobalLeaderboard = function() {
-            leaderboardLoading.classList.remove('hidden');
-            leaderboardBody.innerHTML = '';
+        function listenForLeaderboardChanges() {
             if (!window.firebaseInitialized) return;
 
             const q = window.query(window.collection(window.db, `artifacts/${window.appId}/public/data/globalLeaderboard`),
@@ -1129,11 +1130,11 @@
             }
         }
 
-        window.loadUserStats = async function() {
+        function listenForUserStatsChanges() {
             if (!window.firebaseInitialized || !window.currentUserId) return;
             const userStatsDocRef = window.doc(window.db, `artifacts/${window.appId}/users/${window.currentUserId}/userStats/statsDoc`);
-            try {
-                const docSnap = await retryFirebaseCall(() => window.getDoc(userStatsDocRef));
+            
+            window.onSnapshot(userStatsDocRef, async (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     
@@ -1148,7 +1149,6 @@
                         const legacyGames = data.gamesPlayed;
                         userStats.untimed.gamesPlayed += legacyGames;
                         
-                        // Update Firestore to move the count and remove the old field
                         await retryFirebaseCall(() => window.updateDoc(userStatsDocRef, {
                             'untimed.gamesPlayed': window.increment(legacyGames),
                             'gamesPlayed': window.deleteField()
@@ -1158,7 +1158,9 @@
                 }
                 isUserStatsLoaded = true;
                 checkAndRenderData();
-            } catch (e) { console.error("Error loading/migrating user stats:", e); }
+            }, (error) => {
+                console.error("Error listening for user stats:", error);
+            });
         }
 
         function updateStatsDisplay() {
@@ -1194,14 +1196,15 @@
             statsContent.classList.remove('hidden');
         }
 
-        async function showStatsScreen() {
+        function showStatsScreen() {
             showScreen('stats-screen');
-            statsLoading.classList.remove('hidden');
-            statsContent.classList.add('hidden');
-            // Re-fetch data every time stats is opened to ensure it's fresh
-            isUserStatsLoaded = false;
-            isLeaderboardLoaded = false;
-            await Promise.all([loadUserStats(), loadGlobalLeaderboard()]);
+            // Check if data is already loaded
+            if (isUserStatsLoaded && isLeaderboardLoaded) {
+                updateStatsDisplay();
+            } else {
+                statsLoading.classList.remove('hidden');
+                statsContent.classList.add('hidden');
+            }
         }
 
         function updateHighestScorerDisplay() {
