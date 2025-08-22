@@ -529,6 +529,7 @@
             }
             window.firebaseInitialized = true;
             if (document.getElementById('main-menu').classList.contains('active')) {
+                // Trigger both loads, the check function will handle rendering
                 window.loadGlobalLeaderboard();
                 window.loadUserStats();
             }
@@ -696,6 +697,8 @@
             timed: { gamesPlayed: 0, highestScore: 0, totalCorrect: 0, totalAnswered: 0 },
             untimed: { gamesPlayed: 0, highestScore: 0, totalCorrect: 0, totalAnswered: 0 }
         };
+        let isUserStatsLoaded = false;
+        let isLeaderboardLoaded = false;
 
         // Pagination state
         let currentPage = 1;
@@ -1014,6 +1017,13 @@
             nextPageButton.disabled = currentPage === totalPages;
         }
 
+        function checkAndRenderData() {
+            if (isUserStatsLoaded && isLeaderboardLoaded) {
+                updateHighestScorerDisplay();
+                updateStatsDisplay();
+            }
+        }
+
         window.loadGlobalLeaderboard = function() {
             leaderboardLoading.classList.remove('hidden');
             leaderboardBody.innerHTML = '';
@@ -1031,6 +1041,9 @@
                 timedLeaderboardData = allScores.filter(s => s.mode === 'timed');
                 untimedLeaderboardData = allScores.filter(s => s.mode !== 'timed'); // Default old scores to untimed
 
+                isLeaderboardLoaded = true;
+                checkAndRenderData();
+
                 if (latestSubmittedDocIdForHighlight) {
                     const sourceData = currentLeaderboardMode === 'timed' ? timedLeaderboardData : untimedLeaderboardData;
                     const userScoreEntry = sourceData.find(s => s.id === latestSubmittedDocIdForHighlight);
@@ -1045,9 +1058,6 @@
                 if (latestSubmittedDocIdForHighlight) {
                     latestSubmittedDocIdForHighlight = null;
                 }
-
-                updateHighestScorerDisplay();
-                updateStatsDisplay(); // Update stats in case rank changed
 
             }, (error) => {
                 console.error("Error fetching leaderboard:", error);
@@ -1146,11 +1156,14 @@
                         console.log(`Migrated ${legacyGames} legacy games to untimed stats.`);
                     }
                 }
-                updateStatsDisplay();
+                isUserStatsLoaded = true;
+                checkAndRenderData();
             } catch (e) { console.error("Error loading/migrating user stats:", e); }
         }
 
         function updateStatsDisplay() {
+            if (!isUserStatsLoaded || !isLeaderboardLoaded) return; // Don't run if data is missing
+
             const stats = userStats[currentStatsMode];
             const leaderboardData = currentStatsMode === 'timed' ? timedLeaderboardData : untimedLeaderboardData;
             
@@ -1185,7 +1198,10 @@
             showScreen('stats-screen');
             statsLoading.classList.remove('hidden');
             statsContent.classList.add('hidden');
-            await loadUserStats(); // This will fetch the latest stats and then call updateStatsDisplay
+            // Re-fetch data every time stats is opened to ensure it's fresh
+            isUserStatsLoaded = false;
+            isLeaderboardLoaded = false;
+            await Promise.all([loadUserStats(), loadGlobalLeaderboard()]);
         }
 
         function updateHighestScorerDisplay() {
@@ -1218,7 +1234,6 @@
 
         window.onload = function() {
             toggleMusic(); // Attempt to play music on load
-            window.loadGlobalLeaderboard();
             showScreen('main-menu');
         };
 
