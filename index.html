@@ -64,7 +64,7 @@
                 box-shadow: 0 0 35px #00FFFF;
             }
         }
-
+        
         h1 {
             color: var(--primary-bright);
             text-shadow: none;
@@ -136,6 +136,33 @@
         #game-over-screen #save-score-button:active {
             top: 5px;
             box-shadow: none;
+        }
+
+        /* New styles for Game Mode selection */
+        .game-mode-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            width: 150px;
+            height: 120px;
+            font-size: 1rem;
+            line-height: 1.5;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .game-mode-button svg {
+            width: 40px;
+            height: 40px;
+        }
+        .game-mode-button .top-text {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .game-mode-button .bottom-text {
+            flex-shrink: 0;
         }
 
 
@@ -365,12 +392,20 @@
 
         <!-- Game Mode Selection Screen -->
         <div id="game-mode-screen" class="screen">
-            <h2 class="text-xl sm:text-2xl md:text-3xl">Select Game Mode</h2>
-            <div class="flex flex-col space-y-4 items-center w-full mt-8">
-                <button id="timed-mode-button" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Timed (60s)</button>
-                <button id="untimed-mode-button" class="text-base sm:text-lg md:text-xl w-full max-w-xs">Untimed</button>
-                <button id="back-to-main-menu-button" class="text-sm sm:text-base mt-4">Back</button>
+            <h2 class="text-xl sm:text-2xl md:text-3xl mb-8">Select Game Mode</h2>
+            <div class="flex justify-center space-x-4 items-center w-full mt-8">
+                <button id="timed-mode-button" class="game-mode-button">
+                    <span class="top-text">60s</span>
+                    <span class="bottom-text">Rapid</span>
+                </button>
+                <button id="untimed-mode-button" class="game-mode-button">
+                     <span class="top-text">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+                    </span>
+                    <span class="bottom-text">Endless</span>
+                </button>
             </div>
+            <button id="back-to-main-menu-button" class="text-sm sm:text-base mt-12">Back</button>
         </div>
 
         <!-- Game Screen -->
@@ -380,7 +415,7 @@
                 <div id="wrong-attempts-display" class="text-lg sm:text-xl">Wrong: 0/3</div>
                 <div id="timer-display" class="text-lg sm:text-xl">Time: 60</div>
             </div>
-            <div id="word-display" class="text-2xl sm:text-3xl md:text-4xl mb-8"></div>
+            <div id="word-display" class="text-2xl sm:text-3xl md:text-4xl my-8"></div>
             <div id="choices-container" class="choices-grid"></div>
         </div>
 
@@ -401,8 +436,8 @@
         <div id="leaderboard-screen" class="screen">
             <h2 id="leaderboard-title" class="text-xl sm:text-2xl md:text-3xl">Global Leaderboard</h2>
             <div class="flex justify-center space-x-4 my-4">
-                <button id="show-timed-leaderboard" class="toggle-button text-sm sm:text-base active">Timed</button>
-                <button id="show-untimed-leaderboard" class="toggle-button text-sm sm:text-base">Untimed</button>
+                <button id="show-timed-leaderboard" class="toggle-button text-sm sm:text-base active">Rapid</button>
+                <button id="show-untimed-leaderboard" class="toggle-button text-sm sm:text-base">Endless</button>
             </div>
             <div id="leaderboard-loading" class="text-xl text-yellow-400 my-4">Loading...</div>
             <table id="leaderboard-table" class="mx-auto text-sm sm:text-base">
@@ -421,8 +456,8 @@
         <div id="stats-screen" class="screen">
             <h2 class="text-xl sm:text-2xl md:text-3xl">Your Stats</h2>
              <div class="flex justify-center space-x-4 my-4">
-                <button id="show-timed-stats" class="toggle-button text-sm sm:text-base active">Timed</button>
-                <button id="show-untimed-stats" class="toggle-button text-sm sm:text-base">Untimed</button>
+                <button id="show-timed-stats" class="toggle-button text-sm sm:text-base active">Rapid</button>
+                <button id="show-untimed-stats" class="toggle-button text-sm sm:text-base">Endless</button>
             </div>
             <div class="flex flex-col space-y-3 mt-4">
                 <div class="stats-item"><span class="stats-icon">&#x1F3C6; Highest Score:</span><span id="highest-score-stat">0</span></div>
@@ -442,7 +477,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc, updateDoc, increment, deleteField } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc, updateDoc, increment, deleteField, where, limit, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCodVJigrQK0craiXfsbaWi6oJpLZTMKso",
@@ -471,10 +506,13 @@
         window.serverTimestamp = serverTimestamp;
         window.doc = doc;
         window.getDoc = getDoc;
+        window.getDocs = getDocs;
         window.setDoc = setDoc;
         window.updateDoc = updateDoc;
         window.increment = increment;
         window.deleteField = deleteField;
+        window.where = where;
+        window.limit = limit;
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -568,7 +606,7 @@
             { word: "Inherent", definition: "Existing as a permanent, essential attribute.", options: ["Existing as a permanent, essential attribute.", "Acquired or external.", "Temporary or transient.", "Superficial or accidental."] },
             { word: "Iniquity", definition: "Immoral or grossly unfair behavior.", options: ["Immoral or grossly unfair behavior.", "Morality and righteousness.", "Justice and fairness.", "Virtue and goodness."] },
             { word: "Innate", definition: "Inborn; natural.", options: ["Inborn; natural.", "Acquired or learned.", "Artificial or unnatural.", "Developed or cultivated."] },
-            { word: "Innocuous", definition: "Not harmful or offensive.", options: ["Not harmful or offensive.", "Harmful or injurious.", "Offensive or hurtful.", "Dangerous or toxic."] },
+            { word: "Innocuous", definition: "Not harmful or offensive.", options: ["Not harmful or injurious.", "Offensive or hurtful.", "Dangerous or toxic."] },
             { word: "Insipid", definition: "Lacking flavor, vigor, or interest.", options: ["Lacking flavor, vigor, or interest.", "Flavorful and exciting.", "Vigorous and stimulating.", "Engaging and interesting."] },
             { word: "Intransigent", definition: "Unwilling to change views or agree.", options: ["Unwilling to change views or agree.", "Flexible and adaptable.", "Compliant and yielding.", "Agreeable and compromising."] },
             { word: "Inundate", definition: "To overwhelm or flood with many things.", options: ["To overwhelm or flood with many things.", "To deprive or drain.", "To underwhelm or lessen.", "To alleviate or reduce."] },
@@ -645,7 +683,7 @@
         let latestSubmittedDocIdForHighlight = null; // To highlight the new score
         let questionsAnsweredThisGame = 0;
         let correctAnswersThisGame = 0;
-
+        
         // Timer State
         let gameTimer = null;
         let timeLeft = 60;
@@ -1023,11 +1061,11 @@
                 currentLeaderboardMode = gameMode;
                 
                 if (gameMode === 'timed') {
-                    leaderboardTitle.textContent = "Timed Leaderboard";
+                    leaderboardTitle.textContent = "Rapid Leaderboard";
                     showTimedLeaderboardButton.classList.add('active');
                     showUntimedLeaderboardButton.classList.remove('active');
                 } else {
-                    leaderboardTitle.textContent = "Untimed Leaderboard";
+                    leaderboardTitle.textContent = "Endless Leaderboard";
                     showUntimedLeaderboardButton.classList.add('active');
                     showTimedLeaderboardButton.classList.remove('active');
                 }
@@ -1142,16 +1180,16 @@
             // Timed Scorer
             if (timedLeaderboardData.length > 0) {
                 const topScorer = timedLeaderboardData[0];
-                highestScorerOverallDisplay.innerHTML = `Top Timed Scorer: <span class="text-yellow-400">${topScorer.name}</span> (${topScorer.score} pts)`;
+                highestScorerOverallDisplay.innerHTML = `Top Rapid Scorer: <span class="text-yellow-400">${topScorer.name}</span> (${topScorer.score} pts)`;
             } else {
-                highestScorerOverallDisplay.textContent = `No timed scores yet!`;
+                highestScorerOverallDisplay.textContent = `No Rapid scores yet!`;
             }
             // Untimed Scorer
             if (untimedLeaderboardData.length > 0) {
                 const topScorer = untimedLeaderboardData[0];
-                untimedHighestScorerDisplay.innerHTML = `Top Untimed Scorer: <span class="text-red-400">${topScorer.name}</span> (${topScorer.score} pts)`;
+                untimedHighestScorerDisplay.innerHTML = `Top Endless Scorer: <span class="text-red-400">${topScorer.name}</span> (${topScorer.score} pts)`;
             } else {
-                untimedHighestScorerDisplay.textContent = `No untimed scores yet!`;
+                untimedHighestScorerDisplay.textContent = `No Endless scores yet!`;
             }
         }
 
@@ -1190,7 +1228,7 @@
         
         showTimedLeaderboardButton.addEventListener('click', () => {
             currentLeaderboardMode = 'timed';
-            leaderboardTitle.textContent = "Timed Leaderboard";
+            leaderboardTitle.textContent = "Rapid Leaderboard";
             showTimedLeaderboardButton.classList.add('active');
             showUntimedLeaderboardButton.classList.remove('active');
             currentPage = 1;
@@ -1199,7 +1237,7 @@
 
         showUntimedLeaderboardButton.addEventListener('click', () => {
             currentLeaderboardMode = 'untimed';
-            leaderboardTitle.textContent = "Untimed Leaderboard";
+            leaderboardTitle.textContent = "Endless Leaderboard";
             showUntimedLeaderboardButton.classList.add('active');
             showTimedLeaderboardButton.classList.remove('active');
             currentPage = 1;
