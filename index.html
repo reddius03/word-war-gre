@@ -11,7 +11,11 @@
       gtag('config', 'G-33KTYYQHXQ');
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- Mobile optimization meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Word War GRE">
     <title>Word War GRE</title>
     <link rel="icon" type="image/png" href="star.png">
     <!-- Tailwind CSS CDN for quick styling -->
@@ -21,8 +25,8 @@
     <style>
         /* Primary bright color */
         :root {
-            --primary-bright: #00E0FF; /* Electric Cyan */
-            --dark-background: #0A0A0A;
+            --primary-bright: #E000FF; /* Vibrant Magenta */
+            --dark-background: #100A1A; /* Deep Purple/Black */
         }
 
         /* Base styles */
@@ -41,6 +45,15 @@
             overflow: hidden; /* Prevent scrollbars */
         }
 
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind all content */
+        }
+
         .game-container {
             background-color: var(--dark-background);
             border: 4px solid var(--primary-bright);
@@ -53,6 +66,7 @@
             text-align: center;
             position: relative;
             animation: pulse-border 1.8s infinite alternate ease-in-out;
+            z-index: 1;
         }
 
         @keyframes pulse-border {
@@ -61,8 +75,8 @@
                 box-shadow: 0 0 25px var(--primary-bright);
             }
             to {
-                border-color: #00FFFF;
-                box-shadow: 0 0 35px #00FFFF;
+                border-color: #FF69B4; /* Hot Pink for pulse */
+                box-shadow: 0 0 35px #FF69B4;
             }
         }
         
@@ -96,12 +110,13 @@
             cursor: pointer;
             transition: all 0.2s ease-in-out;
             text-shadow: none;
-            box-shadow: 0 3px #0080A0;
+            box-shadow: 0 3px #9000A0;
             outline: none;
             position: relative;
             top: 0;
             left: 0;
             letter-spacing: 0.5px;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
 
         button:active {
@@ -116,22 +131,20 @@
             background-color: var(--primary-bright);
             border-color: var(--primary-bright);
             color: #000;
-            box-shadow: 0 5px #00B0D0;
+            box-shadow: 0 5px #C000D0;
         }
         
-        /* Style for active toggle buttons */
         .toggle-button.active {
             background-color: var(--primary-bright);
             color: #000;
-            box-shadow: 0 2px #00B0D0;
+            box-shadow: 0 2px #C000D0;
         }
         
-        /* Style for prominent Save Score button */
         #game-over-screen #save-score-button {
             padding: 1rem 1.5rem;
             font-size: 1.1rem;
             border-width: 3px;
-            box-shadow: 0 5px #0080A0;
+            box-shadow: 0 5px #9000A0;
         }
 
         #game-over-screen #save-score-button:active {
@@ -139,7 +152,6 @@
             box-shadow: none;
         }
 
-        /* New styles for Game Mode selection */
         .game-mode-button {
             display: flex;
             flex-direction: column;
@@ -166,9 +178,17 @@
             flex-shrink: 0;
         }
 
-
+        /* Screen transition styles */
         .screen { display: none; }
-        .screen.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .screen.active { 
+            display: block; 
+            animation: fadeIn 0.4s ease-out;
+        }
+
 
         #score-display, #wrong-attempts-display, #timer-display {
             font-size: 1.4rem;
@@ -329,36 +349,54 @@
             margin-bottom: 1rem; text-shadow: none;
         }
         @media (min-width: 640px) { .modal-content h3 { font-size: 1.8rem; } }
-        .modal-content button {
+        
+        #modal-buttons button {
             background-color: var(--primary-bright); border: none;
-            color: #000; margin-top: 1.5rem; padding: 0.6rem 1.2rem;
-            font-size: 0.9rem; box-shadow: 0 4px #0080A0;
+            color: #000; padding: 0.6rem 1.2rem;
+            font-size: 0.9rem; box-shadow: 0 4px #9000A0;
         }
-        @media (min-width: 640px) { .modal-content button { padding: 0.8rem 1.5rem; font-size: 1.1rem; } }
-        .modal-content button:hover { background-color: #00FFFF; color: #000; }
+        #modal-buttons button:hover { background-color: #FF69B4; color: #000; }
+        
+        #modal-cancel-button {
+             background-color: #555;
+             color: #fff;
+             box-shadow: 0 4px #222;
+        }
+        #modal-cancel-button:hover {
+            background-color: #777;
+        }
 
+
+        /* --- Mobile Optimization Styles --- */
         @media (max-width: 639px) {
-            .game-container { padding: 0.8rem; border-width: 3px; border-radius: 8px; box-shadow: 0 0 15px var(--primary-bright); max-height: 95vh; overflow-y: auto; }
-            button { padding: 0.6rem 0.8rem; font-size: 0.75rem; border-width: 2px; border-radius: 6px; box-shadow: 0 3px #0080A0; }
-            .choice-button { padding: 0.6rem; min-height: 3.5rem; font-size: 0.8rem; }
+            .game-container { padding: 1.5rem 1rem; border-width: 3px; border-radius: 8px; box-shadow: 0 0 15px var(--primary-bright); max-height: 95vh; overflow-y: auto; }
+            button { padding: 0.9rem 1rem; font-size: 0.8rem; border-width: 2px; border-radius: 6px; box-shadow: 0 3px #9000A0; }
+            .choice-button { padding: 0.8rem; min-height: 4rem; font-size: 0.8rem; }
             #word-display { font-size: 1.6rem; min-height: 3rem; }
             #score-display, #wrong-attempts-display { font-size: 1.2rem; }
             #game-over-screen .flex-col > button { margin-top: 0.8rem; width: 90%; max-width: 250px; }
             #game-over-screen input[type="text"] { margin-bottom: 1rem; }
         }
         @media (max-width: 480px) {
-            .game-container { padding: 0.6rem; max-height: 98vh; }
-            h1 { font-size: 1.8rem; } h2 { font-size: 1.5rem; }
-            button { padding: 0.5rem 0.7rem; font-size: 0.7rem; }
-            .choice-button { padding: 0.5rem; min-height: 3rem; font-size: 0.75rem; }
+            body { padding: 0.5rem; }
+            .game-container { padding: 1rem 0.5rem; max-height: 98vh; }
+            h1 { font-size: 1.6rem; } 
+            h2 { font-size: 1.4rem; }
+            button { padding: 0.8rem; font-size: 0.75rem; }
+            .game-mode-button { width: 120px; height: 100px; font-size: 0.8rem; }
+            .choice-button { padding: 0.7rem; min-height: 3.5rem; font-size: 0.75rem; }
             #word-display { font-size: 1.4rem; min-height: 2.5rem; }
-            #score-display, #wrong-attempts-display { font-size: 1.1rem; }
+            #score-display, #wrong-attempts-display, #timer-display { font-size: 1.1rem; }
         }
+        /* --- End Mobile Optimization Styles --- */
+        .text-primary-bright { color: var(--primary-bright); }
+        .final-score-color { color: #FF69B4; }
+
         #leaderboard-screen { max-height: 500px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--primary-bright) var(--dark-background); }
         #leaderboard-screen::-webkit-scrollbar { width: 8px; }
         #leaderboard-screen::-webkit-scrollbar-track { background: var(--dark-background); border-radius: 10px; }
         #leaderboard-screen::-webkit-scrollbar-thumb { background-color: var(--primary-bright); border-radius: 10px; border: 2px solid var(--dark-background); }
-        #leaderboard-screen::-webkit-scrollbar-thumb:hover { background-color: #00FFFF; }
+        #leaderboard-screen::-webkit-scrollbar-thumb:hover { background-color: #FF69B4; }
         .stats-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; margin-bottom: 0.5rem; background-color: #1A1A1A; border: 1px solid var(--primary-bright); border-radius: 8px; font-size: 1rem; }
         .stats-item span:first-child { color: var(--primary-bright); }
         .stats-item span:last-child { color: #FFF; font-weight: bold; }
@@ -367,6 +405,7 @@
     </style>
 </head>
 <body>
+    <canvas id="background-canvas"></canvas>
     <!-- Audio Elements -->
     <audio id="background-music" loop><source src="Run As Fast As You Can.mp3" type="audio/mpeg"></audio>
     <audio id="correct-sound"><source src="correct.mp3" type="audio/mpeg"></audio>
@@ -411,19 +450,24 @@
 
         <!-- Game Screen -->
         <div id="game-screen" class="screen">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-4">
                 <div id="score-display" class="text-lg sm:text-xl">Score: 0</div>
                 <div id="wrong-attempts-display" class="text-lg sm:text-xl">Wrong: 0/3</div>
                 <div id="timer-display" class="text-lg sm:text-xl">Time: 60</div>
             </div>
+            <!-- Visual Timer Bar -->
+            <div id="timer-bar-container" class="w-full bg-gray-800 rounded-full h-2.5 mb-4 border border-gray-600 hidden">
+                <div id="timer-bar" class="h-full rounded-full" style="width: 100%; transition: width 0.2s linear, background-color 0.5s ease;"></div>
+            </div>
             <div id="word-display" class="text-2xl sm:text-3xl md:text-4xl my-8"></div>
             <div id="choices-container" class="choices-grid"></div>
+            <button id="exit-game-button" class="text-sm sm:text-base mt-8">Exit</button>
         </div>
 
         <!-- Game Over Screen -->
         <div id="game-over-screen" class="screen">
             <h2 class="text-xl sm:text-2xl md:text-3xl">GAME OVER!</h2>
-            <p class="text-lg mt-4 mb-4">Final score: <span id="final-score" class="font-bold text-yellow-400">0</span></p>
+            <p class="text-lg mt-4 mb-4">Final score: <span id="final-score" class="font-bold final-score-color">0</span></p>
             <p class="text-md mb-2">Enter your name for the Leaderboard:</p>
             <input type="text" id="player-name-input" placeholder="Your Name" class="text-sm sm:text-base">
             <div class="flex flex-col space-y-3 items-center w-full mt-4">
@@ -472,8 +516,19 @@
     </div>
 
     <!-- Developer Note & Modal -->
-    <div id="developer-note-display" class="text-base text-white mt-5 text-center hidden">Developer Note: <a href="https://wordwargre.blogspot.com/2025/08/update-aug-22th-2025.html" target="_blank" class="text-yellow-400 underline">Aug 22nd Updates</a></div>
-    <div id="custom-modal-overlay" class="modal-overlay hidden"><div class="modal-content"><h3 id="modal-title">Attention!</h3><p id="modal-message"></p><button id="modal-close-button">OK</button></div></div>
+    <div id="developer-note-display" class="text-base text-white mt-5 text-center hidden">Developer Note: <a href="https://wordwargre.blogspot.com/2025/09/update-sep-6-v12.html" target="_blank" class="text-yellow-400 underline">Sep 6th Updates</a></div>
+    <div id="collaboration-note-display" class="text-sm text-white mt-2 text-center hidden">Looking for people interested in working on the Word War Gre App.</div>
+    <div id="custom-modal-overlay" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 id="modal-title">Attention!</h3>
+            <p id="modal-message"></p>
+            <div id="modal-buttons" class="mt-6 flex justify-center space-x-4">
+                <button id="modal-cancel-button">Cancel</button>
+                <button id="modal-confirm-button">OK</button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Firebase SDK -->
     <script type="module">
@@ -530,7 +585,6 @@
             }
             window.firebaseInitialized = true;
             if (document.getElementById('main-menu').classList.contains('active')) {
-                // Trigger both listeners, the check function will handle rendering
                 listenForLeaderboardChanges();
                 listenForUserStatsChanges();
             }
@@ -670,7 +724,74 @@
             { word: "Diffident", definition: "Modest or shy due to lack of confidence.", options: ["Modest or shy due to lack of confidence.", "Confident and assertive.", "Bold and self-assured.", "Outgoing and brave."] },
             { word: "Disparage", definition: "To represent as of little worth.", options: ["To represent as of little worth.", "To praise or commend.", "To esteem or value.", "To flatter or admire."] },
             { word: "Ebullient", definition: "Cheerful and full of energy.", options: ["Cheerful and full of energy.", "Depressed and lethargic.", "Gloomy and sad.", "Quiet and reserved."] },
-            { word: "Enigma", definition: "A mysterious, puzzling, hard to understand thing.", options: ["A mysterious, puzzling, hard to understand thing.", "A clear explanation.", "A simple solution.", "An obvious truth."] }
+            { word: "Enigma", definition: "A mysterious, puzzling, hard to understand thing.", options: ["A mysterious, puzzling, hard to understand thing.", "A clear explanation.", "A simple solution.", "An obvious truth."] },
+            { word: "Abate", definition: "To become less intense or widespread.", options: ["To become less intense or widespread.", "To increase in intensity.", "To spread rapidly.", "To remain constant."] },
+            { word: "Abjure", definition: "To solemnly renounce a belief, cause, or claim.", options: ["To solemnly renounce a belief, cause, or claim.", "To strongly support a belief.", "To publicly declare allegiance.", "To secretly conspire."] },
+            { word: "Abstain", definition: "To restrain oneself from doing or enjoying something.", options: ["To restrain oneself from doing or enjoying something.", "To indulge excessively.", "To participate eagerly.", "To boast about achievements."] },
+            { word: "Abstruse", definition: "Difficult to understand; obscure.", options: ["Difficult to understand; obscure.", "Easy to comprehend.", "Clear and straightforward.", "Simple and obvious."] },
+            { word: "Accolade", definition: "An award or privilege granted as a special honor.", options: ["An award or privilege granted as a special honor.", "A punishment for wrongdoing.", "A public criticism.", "A mark of disgrace."] },
+            { word: "Acerbic", definition: "Sharp and forthright; tasting sour or bitter.", options: ["Sharp and forthright; tasting sour or bitter.", "Kind and gentle.", "Sweet and pleasant.", "Mild and bland."] },
+            { word: "Acumen", definition: "The ability to make good judgments and quick decisions.", options: ["The ability to make good judgments and quick decisions.", "Ignorance and foolishness.", "Slow and poor judgment.", "Indecisiveness."] },
+            { word: "Adamant", definition: "Refusing to be persuaded or to change one's mind.", options: ["Refusing to be persuaded or to change one's mind.", "Flexible and open-minded.", "Easily convinced.", "Willing to compromise."] },
+            { word: "Admonish", definition: "To warn or reprimand someone firmly.", options: ["To warn or reprimand someone firmly.", "To praise and commend.", "To reward and honor.", "To ignore and neglect."] },
+            { word: "Adroit", definition: "Clever or skillful in using the hands or mind.", options: ["Clever or skillful in using the hands or mind.", "Clumsy and awkward.", "Incompetent and inept.", "Slow-witted."] },
+            { word: "Adulation", definition: "Excessive admiration or praise.", options: ["Excessive admiration or praise.", "Harsh criticism.", "Complete indifference.", "Deep hatred."] },
+            { word: "Adulterate", definition: "To corrupt or make impure by adding an inferior substance.", options: ["To corrupt or make impure by adding an inferior substance.", "To purify and refine.", "To enhance the quality of.", "To strengthen and fortify."] },
+            { word: "Aesthetic", definition: "Concerned with beauty or the appreciation of beauty.", options: ["Concerned with beauty or the appreciation of beauty.", "Ugly and unattractive.", "Practical and functional.", "Displeasing to the eye."] },
+            { word: "Affable", definition: "Friendly, good-natured, or easy to talk to.", options: ["Friendly, good-natured, or easy to talk to.", "Hostile and unfriendly.", "Rude and impolite.", "Reserved and distant."] },
+            { word: "Aggravate", definition: "To make a problem, injury, or offense worse.", options: ["To make a problem, injury, or offense worse.", "To alleviate or soothe.", "To improve or heal.", "To lessen the severity of."] },
+            { word: "Aggrandize", definition: "To increase the power, status, or wealth of.", options: ["To increase the power, status, or wealth of.", "To reduce or diminish.", "To humble or belittle.", "To weaken or undermine."] },
+            { word: "Aggregate", definition: "A whole formed by combining several elements.", options: ["A whole formed by combining several elements.", "A single, separate part.", "A dispersed collection.", "An individual unit."] },
+            { word: "Agnostic", definition: "A person who believes that nothing is known of the existence of God.", options: ["A person who believes that nothing is known of the existence of God.", "A devout believer.", "A person who denies God's existence.", "A religious leader."] },
+            { word: "Alchemy", definition: "A medieval practice of turning base metals into gold.", options: ["A medieval practice of turning base metals into gold.", "Modern chemistry.", "A form of agriculture.", "A type of architecture."] },
+            { word: "Alienate", definition: "To cause someone to feel isolated or estranged.", options: ["To cause someone to feel isolated or estranged.", "To unite or bring together.", "To make someone feel welcome.", "To befriend and support."] },
+            { word: "Alleviate", definition: "To make suffering or a problem less severe.", options: ["To make suffering or a problem less severe.", "To worsen or aggravate.", "To intensify or increase.", "To create a problem."] },
+            { word: "Alloy", definition: "A metal made by combining two or more metallic elements.", options: ["A metal made by combining two or more metallic elements.", "A pure, unmixed element.", "A non-metallic substance.", "A type of wood."] },
+            { word: "Allure", definition: "The quality of being powerfully and mysteriously attractive.", options: ["The quality of being powerfully and mysteriously attractive.", "Repulsiveness.", "A boring quality.", "A sense of danger."] },
+            { word: "Amalgamate", definition: "To combine or unite to form one organization or structure.", options: ["To combine or unite to form one organization or structure.", "To separate or divide.", "To break into smaller pieces.", "To remain independent."] },
+            { word: "Ambiguous", definition: "Open to more than one interpretation; having a double meaning.", options: ["Open to more than one interpretation; having a double meaning.", "Clear and precise.", "Unquestionable and certain.", "Direct and straightforward."] },
+            { word: "Ambivalence", definition: "The state of having mixed feelings or contradictory ideas.", options: ["The state of having mixed feelings or contradictory ideas.", "Certainty and decisiveness.", "A strong, single opinion.", "Complete agreement."] },
+            { word: "Ambrosia", definition: "The food of the gods; something very pleasing to taste or smell.", options: ["The food of the gods; something very pleasing to taste or smell.", "A foul-smelling substance.", "A bitter-tasting medicine.", "A common, everyday food."] },
+            { word: "Amenable", definition: "Open and responsive to suggestion; easily persuaded.", options: ["Open and responsive to suggestion; easily persuaded.", "Stubborn and uncooperative.", "Resistant to change.", "Difficult to control."] },
+            { word: "Amenity", definition: "A desirable or useful feature or facility of a place.", options: ["A desirable or useful feature or facility of a place.", "A major inconvenience.", "A source of discomfort.", "An unpleasant aspect."] },
+            { word: "Amulet", definition: "An ornament or small piece of jewelry thought to give protection.", options: ["An ornament or small piece of jewelry thought to give protection.", "A weapon of aggression.", "An item that brings bad luck.", "A common tool."] },
+            { word: "Anachronism", definition: "A thing belonging to a period other than that in which it exists.", options: ["A thing belonging to a period other than that in which it exists.", "A modern invention.", "A futuristic concept.", "Something that is timeless."] },
+            { word: "Analgesic", definition: "A drug that relieves pain.", options: ["A drug that relieves pain.", "A drug that causes pain.", "A type of stimulant.", "A vitamin supplement."] },
+            { word: "Analogous", definition: "Comparable in certain respects.", options: ["Comparable in certain respects.", "Completely different.", "Opposite in nature.", "Unrelated and distinct."] },
+            { word: "Anarchy", definition: "A state of disorder due to absence of authority.", options: ["A state of disorder due to absence of authority.", "A well-organized society.", "A strict government.", "A peaceful community."] },
+            { word: "Anathema", definition: "Something or someone that one vehemently dislikes.", options: ["Something or someone that one vehemently dislikes.", "Something that is deeply loved.", "A source of great joy.", "A person who is admired."] },
+            { word: "Ancillary", definition: "Providing necessary support to the primary activities.", options: ["Providing necessary support to the primary activities.", "Unimportant and secondary.", "Completely independent.", "The main focus."] },
+            { word: "Animosity", definition: "Strong hostility.", options: ["Strong hostility.", "Friendship and love.", "A feeling of indifference.", "A sense of peace."] },
+            { word: "Antediluvian", definition: "Of or belonging to the time before the biblical Flood; ridiculously old-fashioned.", options: ["Of or belonging to the time before the biblical Flood; ridiculously old-fashioned.", "Modern and up-to-date.", "Futuristic and advanced.", "Recent and new."] },
+            { word: "Apex", definition: "The top or highest part of something.", options: ["The top or highest part of something.", "The bottom or base.", "The middle section.", "The outer edge."] },
+            { word: "Aphorism", definition: "A pithy observation that contains a general truth.", options: ["A pithy observation that contains a general truth.", "A long, detailed explanation.", "A confusing and misleading statement.", "A false and illogical claim."] },
+            { word: "Apocryphal", definition: "Of doubtful authenticity, although widely circulated as being true.", options: ["Of doubtful authenticity, although widely circulated as being true.", "Authentic and verified.", "Historically accurate.", "Officially approved."] },
+            { word: "Apogee", definition: "The highest point in the development of something; a climax.", options: ["The highest point in the development of something; a climax.", "The lowest point.", "The beginning or start.", "A period of decline."] },
+            { word: "Apostate", definition: "A person who renounces a religious or political belief.", options: ["A person who renounces a religious or political belief.", "A loyal follower.", "A devout believer.", "A political leader."] },
+            { word: "Apotheosis", definition: "The highest point in the development of something; culmination.", options: ["The highest point in the development of something; culmination.", "The lowest point; nadir.", "The beginning; inception.", "A period of stagnation."] },
+            { word: "Appease", definition: "To pacify or placate someone by acceding to their demands.", options: ["To pacify or placate someone by acceding to their demands.", "To provoke or anger.", "To challenge or defy.", "To ignore or neglect."] },
+            { word: "Appellation", definition: "A name or title.", options: ["A name or title.", "A nameless object.", "A secret identity.", "A form of currency."] },
+            { word: "Apposite", definition: "Apt in the circumstances or in relation to something.", options: ["Apt in the circumstances or in relation to something.", "Inappropriate and irrelevant.", "Out of place.", "Unsuitable and improper."] },
+            { word: "Apprise", definition: "To inform or tell someone.", options: ["To inform or tell someone.", "To keep someone in the dark.", "To deceive or mislead.", "To ask a question."] },
+            { word: "Approbation", definition: "Approval or praise.", options: ["Approval or praise.", "Disapproval or criticism.", "Condemnation and blame.", "A feeling of indifference."] },
+            { word: "Appropriate", definition: "To take something for one's own use, typically without permission.", options: ["To take something for one's own use, typically without permission.", "To give something away freely.", "To return something to its owner.", "To share with others."] },
+            { word: "Archaic", definition: "Very old or old-fashioned.", options: ["Very old or old-fashioned.", "Modern and new.", "Current and up-to-date.", "Futuristic and advanced."] },
+            { word: "Arduous", definition: "Involving or requiring strenuous effort; difficult and tiring.", options: ["Involving or requiring strenuous effort; difficult and tiring.", "Easy and effortless.", "Simple and quick.", "Relaxing and enjoyable."] },
+            { word: "Argot", definition: "The jargon or slang of a particular group or class.", options: ["The jargon or slang of a particular group or class.", "Formal, standard language.", "A universal language.", "A form of poetry."] },
+            { word: "Arrant", definition: "Complete, utter.", options: ["Complete, utter.", "Partial and incomplete.", "Slight and minor.", "Moderate and reasonable."] },
+            { word: "Arrogate", definition: "To take or claim something without justification.", options: ["To take or claim something without justification.", "To earn through hard work.", "To receive as a gift.", "To politely request."] },
+            { word: "Articulate", definition: "Having or showing the ability to speak fluently and coherently.", options: ["Having or showing the ability to speak fluently and coherently.", "Unable to speak clearly.", "Quiet and reserved.", "Confused and illogical."] },
+            { word: "Artless", definition: "Without guile or deception; natural and simple.", options: ["Without guile or deception; natural and simple.", "Cunning and sly.", "Deceitful and dishonest.", "Artificial and fake."] },
+            { word: "Ascetic", definition: "Characterized by severe self-discipline and abstention from indulgence.", options: ["Characterized by severe self-discipline and abstention from indulgence.", "Hedonistic and self-indulgent.", "Luxurious and extravagant.", "Excessive and unrestrained."] },
+            { word: "Asperity", definition: "Harshness of tone or manner.", options: ["Harshness of tone or manner.", "Gentleness and kindness.", "A soft and soothing tone.", "A friendly and warm attitude."] },
+            { word: "Aspersion", definition: "An attack on the reputation or integrity of someone.", options: ["An attack on the reputation or integrity of someone.", "A compliment or praise.", "A statement of support.", "A glowing recommendation."] },
+            { word: "Attenuate", definition: "To reduce the force, effect, or value of.", options: ["To reduce the force, effect, or value of.", "To strengthen or increase.", "To amplify or enhance.", "To magnify and expand."] },
+            { word: "August", definition: "Respected and impressive.", options: ["Respected and impressive.", "Common and ordinary.", "Unimportant and insignificant.", "Ridiculous and foolish."] },
+            { word: "Auspice", definition: "A divine or prophetic token.", options: ["A divine or prophetic token.", "A sign of bad luck.", "A random, meaningless event.", "A scientific fact."] },
+            { word: "Austere", definition: "Severe or strict in manner, attitude, or appearance.", options: ["Severe or strict in manner, attitude, or appearance.", "Ornate and decorated.", "Luxurious and extravagant.", "Friendly and approachable."] },
+            { word: "Autonomous", definition: "Having self-government, at least to a significant degree.", options: ["Having self-government, at least to a significant degree.", "Dependent on others.", "Controlled by an external force.", "Powerless and weak."] },
+            { word: "Avant-garde", definition: "New and unusual or experimental ideas.", options: ["New and unusual or experimental ideas.", "Traditional and conventional.", "Old-fashioned and outdated.", "Conservative and mainstream."] },
+            { word: "Axiom", definition: "A statement that is regarded as being established, accepted, or self-evidently true.", options: ["A statement that is regarded as being established, accepted, or self-evidently true.", "A controversial opinion.", "A false and illogical claim.", "A debatable theory."] }
         ];
 
         // Global Game State
@@ -689,7 +810,8 @@
         
         // Timer State
         let gameTimer = null;
-        let timeLeft = 60;
+        const totalTime = 60; // Total time for timed mode
+        let timeLeft = totalTime;
         let isTimerPausedForModal = false;
 
         // Stats State
@@ -707,6 +829,7 @@
         let totalPages = 1;
 
         // DOM Elements
+        const backgroundCanvas = document.getElementById('background-canvas');
         const mainMenuScreen = document.getElementById('main-menu');
         const gameModeScreen = document.getElementById('game-mode-screen');
         const gameScreen = document.getElementById('game-screen');
@@ -726,6 +849,8 @@
         const scoreDisplay = document.getElementById('score-display');
         const wrongAttemptsDisplay = document.getElementById('wrong-attempts-display');
         const timerDisplay = document.getElementById('timer-display');
+        const timerBarContainer = document.getElementById('timer-bar-container');
+        const timerBar = document.getElementById('timer-bar');
         const finalScoreDisplay = document.getElementById('final-score');
         const playerNameInput = document.getElementById('player-name-input');
         const saveScoreButton = document.getElementById('save-score-button');
@@ -747,10 +872,12 @@
         const highestScorerOverallDisplay = document.getElementById('highest-scorer-overall-display');
         const untimedHighestScorerDisplay = document.getElementById('untimed-highest-scorer-display');
         const developerNoteDisplay = document.getElementById('developer-note-display');
+        const collaborationNoteDisplay = document.getElementById('collaboration-note-display');
         const customModalOverlay = document.getElementById('custom-modal-overlay');
         const modalTitle = document.getElementById('modal-title');
         const modalMessage = document.getElementById('modal-message');
-        const modalCloseButton = document.getElementById('modal-close-button');
+        const modalConfirmButton = document.getElementById('modal-confirm-button');
+        const modalCancelButton = document.getElementById('modal-cancel-button');
         const showTimedLeaderboardButton = document.getElementById('show-timed-leaderboard');
         const showUntimedLeaderboardButton = document.getElementById('show-untimed-leaderboard');
         const showTimedStatsButton = document.getElementById('show-timed-stats');
@@ -758,6 +885,7 @@
         const leaderboardTitle = document.getElementById('leaderboard-title');
         const statsLoading = document.getElementById('stats-loading');
         const statsContent = document.getElementById('stats-content');
+        const exitGameButton = document.getElementById('exit-game-button');
 
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -774,11 +902,13 @@
                 highestScorerOverallDisplay.classList.remove('hidden');
                 untimedHighestScorerDisplay.classList.remove('hidden');
                 developerNoteDisplay.classList.remove('hidden');
+                collaborationNoteDisplay.classList.remove('hidden');
                 updateHighestScorerDisplay();
             } else {
                 highestScorerOverallDisplay.classList.add('hidden');
                 untimedHighestScorerDisplay.classList.add('hidden');
                 developerNoteDisplay.classList.add('hidden');
+                collaborationNoteDisplay.classList.add('hidden');
             }
             if (screenId === 'leaderboard-screen') {
                 if (isLeaderboardLoaded) {
@@ -791,25 +921,44 @@
             }
         }
 
-        window.showCustomModal = function(title, message, onCloseCallback = null) {
+        function showCustomModal(title, message, confirmCallback = null, showCancel = false) {
             modalTitle.textContent = title;
             modalMessage.innerHTML = message;
+            
+            modalCancelButton.classList.toggle('hidden', !showCancel);
+            
+            modalConfirmButton.onclick = () => {
+                hideCustomModal();
+                if (confirmCallback) confirmCallback();
+            };
+            
+            modalCancelButton.onclick = () => {
+                hideCustomModal();
+                 if (gameMode === 'timed') isTimerPausedForModal = false;
+            };
+
             customModalOverlay.classList.remove('hidden');
-            modalOnCloseCallback = onCloseCallback;
+            if (gameMode === 'timed') isTimerPausedForModal = true;
         }
 
-        function hideCustomModalAndExecuteCallback() {
+        function hideCustomModal() {
             customModalOverlay.classList.add('hidden');
-            if (modalOnCloseCallback) {
-                setTimeout(() => {
-                    modalOnCloseCallback();
-                    modalOnCloseCallback = null;
-                }, 100);
-            }
         }
 
         function updateTimerDisplay() {
             timerDisplay.textContent = `Time: ${timeLeft}`;
+            if (gameMode === 'timed') {
+                const percentage = (timeLeft / totalTime) * 100;
+                timerBar.style.width = `${percentage}%`;
+
+                if (percentage < 25) {
+                    timerBar.style.backgroundColor = '#FF4500'; // OrangeRed
+                } else if (percentage < 50) {
+                    timerBar.style.backgroundColor = '#FFD700'; // Gold
+                } else {
+                    timerBar.style.backgroundColor = 'var(--primary-bright)'; // Cyan
+                }
+            }
         }
 
         function countdown() {
@@ -833,13 +982,15 @@
             
             updateScoreDisplay();
             if (gameMode === 'timed') {
-                timeLeft = 60;
+                timeLeft = totalTime;
                 timerDisplay.style.display = 'block';
-                updateTimerDisplay();
+                timerBarContainer.classList.remove('hidden');
+                updateTimerDisplay(); // Initial call to set bar
                 if (gameTimer) clearInterval(gameTimer);
                 gameTimer = setInterval(countdown, 1000);
             } else {
                 timerDisplay.style.display = 'none';
+                timerBarContainer.classList.add('hidden');
                 if (gameTimer) clearInterval(gameTimer);
                 gameTimer = null;
             }
@@ -907,7 +1058,7 @@
                     if(gameTimer) clearInterval(gameTimer);
                     gameTimer = null;
                     const message = `Correct answer for "${currentWord.word}": <br><br><span class="text-green-400">"${currentWord.definition}"</span>`;
-                    window.showCustomModal("Incorrect", message, () => {
+                    showCustomModal("Incorrect", message, () => {
                         isTimerPausedForModal = false;
                         if (gameOverCondition) {
                             endGame();
@@ -1002,12 +1153,10 @@
                 const row = document.createElement('tr');
                 const rank = startIndex + index + 1;
                 
-                // Highlight all scores by the current user in blue
                 if (window.currentUserId && entry.userId === window.currentUserId) {
                     row.classList.add('bg-blue-900', 'text-blue-100');
                 }
 
-                // Override with a more prominent highlight for the score just submitted
                 if (latestSubmittedDocId && entry.id === latestSubmittedDocId) {
                     row.classList.add('recent-score-highlight');
                 }
@@ -1041,7 +1190,7 @@
                 querySnapshot.forEach((doc) => allScores.push({ id: doc.id, ...doc.data() }));
 
                 timedLeaderboardData = allScores.filter(s => s.mode === 'timed');
-                untimedLeaderboardData = allScores.filter(s => s.mode !== 'timed'); // Default old scores to untimed
+                untimedLeaderboardData = allScores.filter(s => s.mode !== 'timed');
 
                 isLeaderboardLoaded = true;
                 checkAndRenderData();
@@ -1106,7 +1255,6 @@
 
             try {
                 await retryFirebaseCall(() => window.updateDoc(userStatsDocRef, updateData));
-                // Update local stats to match
                 userStats[gameMode].gamesPlayed++;
                 userStats[gameMode].totalCorrect += correctAnswersThisGame;
                 userStats[gameMode].totalAnswered += questionsAnsweredThisGame;
@@ -1114,7 +1262,6 @@
 
             } catch (e) {
                  if (e.code === 'not-found') {
-                    // If doc doesn't exist, create it
                     const initialStats = {
                         gamesPlayed: 1,
                         totalCorrect: correctAnswersThisGame,
@@ -1145,7 +1292,6 @@
                     userStats.timed = { ...userStats.timed, ...timedStats };
                     userStats.untimed = { ...userStats.untimed, ...untimedStats };
 
-                    // One-time migration for legacy gamesPlayed count
                     if (data.gamesPlayed && data.gamesPlayed > 0) {
                         const legacyGames = data.gamesPlayed;
                         userStats.untimed.gamesPlayed += legacyGames;
@@ -1165,7 +1311,7 @@
         }
 
         function updateStatsDisplay() {
-            if (!isUserStatsLoaded || !isLeaderboardLoaded) return; // Don't run if data is missing
+            if (!isUserStatsLoaded || !isLeaderboardLoaded) return;
 
             const stats = userStats[currentStatsMode];
             const leaderboardData = currentStatsMode === 'timed' ? timedLeaderboardData : untimedLeaderboardData;
@@ -1183,7 +1329,6 @@
             let rank = "N/A";
             const userScores = leaderboardData.filter(s => s.userId === window.currentUserId);
             if (userScores.length > 0) {
-                // find the index of the highest score
                 const highestUserScore = userScores.reduce((max, score) => max.score > score.score ? max : score);
                 const rankIndex = leaderboardData.indexOf(highestUserScore);
                 if (rankIndex !== -1) {
@@ -1192,14 +1337,12 @@
             }
             highestRankStat.textContent = rank;
             
-            // Show stats content and hide loading message
             statsLoading.classList.add('hidden');
             statsContent.classList.remove('hidden');
         }
 
         function showStatsScreen() {
             showScreen('stats-screen');
-            // Check if data is already loaded
             if (isUserStatsLoaded && isLeaderboardLoaded) {
                 updateStatsDisplay();
             } else {
@@ -1209,14 +1352,12 @@
         }
 
         function updateHighestScorerDisplay() {
-            // Timed Scorer
             if (timedLeaderboardData.length > 0) {
                 const topScorer = timedLeaderboardData[0];
-                highestScorerOverallDisplay.innerHTML = `Top Rapid Scorer: <span class="text-yellow-400">${topScorer.name}</span> (${topScorer.score} pts)`;
+                highestScorerOverallDisplay.innerHTML = `Top Rapid Scorer: <span class="text-primary-bright">${topScorer.name}</span> (${topScorer.score} pts)`;
             } else {
                 highestScorerOverallDisplay.textContent = `No Rapid scores yet!`;
             }
-            // Untimed Scorer
             if (untimedLeaderboardData.length > 0) {
                 const topScorer = untimedLeaderboardData[0];
                 untimedHighestScorerDisplay.innerHTML = `Top Endless Scorer: <span class="text-red-400">${topScorer.name}</span> (${topScorer.score} pts)`;
@@ -1236,9 +1377,145 @@
             musicPlaying = !musicPlaying;
         }
 
+        function initAnimatedBackground() {
+            const ctx = backgroundCanvas.getContext('2d');
+            let stars = [];
+            let cats = [];
+            let numStars = 200;
+
+            const catPixels = [
+                [0,0,1,0,0,1,0,0,0,0,0,0,0],
+                [0,1,1,1,1,1,1,0,0,0,1,1,0],
+                [0,1,0,1,0,1,1,0,0,1,0,1,0],
+                [0,1,1,1,1,1,1,0,1,0,0,1,0],
+                [0,0,1,1,1,1,1,1,0,0,0,0,0],
+                [0,0,0,1,1,1,1,0,0,0,0,0,0],
+                [0,0,1,1,0,1,1,0,0,0,0,0,0],
+                [0,1,1,0,0,0,1,1,0,0,0,0,0]
+            ];
+            const pixelSize = 4;
+
+
+            function setStarCount() {
+                if (window.innerWidth < 480) numStars = 50;
+                else if (window.innerWidth < 768) numStars = 100;
+                else numStars = 200;
+            }
+
+            function resizeCanvas() {
+                backgroundCanvas.width = window.innerWidth;
+                backgroundCanvas.height = window.innerHeight;
+            }
+
+            function createStars() {
+                stars = [];
+                for (let i = 0; i < numStars; i++) {
+                    stars.push({
+                        x: Math.random() * backgroundCanvas.width,
+                        y: Math.random() * backgroundCanvas.height,
+                        radius: Math.random() * 1.5 + 0.5,
+                        vx: Math.random() * 0.2 - 0.1,
+                        vy: Math.random() * 0.2 - 0.1,
+                        alpha: Math.random() * 0.5 + 0.5
+                    });
+                }
+            }
+             function createCats() {
+                cats = [];
+                const numCats = 2;
+                for (let i = 0; i < numCats; i++) {
+                    cats.push({
+                        x: Math.random() * backgroundCanvas.width,
+                        y: Math.random() * backgroundCanvas.height,
+                        vx: Math.random() * 0.5 - 0.25,
+                        vy: Math.random() * 0.5 - 0.25,
+                    });
+                }
+            }
+
+
+            function drawStars() {
+                stars.forEach(star => {
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(224, 0, 255, ${star.alpha})`;
+                    ctx.fill();
+                });
+            }
+            
+            function drawCats() {
+                ctx.fillStyle = 'rgba(224, 0, 255, 0.7)';
+                cats.forEach(cat => {
+                    for (let y = 0; y < catPixels.length; y++) {
+                        for (let x = 0; x < catPixels[y].length; x++) {
+                            if (catPixels[y][x] === 1) {
+                                ctx.fillRect(cat.x + x * pixelSize, cat.y + y * pixelSize, pixelSize, pixelSize);
+                            }
+                        }
+                    }
+                });
+            }
+
+            function updateStars() {
+                stars.forEach(star => {
+                    star.x += star.vx;
+                    star.y += star.vy;
+                    if (star.x < 0 || star.x > backgroundCanvas.width) star.vx *= -1;
+                    if (star.y < 0 || star.y > backgroundCanvas.height) star.vy *= -1;
+                });
+            }
+            
+             function updateCats() {
+                const catWidth = catPixels[0].length * pixelSize;
+                const catHeight = catPixels.length * pixelSize;
+                cats.forEach(cat => {
+                    cat.x += cat.vx;
+                    cat.y += cat.vy;
+                    if (cat.x < 0 || cat.x + catWidth > backgroundCanvas.width) cat.vx *= -1;
+                    if (cat.y < 0 || cat.y + catHeight > backgroundCanvas.height) cat.vy *= -1;
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+                
+                updateStars();
+                drawStars();
+                
+                updateCats();
+                if (mainMenuScreen.classList.contains('active')) {
+                    drawCats();
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                setStarCount();
+                createStars();
+                createCats();
+            });
+            
+            resizeCanvas();
+            setStarCount();
+            createStars();
+            createCats();
+            animate();
+        }
+        
+        function exitToMainMenu() {
+            if (gameTimer) {
+                clearInterval(gameTimer);
+                gameTimer = null;
+            }
+            showScreen('main-menu');
+        }
+
         window.onload = function() {
             toggleMusic(); // Attempt to play music on load
             showScreen('main-menu');
+            initAnimatedBackground();
         };
 
         playGameButton.addEventListener('click', () => showScreen('game-mode-screen'));
@@ -1253,10 +1530,19 @@
         mainMenuFromGameOverButton.addEventListener('click', () => showScreen('main-menu'));
         prevPageButton.addEventListener('click', goToPreviousPage);
         nextPageButton.addEventListener('click', goToNextPage);
-        modalCloseButton.addEventListener('click', hideCustomModalAndExecuteCallback);
+        
         mainMenuFromStatsButton.addEventListener('click', () => showScreen('main-menu'));
         mainMenuFromLeaderboardButton.addEventListener('click', () => showScreen('main-menu'));
         
+        exitGameButton.addEventListener('click', () => {
+             showCustomModal(
+                "Exit Game?", 
+                "Return to main menu? Progress will be lost.", 
+                exitToMainMenu, 
+                true
+            );
+        });
+
         showTimedLeaderboardButton.addEventListener('click', () => {
             currentLeaderboardMode = 'timed';
             leaderboardTitle.textContent = "Rapid Leaderboard";
@@ -1291,3 +1577,4 @@
     </script>
 </body>
 </html>
+
